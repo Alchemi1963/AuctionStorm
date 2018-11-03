@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="The Oncoming Auction" default="CreateJar" basedir=".">
+<project name="AuctionStorm" default="CreateJar" basedir=".">
     <target name="CreateJar" description="Create a jar for the project">
         <mkdir dir="target"></mkdir>
-        <jar destfile="../Test-Server/plugins/TOA-1.0.jar">
+        <jar destfile="../Test-Server/plugins/AuctionStorm-1.0.jar">
             <fileset dir="bin/"></fileset>
             <fileset file="plugin.yml"></fileset>
             <fileset file="config.yml"></fileset>

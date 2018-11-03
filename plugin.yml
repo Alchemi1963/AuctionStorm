@@ -1,3 +1,20 @@
-name: TheOncomingAuction
-main: com.alchemi.toa.TheOncomingAuction
+name: AuctionStorm
+main: com.alchemi.toa.AuctionStorm
 version: 1.0
+
+commands:
+    auctionstorm:
+        description: AS base command.
+        usage: /auctionstorm
+        aliases: [as]
+        permission: as.base
+
+permissions:
+    as.*:
+        description: Gives permissions for all AuctionStorm commands.
+        children:
+            as.base: true
+        default: false
+    as.base:
+        description: Base AuctionStorm permission.
+        default: true
