@@ -43,23 +43,30 @@ public class Auction {
 		this.timer = AuctionStorm.instance.getServer().getScheduler();
 		
 		object = inventory.getItemInMainHand();
+		inventory.setItemInMainHand(new ItemStack(Material.AIR));
 		
 		if (object.getType().name().equalsIgnoreCase("air")) {
 			
 			Library.sendMsg("&4You need to hold an item to start an auction.", seller, null);
 			Queue.removeAuction(this);
+			inventory.setItemInMainHand(object);
 						
 		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !seller.hasPermission("as.creative") && !seller.isOp()) {
 			
 			Library.sendMsg("&4You have no permission to start an auction in creative.", seller, null);
 			Queue.removeAuction(this);
+			inventory.setItemInMainHand(object);
 			
-		} else if (object.getAmount() < amount) {
+		} 
+		if (object.getAmount() < amount) {
 			
 			Library.sendMsg("&4You don't have " + amount + " of the item.", seller, null);
 			Queue.removeAuction(this);
+			inventory.setItemInMainHand(object);
 			
 		}
+		
+		
 		
 	}
 	
@@ -68,9 +75,6 @@ public class Auction {
 	}
 	
 	public boolean startAuction() {
-		
-		inventory.setItemInMainHand(new ItemStack(Material.AIR));
-		
 		Library.broadcast(seller.getDisplayName() + "&6 has started an auction!", AuctionStorm.instance.pluginname);
 		Library.broadcast("&6It is " + amount + " " + object.getType().name().toLowerCase().replaceAll("_", " ") + " for " + price + " credits.", AuctionStorm.instance.pluginname);
 		Library.broadcast("&6Use &9/auc info &6to get information about it.", AuctionStorm.instance.pluginname);

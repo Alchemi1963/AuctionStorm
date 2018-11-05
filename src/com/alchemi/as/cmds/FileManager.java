@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.alchemi.al.Library;
 import com.alchemi.as.AuctionStorm;
 
 public class FileManager {
@@ -30,11 +30,7 @@ public class FileManager {
     public FileConfiguration getConfig(){
         return plugin.getConfig();
     }
-
-    /*
-     * messages.yml
-     */
-
+    
     public AuctionStorm getMain(){ return plugin;}
 
     public void saveDefaultMessagesConfig() {
@@ -68,7 +64,7 @@ public class FileManager {
                 messagesConfig.setDefaults(defConfig);
             }
         } catch(Exception e) {
-            System.out.println("[MarioParty] System could not reload configuration!");
+            Library.print("System could not reload configuration!", AuctionStorm.instance.pluginname);
             e.printStackTrace();
         }
     }
