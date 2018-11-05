@@ -83,13 +83,10 @@ public class Commando implements CommandExecutor{
 							return false;
 						}
 						
-						if (args.length == 3 && Library.containsAny(args[2], "0123456789")) {
-							AuctionStorm.instance.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
-							return true;
-						}
-						
 						if (args.length >= 2 && Library.containsAny(args[1], "0123456789")) AuctionStorm.instance.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
 						else Library.sendMsg("&8Usage: &9" + Commando.bid_usage, (Player)sender, null);
+						
+						if (args.length == 3 && Library.containsAny(args[2], "0123456789")) AuctionStorm.instance.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
 						
 						return true;
 					

@@ -42,6 +42,26 @@ public class Auction {
 		this.inventory = seller.getInventory();
 		this.timer = AuctionStorm.instance.getServer().getScheduler();
 		startAuction();
+		
+		object = inventory.getItemInMainHand();
+		
+		if (object.getType().name().equalsIgnoreCase("air")) {
+			
+			Library.sendMsg("&4You need to hold an item to start an auction.", seller, null);
+			AuctionStorm.instance.current_auction = null;
+						
+		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !seller.hasPermission("as.creative") && !seller.isOp()) {
+			
+			Library.sendMsg("&4You have no permission to start an auction in creative.", seller, null);
+			AuctionStorm.instance.current_auction = null;
+			
+		} else if (object.getAmount() < amount) {
+			
+			Library.sendMsg("&4You don't have " + amount + " of the item.", seller, null);
+			AuctionStorm.instance.current_auction = null;
+			
+		}
+		
 	}
 	
 	public Player getSeller() {
@@ -50,21 +70,6 @@ public class Auction {
 	
 	private boolean startAuction() {
 		
-		
-		object = inventory.getItemInMainHand();
-		if (object.getType().name().equalsIgnoreCase("air")) {
-			
-			Library.sendMsg("&4You need to hold an item to start an auction.", seller, null);
-			AuctionStorm.instance.current_auction = null;
-			return false;
-			
-		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !seller.hasPermission("as.creative") && !seller.isOp()) {
-			
-			AuctionStorm.instance.current_auction = null;
-			Library.sendMsg("&4You have no permission to start an auction in creative.", seller, null);
-			return false;
-			
-		}
 		inventory.setItemInMainHand(new ItemStack(Material.AIR));
 		
 		Library.broadcast(seller.getDisplayName() + "&6 has started an auction!", AuctionStorm.instance.pluginname);
