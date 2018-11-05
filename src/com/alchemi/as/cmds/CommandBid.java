@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.alchemi.al.Library;
+import com.alchemi.as.Auction;
 import com.alchemi.as.AuctionStorm;
 
 public class CommandBid implements CommandExecutor{
@@ -14,6 +15,11 @@ public class CommandBid implements CommandExecutor{
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
 		if (Library.checkCmdPermission(cmd, sender, "as.base", "bid") && sender instanceof Player) {
+			
+			if (AuctionStorm.instance.current_auction == null) {
+				Auction.noAuction((Player)sender);
+				return false;
+			}
 			
 			if (args.length >= 1 && Library.containsAny(args[0], "0123456789")) AuctionStorm.instance.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
 			else Library.sendMsg("&8Usage: &9" + Commando.bid_usage, (Player)sender, null);

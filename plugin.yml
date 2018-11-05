@@ -5,8 +5,8 @@ version: 1.0
 commands:
     auc:
         description: AuctionStorm base command.
-        usage: /auctionstorm
-        aliases: [as, auc, auction]
+        usage: /auc
+        aliases: [as, auctionstorm, auction]
         permission: as.base
     
     bid:

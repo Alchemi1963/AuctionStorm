@@ -32,12 +32,14 @@ public class Commando implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		if (Library.checkCmdPermission(cmd, sender, "as.base", "auctionstorm") && sender instanceof Player) {
+		
+		
+		if (Library.checkCmdPermission(cmd, sender, "as.base", "auc") && sender instanceof Player) {
 			Player player = (Player)sender;
 			
 			
 			if (args.length == 0) {
-				Library.sendMsg("&8Use &9/as help&8 to get help", player, null);
+				Library.sendMsg("&8Use " + help_usage + "&8 to get help", player, null);
 				return true;
 			}
 			
@@ -57,7 +59,8 @@ public class Commando implements CommandExecutor{
 						if (Library.containsAny(args[1], "0123456789")) price = Integer.valueOf(args[1]);
 						if (args.length >= 3 && Library.containsAny(args[2], "0123456789") && Integer.valueOf(args[1]) > 0) amount = Integer.valueOf(args[2]);
 						if (args.length >= 4 && Library.containsAny(args[3], "0123456789") && Integer.valueOf(args[2]) > 0) increment = Integer.valueOf(args[3]);
-						if (args.length == 5 && Library.containsAny(args[4], "0123456789") && Integer.valueOf(args[3]) >= 30 && Integer.valueOf(args[3]) <= 240) duration = Integer.valueOf(args[3]);
+						if (args.length == 5 && Library.containsAny(args[4], "0123456789") && Integer.valueOf(args[4]) >= 30 && Integer.valueOf(args[4]) <= 240) duration = Integer.valueOf(args[4]);
+						
 						
 						if (price == 0) {
 							Library.sendMsg("Usage: " + start_usage, player, null);
@@ -65,32 +68,20 @@ public class Commando implements CommandExecutor{
 						}
 						
 						AuctionStorm.instance.current_auction = new Auction(player, price, duration, amount, increment);
-						
-						/*try {
-							int price = Integer.valueOf(args[1]);
-							int duration = Integer.valueOf(args[2]);
-							int increment = 2;
-							int amount = player.getInventory().getItemInMainHand().getAmount();
-							
-							if (args.length >= 4) amount = Integer.valueOf(args[3]);
-							if (args.length == 5) increment = Integer.valueOf(args[4]);
-							
-							AuctionStorm.instance.current_auction = new Auction(player, price, duration, amount, increment);
-							
-						} catch (Exception e) {
-							e.printStackTrace();
-							Library.sendMsg("Usage: " + start_usage, player, null);
-						}*/
+						return true;
 					}
 				} else if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")) { 
 					
 					Library.sendMsg("Usage: " + start_usage, player, null);
 					
-				} else if (args.length >= 1) { //bid command
+				} else if (args.length >= 1) { 
 					
-					if (args[0].equalsIgnoreCase("bid")) {
+					if (args[0].equalsIgnoreCase("bid")) { //bid command
 					
-						Library.print(Library.containsAny(args[1], "0123456789"), AuctionStorm.instance.pluginname);
+						if (AuctionStorm.instance.current_auction == null) {
+							Auction.noAuction(player);
+							return false;
+						}
 						
 						if (args.length >= 2 && Library.containsAny(args[1], "0123456789")) AuctionStorm.instance.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
 						else Library.sendMsg("&8Usage: &9" + Commando.bid_usage, (Player)sender, null);
@@ -101,24 +92,40 @@ public class Commando implements CommandExecutor{
 					
 					} else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("i")) { //info command
 						if (AuctionStorm.instance.current_auction != null) AuctionStorm.instance.current_auction.getInfo(player);
-						else Library.sendMsg("&6There is currently no auction, you can use &9/as start &6to start one.", player, null);
+						else Auction.noAuction(player);
+					
+					} else if (args[0].equalsIgnoreCase("end") || args[0].equalsIgnoreCase("cancel")) { //end command
+						
+						if (AuctionStorm.instance.current_auction == null) {
+							Auction.noAuction(player);
+							return false;
+						}
+						
+						if (player.equals(AuctionStorm.instance.current_auction.getSeller())) {
+							if (args.length == 2) AuctionStorm.instance.current_auction.forceEndAuction(args[1]);
+							else AuctionStorm.instance.current_auction.forceEndAuction();
+							return true;
+							
+						} else if (player.isOp() || player.hasPermission("as.cancel")) {
+							if (args.length == 2) AuctionStorm.instance.current_auction.forceEndAuction(args[1], player);
+							else AuctionStorm.instance.current_auction.forceEndAuction("", player);
+							return true;
+							
+						} else {
+							Library.sendMsg("You cannot do this!", player, null);
+							return false;
+						}
 					}
 					
-				} else if (args[0].equalsIgnoreCase("end") || args[0].equalsIgnoreCase("cancel")) {
-					if (player.equals(AuctionStorm.instance.current_auction.getSeller())) {
-						if (args.length == 2) AuctionStorm.instance.current_auction.forceEndAuction(args[1]);
-						else AuctionStorm.instance.current_auction.forceEndAuction();
-					} else if (player.isOp() || player.hasPermission("as.cancel")) {
-						if (args.length == 2) AuctionStorm.instance.current_auction.forceEndAuction(args[1], player);
-						else AuctionStorm.instance.current_auction.forceEndAuction("", player);
-					}
-				}
+				} 
 			}
-			
+			Library.sendMsg("This command does not exist, use " + help_usage + " to get help.", player, null);
 			return true;
 		}
 		
 		return false;
+		
+		
 	}
 
 	
