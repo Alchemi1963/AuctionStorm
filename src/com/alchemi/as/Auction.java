@@ -68,6 +68,7 @@ public class Auction {
 		inventory.setItemInMainHand(new ItemStack(Material.AIR));
 		
 		Library.broadcast(seller.getDisplayName() + "&6 has started an auction!", AuctionStorm.instance.pluginname);
+		Library.broadcast("&6It is " + amount + " " + object.getType().name().toLowerCase().replaceAll("_", " ") + " for " + price + " credits.", AuctionStorm.instance.pluginname);
 		Library.broadcast("&6Use &9/auc info &6to get information about it.", AuctionStorm.instance.pluginname);
 		
 		//20 ticks/second * 60 seconds/minute = 1200 ticks/minute
@@ -103,19 +104,17 @@ public class Auction {
 			secret_bid = bid;
 			secret_bidder = bidder;
 			
+			return true;
+			
 		}
 		
-		if (secret_bid != 0) {
-			
-			if (secret_bid > bid) {
+		if (bid <= secret_bid) {
 				Library.sendMsg("&9You have been automatically outbit by " + secret_bidder.getDisplayName(), bidder, null);
 				bid = secret_bid;
 				bidder = secret_bidder;
 				
 				secret_bid = 0;
 				secret_bidder = null;
-			}
-			
 		}
 		
 		current_bid = bid;
