@@ -32,8 +32,6 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	private Map<String, Object> data_defaults = new HashMap<String, Object>();
 	public ArrayList<Player> banned_players = new ArrayList<Player>(); 
 
-	public Auction current_auction;
-	
 	@Override
 	public void onEnable() {
 		instance = this;
@@ -75,8 +73,8 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	@Override
 	public void onDisable() {
 		
-		if (current_auction != null) {
-			current_auction.forceEndAuction("plugin reload", null);
+		if (Queue.current_auction != null) {
+			Queue.current_auction.forceEndAuction("plugin reload", null);
 		}
 		Library.saveExtraConfig(datafile, data);
 		saveConfig();

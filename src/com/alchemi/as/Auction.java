@@ -41,24 +41,23 @@ public class Auction {
 		
 		this.inventory = seller.getInventory();
 		this.timer = AuctionStorm.instance.getServer().getScheduler();
-		startAuction();
 		
 		object = inventory.getItemInMainHand();
 		
 		if (object.getType().name().equalsIgnoreCase("air")) {
 			
 			Library.sendMsg("&4You need to hold an item to start an auction.", seller, null);
-			AuctionStorm.instance.current_auction = null;
+			Queue.removeAuction(this);
 						
 		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !seller.hasPermission("as.creative") && !seller.isOp()) {
 			
 			Library.sendMsg("&4You have no permission to start an auction in creative.", seller, null);
-			AuctionStorm.instance.current_auction = null;
+			Queue.removeAuction(this);
 			
 		} else if (object.getAmount() < amount) {
 			
 			Library.sendMsg("&4You don't have " + amount + " of the item.", seller, null);
-			AuctionStorm.instance.current_auction = null;
+			Queue.removeAuction(this);
 			
 		}
 		
@@ -68,7 +67,7 @@ public class Auction {
 		return seller;
 	}
 	
-	private boolean startAuction() {
+	public boolean startAuction() {
 		
 		inventory.setItemInMainHand(new ItemStack(Material.AIR));
 		
@@ -177,7 +176,7 @@ public class Auction {
 			Library.broadcast("&9Sold! To no one...", AuctionStorm.instance.pluginname);
 		}
 		
-		AuctionStorm.instance.current_auction = null;
+		
 	}
 	
 	public void forceEndAuction() { forceEndAuction(""); }
@@ -186,7 +185,7 @@ public class Auction {
 	
 	public void forceEndAuction(String reason, Player ender) {
 
-		AuctionStorm.instance.current_auction = null;
+		Queue.nextAuction();
 		inventory.addItem(object);
 		
 		if (ender.hasPermission("as.cancel") || ender == null || ender.isOp() || ender == seller) {

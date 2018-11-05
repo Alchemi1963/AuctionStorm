@@ -17,8 +17,9 @@ public class AuctionTimer implements Runnable{
 	public void run() {
 		
 		if (time == 0) {
-			AuctionStorm.instance.getServer().getScheduler().cancelTask(AuctionStorm.instance.current_auction.task_id);
-			AuctionStorm.instance.current_auction.endAuction();
+			AuctionStorm.instance.getServer().getScheduler().cancelTask(Queue.current_auction.task_id);
+			Queue.current_auction.endAuction();
+			
 		} else if (time == 2) {
 			Library.broadcast("&6Going once...", AuctionStorm.instance.pluginname);
 		} else if (time == 1) {

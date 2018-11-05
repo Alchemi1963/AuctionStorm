@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import com.alchemi.al.Library;
 import com.alchemi.as.Auction;
 import com.alchemi.as.AuctionStorm;
+import com.alchemi.as.Queue;
 
 
 public class Commando implements CommandExecutor{
@@ -67,7 +68,7 @@ public class Commando implements CommandExecutor{
 							return false;
 						}
 						
-						AuctionStorm.instance.current_auction = new Auction(player, price, duration, amount, increment);
+						Queue.addAuction(new Auction(player, price, duration, amount, increment));
 						return true;
 					}
 				} else if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")) { 
@@ -78,37 +79,37 @@ public class Commando implements CommandExecutor{
 					
 					if (args[0].equalsIgnoreCase("bid")) { //bid command
 					
-						if (AuctionStorm.instance.current_auction == null) {
+						if (Queue.current_auction == null) {
 							Auction.noAuction(player);
 							return false;
 						}
 						
-						if (args.length >= 2 && Library.containsAny(args[1], "0123456789")) AuctionStorm.instance.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
+						if (args.length >= 2 && Library.containsAny(args[1], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
 						else Library.sendMsg("&8Usage: &9" + Commando.bid_usage, (Player)sender, null);
 						
-						if (args.length == 3 && Library.containsAny(args[2], "0123456789")) AuctionStorm.instance.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
+						if (args.length == 3 && Library.containsAny(args[2], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
 						
 						return true;
 					
 					} else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("i")) { //info command
-						if (AuctionStorm.instance.current_auction != null) AuctionStorm.instance.current_auction.getInfo(player);
+						if (Queue.current_auction != null) Queue.current_auction.getInfo(player);
 						else Auction.noAuction(player);
 					
 					} else if (args[0].equalsIgnoreCase("end") || args[0].equalsIgnoreCase("cancel")) { //end command
 						
-						if (AuctionStorm.instance.current_auction == null) {
+						if (Queue.current_auction == null) {
 							Auction.noAuction(player);
 							return false;
 						}
 						
-						if (player.equals(AuctionStorm.instance.current_auction.getSeller())) {
-							if (args.length == 2) AuctionStorm.instance.current_auction.forceEndAuction(args[1]);
-							else AuctionStorm.instance.current_auction.forceEndAuction();
+						if (player.equals(Queue.current_auction.getSeller())) {
+							if (args.length == 2) Queue.current_auction.forceEndAuction(args[1]);
+							else Queue.current_auction.forceEndAuction();
 							return true;
 							
 						} else if (player.isOp() || player.hasPermission("as.cancel")) {
-							if (args.length == 2) AuctionStorm.instance.current_auction.forceEndAuction(args[1], player);
-							else AuctionStorm.instance.current_auction.forceEndAuction("", player);
+							if (args.length == 2) Queue.current_auction.forceEndAuction(args[1], player);
+							else Queue.current_auction.forceEndAuction("", player);
 							return true;
 							
 						} else {
