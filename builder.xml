@@ -2,10 +2,11 @@
 <project name="AuctionStorm" default="CreateJar" basedir=".">
     <target name="CreateJar" description="Create a jar for the project">
         <mkdir dir="target"></mkdir>
-        <jar destfile="../Test-Server/plugins/AuctionStorm-1.0.jar">
+        <jar destfile="../Test-Server/plugins/AuctionStorm-0.2.jar">
             <fileset dir="bin/"></fileset>
             <fileset file="plugin.yml"></fileset>
             <fileset file="config.yml"></fileset>
+            <fileset file="as-data.yml"></fileset>
         </jar>
     </target>
 </project>

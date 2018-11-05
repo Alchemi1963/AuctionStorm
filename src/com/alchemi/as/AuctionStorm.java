@@ -1,4 +1,4 @@
-package com.alchemi.toa;
+package com.alchemi.as;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,34 +10,47 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.alchemi.al.Library;
-import com.alchemi.toa.cmds.Commando;
+import com.alchemi.as.cmds.CommandBid;
+import com.alchemi.as.cmds.Commando;
 
-import net.minecraft.server.v1_13_R2.ItemStack;
+import net.milkbowl.vault.economy.Economy;
 
 public class AuctionStorm extends JavaPlugin implements Listener {
-	public static String pluginname;
-	public static FileConfiguration config;
-	public static FileConfiguration data;
+	public String pluginname;
+	public static Economy econ;	
+	public FileConfiguration config;
+	public FileConfiguration data;
 	public File datafile = new File(getDataFolder(), "as-data.yml");
 	public File configfile = new File(getDataFolder(), "config.yml");
 	
+	public static AuctionStorm instance;
+	
 	private Map<String, Object> data_defaults = new HashMap<String, Object>();
-	public static ArrayList<Player> banned_players = new ArrayList<Player>(); 
+	public ArrayList<Player> banned_players = new ArrayList<Player>(); 
 
+	public Auction current_auction;
+	
 	@Override
 	public void onEnable() {
+		instance = this;
 		
 		data_defaults.put("baddies", new ArrayList<Player>());
-		data_defaults.put("current_auction", new Object[]{new ItemStack(null), 0, 0});
 		
 		pluginname = getDescription().getName();
 
 		Library.print("Vworp vworp vworp", pluginname);
 		
 		//init resources
+		if (!setupEconomy() ) {
+            Library.print("[%s] - Disabled due to no Vault dependency found!", pluginname);
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+		
 		config = getConfig();
 		checkFileExists(configfile);
 		
@@ -52,7 +65,6 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		
 		Player player = e.getPlayer();
 		String playername = player.getName();
 		
@@ -63,7 +75,9 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	@Override
 	public void onDisable() {
 		
-		
+		if (current_auction != null) {
+			current_auction.forceEndAuction("plugin reload", null);
+		}
 		Library.saveExtraConfig(datafile, data);
 		saveConfig();
 		Library.print("I don't wanna go...", pluginname);
@@ -71,7 +85,12 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	}
 	
 	private void registerCommands() {
-		getCommand("auctionstorm").setExecutor(new Commando());
+		getCommand("auc").setExecutor(new Commando());
+		getCommand("auc help").setExecutor(new Commando());
+		getCommand("auc start").setExecutor(new Commando());
+		getCommand("auc info").setExecutor(new Commando());
+		getCommand("auc cancel").setExecutor(new Commando());
+		getCommand("bid").setExecutor(new CommandBid());
 	}
 	
 	public void checkFileExists(File file) {
@@ -90,4 +109,16 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 			
 		}
 	}
+	
+	private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
 }
