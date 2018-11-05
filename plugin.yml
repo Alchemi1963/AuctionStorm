@@ -1,6 +1,8 @@
 name: AuctionStorm
 main: com.alchemi.as.AuctionStorm
+author: Lava_Ingot, martijnpu
 version: 1.0
+description: Really nice auction plugin!
 
 commands:
     auc:

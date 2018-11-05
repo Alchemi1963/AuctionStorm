@@ -1,0 +1,28 @@
+AuctionStorm:
+  Tag: "&7[&6&lAuctionStorm&r&7]"
+
+  Auction:
+    Invalid: "&cWorld &b%WORLD% &cdoes not appear in our database. Use &4/mpmap create <name> &cto create."
+    Exists: "&cWorld &b%WORLD% &calready exists in our database."
+    Created: "&6World &b%WORLD% &6is successfully created."
+    Removed: "&6World &b%WORLD% &6is successfully removed"
+    Ingame: "&6World &b%WORLD% &6is ingame!"
+    Enabled: "&6World &b%WORLD% &6is enabled!"
+    Incomplete: "&cWorld &b%WORLD% &cis not valid. Check the lobby, places & cameras!"
+
+  Command:
+    Only-Player: "&cThis command can be used only as player!"
+    No-Permission: "&cYou don't have permission to use this command!"
+    Header: "&8&m==========[&r &6&lMarioParty plugin &8&m]=&8&m========="
+    Footer: "&8&m========================================="
+    Wrong-Format: "&cPlease usage: &4"
+    Unknown: "&cUnknown command. Use &4/marioparty help &cfor more information."
+    Invalid-Name: "&cName &b%NAME% &cdoes not appear in our database."
+    Invalid-Number: "&cNumber &b%NUMBER% &cis not a valid number."
+    Negative-Number: "&cNumber &b%NUMBER% &cis a negative number. Only positive numbers are allowed."
+    Not-Enough-Coins: "&cPlayer &b%PLAYER% &chas not enough coins to withdraw &b%POINTS%&c."
+    Success: "&6Successfully executed."
+    Error: "&cError!"
+    WrongWorld: "&cError because location is in a different world."
+
+File-Version-Do-Not-Edit: 0

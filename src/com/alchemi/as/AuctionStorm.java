@@ -21,11 +21,13 @@ import net.milkbowl.vault.economy.Economy;
 
 public class AuctionStorm extends JavaPlugin implements Listener {
 	public String pluginname;
-	public static Economy econ;	
-	public FileConfiguration config;
-	public FileConfiguration data;
-	public File datafile = new File(getDataFolder(), "as-data.yml");
-	public File configfile = new File(getDataFolder(), "config.yml");
+	public static Economy econ;
+//
+	private FileManager fileManager;
+	public FileManager getFileManager() {
+		return fileManager;
+	}
+	private final int MESSAGES_FILE_VERSION = 0;
 	
 	public static AuctionStorm instance;
 	
@@ -51,8 +53,8 @@ public class AuctionStorm extends JavaPlugin implements Listener {
             return;
         }
 		
-		config = getConfig();
-		checkFileExists(configfile);
+		//config = getConfig();
+		//checkFileExists(configfile);
 		
 		data = Library.loadExtraConfig(datafile);
 		data.addDefaults(data_defaults);
@@ -60,6 +62,26 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		//registry
 		registerCommands();
 		getServer().getPluginManager().registerEvents(this, this);
+
+//van martijnpu:
+		saveDefaultConfig();
+		fileManager = new FileManager(this);
+		getFileManager().saveDefaultMessagesConfig();
+
+		if(!fileManager.getMessagesConfig().isSet("File-Version-Do-Not-Edit") || !fileManager.getMessagesConfig().get("File-Version-Do-Not-Edit").equals(MESSAGES_FILE_VERSION)) {
+			Messages.sendConsole("Your messages file is outdated! Updating...");
+			fileManager.updateConfig("messages.yml");
+			fileManager.getMessagesConfig().set("File-Version-Do-Not-Edit", MESSAGES_FILE_VERSION);
+			fileManager.saveMessagesConfig();
+			Messages.sendConsole("File successfully updated!");
+		}
+		if(!getConfig().isSet("File-Version-Do-Not-Edit") || !getConfig().get("File-Version-Do-Not-Edit").equals(CONFIG_FILE_VERSION)) {
+			Messages.sendConsole("Your config file is outdated! Updating...");
+			fileManager.updateConfig("config.yml");
+			getConfig().set("File-Version-Do-Not-Edit", CONFIG_FILE_VERSION);
+			saveConfig();
+			Messages.sendConsole("File successfully updated!");
+		}
 		
 	}
 	
