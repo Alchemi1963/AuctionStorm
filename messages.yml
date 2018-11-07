@@ -1,28 +1,46 @@
+###################
+#    VARIABLES    #
+#                 #
+#    $player$     #
+#    $sender$     #
+#    $amount$     #
+#     $item$      #
+#    $price$      #
+#    $valuta$     #
+#   $duration$    #
+#     $incr$      #
+#    $reason$     #
+#                 #
+###################
+
 AuctionStorm:
   Tag: "&7[&6&lAuctionStorm&r&7]"
 
   Auction:
-    Invalid: "&cWorld &b%WORLD% &cdoes not appear in our database. Use &4/mpmap create <name> &cto create."
-    Exists: "&cWorld &b%WORLD% &calready exists in our database."
-    Created: "&6World &b%WORLD% &6is successfully created."
-    Removed: "&6World &b%WORLD% &6is successfully removed"
-    Ingame: "&6World &b%WORLD% &6is ingame!"
-    Enabled: "&6World &b%WORLD% &6is enabled!"
-    Incomplete: "&cWorld &b%WORLD% &cis not valid. Check the lobby, places & cameras!"
-
+    No-Item: "&4You need to hold an item to start an auction."
+    Not-Creative: "&4You have no permission to start an auction in creative."
+    Not-Enough: "&4You don't have $amount$ of $item$."
+    Start: "$player$ &6has started an auction!\nIt is $amount$ $item$ for $price$ $valuta$.\nUse &9/auc info&6 to get more info about it."
+    No-Bid-Self: "&4You cannot bid on your own auction..."
+    No-Bid-Money: "&4You do not have enough money to make this bid..."
+    Low-Bid: "&4Your bid must be higher than $price$."
+    Outbid: "&6You have been automatically outbid by $player$."
+    Bid: "$player$ &6has bid $price$ $valuta$ on the $item$."
+    Time-Added: "&930 &6seconds have been added."
+    Info: "&l&9=====Current Auction=====\n&r&9Item: &6$item$\n&9Amount: &6$amount$\n&9Starting Bid: &6$price$ $valuta$\n&9Time Remaining: &6$duration$&6seconds"
+    Info2: "\n&9Highest Bidder: &6$player$\n&9Current Bid: &6$price$"
+    End: "&9Sold! To the lovely $player$ &9for &6$price$ $valuta$."
+    End-No-Bids: "&9Sold! To no one..."
+    Paid-By: "You have been paid $price$ $valuta$ by $player$."
+    Paid-To: "You have paid $player$ $price$ $valuta$."
+    No-Auction: "&6There is currently no auction, you can use &9/as start &6to start one."
+    Notify-Time: "&9$amount$ seconds remaining on the current auction.\nUse &6/auc info&9 to get more info about it."
+    
   Command:
-    Only-Player: "&cThis command can be used only as player!"
-    No-Permission: "&cYou don't have permission to use this command!"
-    Header: "&8&m==========[&r &6&lMarioParty plugin &8&m]=&8&m========="
-    Footer: "&8&m========================================="
-    Wrong-Format: "&cPlease usage: &4"
-    Unknown: "&cUnknown command. Use &4/marioparty help &cfor more information."
-    Invalid-Name: "&cName &b%NAME% &cdoes not appear in our database."
-    Invalid-Number: "&cNumber &b%NUMBER% &cis not a valid number."
-    Negative-Number: "&cNumber &b%NUMBER% &cis a negative number. Only positive numbers are allowed."
-    Not-Enough-Coins: "&cPlayer &b%PLAYER% &chas not enough coins to withdraw &b%POINTS%&c."
-    Success: "&6Successfully executed."
-    Error: "&cError!"
-    WrongWorld: "&cError because location is in a different world."
+    No-Permission: "&c&oYou don't have permission to use &9$sender$&c.&r&c If you believe this is an error, &nplease contact an administrator."
+    Wrong-Format: "&cPlease use: &9"
+    Unknown: "&cUnknown command. Use &9/as help &cfor more information."
+    End-Auction: "The current auction has been cancelled by $sender$."
+    End-Auction-Reason: " The current auction has been cancelled by $sender$ for $reason$."
 
 File-Version-Do-Not-Edit: 0

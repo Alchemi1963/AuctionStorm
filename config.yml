@@ -1,1 +1,13 @@
-messages.yml
+Vault:
+    valutaSingular: "credit"
+    valutaPlural: "credits"
+    
+Auction:
+    Sound:
+        Pay: "ENTITY_PLAYER_LEVELUP"
+        Paid: "ENTITY_PLAYER_LEVELUP"
+        Failed: "ENTITY_PLAYER_LEVELUP"
+    Notify:
+        -120
+        -60
+        -30

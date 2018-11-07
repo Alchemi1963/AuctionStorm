@@ -5,15 +5,13 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.alchemi.al.Library;
+import com.alchemi.al.Messenger;
 
 
 public class Auction {
 
-	private PlayerInventory inventory;
 	private ItemStack object;
 	private Player seller;
 	private Player highest_bidder;
@@ -25,6 +23,11 @@ public class Auction {
 	private int duration;
 	private int amount;
 	private int increment;
+	
+	private final String priceS;
+	private final String durationS;
+	private final String amountS;
+	private final String incrementS;
 	
 	private BukkitScheduler timer;
 	private AuctionTimer atimer;
@@ -39,30 +42,34 @@ public class Auction {
 		this.amount = amount;
 		this.increment = increment;
 		
-		this.inventory = seller.getInventory();
+		priceS = String.valueOf(price);
+		durationS = String.valueOf(duration);
+		amountS = String.valueOf(amount);
+		incrementS = String.valueOf(increment);
+		
 		this.timer = AuctionStorm.instance.getServer().getScheduler();
 		
-		object = inventory.getItemInMainHand();
-		inventory.setItemInMainHand(new ItemStack(Material.AIR));
+		object = seller.getInventory().getItemInMainHand();
+		seller.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 		
 		if (object.getType().name().equalsIgnoreCase("air")) {
 			
-			Library.sendMsg("&4You need to hold an item to start an auction.", seller, null);
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.No-Item"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			Queue.removeAuction(this);
-			inventory.setItemInMainHand(object);
+			seller.getInventory().setItemInMainHand(object);
 						
 		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !seller.hasPermission("as.creative") && !seller.isOp()) {
 			
-			Library.sendMsg("&4You have no permission to start an auction in creative.", seller, null);
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Not-Creative"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			Queue.removeAuction(this);
-			inventory.setItemInMainHand(object);
+			seller.getInventory().setItemInMainHand(object);
 			
 		} 
-		if (object.getAmount() < amount) {
+		if (object.getAmount() < this.amount) {
 			
-			Library.sendMsg("&4You don't have " + amount + " of the item.", seller, null);
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Not-Enough"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			Queue.removeAuction(this);
-			inventory.setItemInMainHand(object);
+			seller.getInventory().setItemInMainHand(object);
 			
 		}
 		
@@ -75,9 +82,7 @@ public class Auction {
 	}
 	
 	public boolean startAuction() {
-		Library.broadcast(seller.getDisplayName() + "&6 has started an auction!", AuctionStorm.instance.pluginname);
-		Library.broadcast("&6It is " + amount + " " + object.getType().name().toLowerCase().replaceAll("_", " ") + " for " + price + " credits.", AuctionStorm.instance.pluginname);
-		Library.broadcast("&6Use &9/auc info &6to get information about it.", AuctionStorm.instance.pluginname);
+		AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Start"), seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 		
 		//20 ticks/second * 60 seconds/minute = 1200 ticks/minute
 		atimer = new AuctionTimer(duration);
@@ -89,21 +94,21 @@ public class Auction {
 	
 	public boolean bid(int bid, Player bidder, boolean secret) {
 		if (bidder.equals(seller)) {
-			Library.sendMsg("&4You cannot bid on your own auction...", seller, null);
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.No-Bid-Self"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			return false;
 		}
 		
 		//check if player has enough money for bid
 		if (!AuctionStorm.econ.has(bidder, bid)) {
-			Library.sendMsg("&4You do not have enough to make this bid.", bidder, null);
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.No-Bid-Money"), bidder, bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			return false;
 		}
 		
 		if (current_bid+increment > bid && current_bid > 0) {
-			Library.sendMsg("&4Your bid must be higher than " + (current_bid + increment) + ".", bidder, null);
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Low-Bid"), bidder, bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), String.valueOf(current_bid + increment), AuctionStorm.valutaP, durationS, incrementS);
 			return false;
 		} else if (price > bid) {
-			Library.sendMsg("&4Your bid must be higher than " + price + ".", bidder, null);
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Low-Bid"), bidder, bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			return false;
 		}
 		
@@ -117,7 +122,7 @@ public class Auction {
 		}
 		
 		if (bid <= secret_bid) {
-				Library.sendMsg("&9You have been automatically outbit by " + secret_bidder.getDisplayName(), bidder, null);
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Outbid"), bidder, secret_bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 				bid = secret_bid;
 				bidder = secret_bidder;
 				
@@ -128,56 +133,64 @@ public class Auction {
 		current_bid = bid;
 		highest_bidder = bidder;
 		
-		if (object.getAmount() > 1) {
-			if ("aieouy".contains(object.getType().name().toLowerCase().substring(object.getType().name().toLowerCase().length() - 1))) Library.broadcast(bidder.getDisplayName() + "&6 has bid " + bid + " on the " + object.getAmount() + " " + object.getType().name().toLowerCase().replaceAll("_", " ") + "'s.", AuctionStorm.instance.pluginname);
-			else Library.broadcast(bidder.getDisplayName() + "&6 has bid " + bid + " on the " + object.getAmount() + " " + object.getType().name().toLowerCase().replaceAll("_", " ") + "s.", AuctionStorm.instance.pluginname);
-			return true;
-		}
-		Library.broadcast(bidder.getDisplayName() + "&6 has bid " + bid + " on the " + object.getType().name().toLowerCase().replaceAll("_", " ") + ".", AuctionStorm.instance.pluginname);
+		AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Bid"), bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), String.valueOf(bid), AuctionStorm.valutaP, durationS, incrementS);
 		
 		if (atimer.time < 5.0F) {
 			atimer.time += 30.0F;
-			Library.broadcast("&930 seconds have been added", AuctionStorm.instance.pluginname);
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time-Added"), bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), String.valueOf(bid), AuctionStorm.valutaP, durationS, incrementS);
 		}
 		
 		return true;
 	}
 	
 	public boolean getInfo(Player p) {
-		String msg = "&l&9=====Current Auction=====\n"
-				+ "&r&9Item: &6" + object.getType().name().toLowerCase().replaceAll("_", " ")
-				+ "\n&9Amount: &6" + amount
-				+ "\n&9Starting Bid: &6" + price + " credits"
-				+ "\n&9Time Remaining: &6" + atimer.time + " seconds";
+		String msg = Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info"), seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 		
-		if (highest_bidder != null) msg = msg + "\n&9Highest Bidder: &6" + highest_bidder.getDisplayName();
-		if (current_bid != 0) msg = msg + "\nCurrent Bid: &6" + current_bid + " credits"; 
+		if (highest_bidder != null && current_bid > 0) {
+			
+			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info2"), highest_bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS);
+			
+		}
 		
 		msg = msg + "\n&l&9=========================";
 		//show enchantments if present?
 		
-		Library.sendMsg(msg, p, null);
+		Messenger.sendMsg(msg, p);
 		return true;
 	}
 	
 	public void endAuction() {
 		
 		if (highest_bidder != null) {
-			highest_bidder.playSound(highest_bidder.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 0.0F);
+			try {
+				highest_bidder.playSound(highest_bidder.getLocation(), Sound.valueOf(AuctionStorm.config.getString("Auction.Sound.Pay")), 1.0F, 0.0F);
+				seller.playSound(seller.getLocation(), Sound.valueOf(AuctionStorm.config.getString("Auction.Sound.Paid")), 1.0F, 0.0F);
+			} catch (Exception e) {
+				e.printStackTrace();
+				highest_bidder.playSound(highest_bidder.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 0.0F);
+				seller.playSound(seller.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 0.0F);
+			}
 			highest_bidder.getInventory().addItem(object);
 			//take money from highest bidder
 			AuctionStorm.econ.withdrawPlayer(highest_bidder, current_bid);
-			Library.sendMsg("You have paid " + current_bid + " credits" + " to " + seller.getDisplayName(), highest_bidder, null);
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Paid-To"), highest_bidder, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS);
 			
 			//give money to seller
-			AuctionStorm.econ.depositPlayer(seller, current_bid);
-			Library.sendMsg("You have been paid " + current_bid + " credits" + " by " + highest_bidder.getDisplayName(), seller, null);
 			
-			Library.broadcast("&9Sold! To the lovely " + highest_bidder.getDisplayName() + "&9 for " + current_bid + " credits.", AuctionStorm.instance.pluginname);
+			AuctionStorm.econ.depositPlayer(seller, current_bid);
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Paid-By"), seller, highest_bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS);
+			
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End"), highest_bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS);
+
 		} else {
-			seller.playSound(seller.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 0.0F);
-			inventory.addItem(object);
-			Library.broadcast("&9Sold! To no one...", AuctionStorm.instance.pluginname);
+			try {
+				seller.playSound(seller.getLocation(), Sound.valueOf(AuctionStorm.config.getString("Auction.Sound.Failed")), 1.0F, 0.0F);
+			} catch (Exception e) {
+				e.printStackTrace();
+				seller.playSound(seller.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 0.0F);
+			}
+			seller.getInventory().addItem(object);
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End-No-Bid"), seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 		}
 		
 		
@@ -190,7 +203,7 @@ public class Auction {
 	public void forceEndAuction(String reason, Player ender) {
 
 		Queue.nextAuction();
-		inventory.addItem(object);
+		seller.getInventory().addItem(object);
 		
 		if (ender.hasPermission("as.cancel") || ender == null || ender.isOp() || ender == seller) {
 		
@@ -198,15 +211,19 @@ public class Auction {
 			if (ender == null) displayname = "the server"; 
 			else displayname = ender.getDisplayName();
 			
-			if (reason != "") Library.broadcast("&9The current auction was ended by " + displayname + " for " + reason + ".", AuctionStorm.instance.pluginname);
-			else Library.broadcast("&9The current auction was ended by " + displayname + ".", AuctionStorm.instance.pluginname);
+			if (reason != "") AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("End-Auction-Reason"), null, displayname, amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS, reason);
+			else AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Command.End-Auction"), null, displayname, amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS, reason);
 			
-		} else Library.sendMsg("&4You have no permission to cancel an auction started by someone else.", ender, null);
+		} else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), ender, ender.getDisplayName(), "/as cancel", amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS);
 		
 	}
 
 	public static void noAuction(Player player) {
-		Library.sendMsg("&6There is currently no auction, you can use &9/as start &6to start one.", player, null);
+		Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.No-Auction"), player, player.getDisplayName());
+	}
+	
+	String getItemName(ItemStack item) {
+		return item.getType().name().toLowerCase().replaceAll("_", " ");
 	}
 	
 }
