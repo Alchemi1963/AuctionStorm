@@ -55,26 +55,30 @@ public class Auction {
 		if (object.getType().name().equalsIgnoreCase("air")) {
 			
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.No-Item"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
-			Queue.removeAuction(this);
 			seller.getInventory().setItemInMainHand(object);
+			return;
 						
 		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !seller.hasPermission("as.creative") && !seller.isOp()) {
 			
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Not-Creative"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
-			Queue.removeAuction(this);
 			seller.getInventory().setItemInMainHand(object);
+			return;
 			
 		} 
 		if (object.getAmount() < this.amount) {
 			
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Not-Enough"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
-			Queue.removeAuction(this);
 			seller.getInventory().setItemInMainHand(object);
+			return;
 			
 		}
 		
+		Queue.addAuction(this);
 		
-		
+	}
+	
+	public ItemStack getObject() {
+		return object;
 	}
 	
 	public Player getSeller() {
@@ -144,7 +148,7 @@ public class Auction {
 	}
 	
 	public boolean getInfo(Player p) {
-		String msg = Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info"), seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
+		String msg = Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info"), seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, String.valueOf(atimer.time), incrementS);
 		
 		if (highest_bidder != null && current_bid > 0) {
 			
@@ -152,7 +156,7 @@ public class Auction {
 			
 		}
 		
-		msg = msg + "\n&l&9=========================";
+		msg = msg + "\n&l&9======================";
 		//show enchantments if present?
 		
 		Messenger.sendMsg(msg, p);
@@ -190,31 +194,39 @@ public class Auction {
 				seller.playSound(seller.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 0.0F);
 			}
 			seller.getInventory().addItem(object);
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End-No-Bid"), seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End-No-Bids"), seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 		}
+		Queue.nextAuction();
+		
+		
 		
 		
 	}
 	
 	public void forceEndAuction() { forceEndAuction(""); }
 	
-	public void forceEndAuction(String reason) { forceEndAuction(reason, seller); }
+	public void forceEndAuction(String reason) { forceEndAuction(reason, seller, false); }
 	
-	public void forceEndAuction(String reason, Player ender) {
+	public void forceEndAuction(String reason, Player ender) { forceEndAuction(reason, ender, false); }
+	
+	public void forceEndAuction(String reason, Player ender, boolean all) {
 
-		Queue.nextAuction();
+		timer.cancelTask(task_id);
+		
 		seller.getInventory().addItem(object);
 		
-		if (ender.hasPermission("as.cancel") || ender == null || ender.isOp() || ender == seller) {
+		if (ender == null || ender.hasPermission("as.cancel") || ender.isOp() || ender == seller) {
 		
 			String displayname;
 			if (ender == null) displayname = "the server"; 
 			else displayname = ender.getDisplayName();
 			
-			if (reason != "") AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("End-Auction-Reason"), null, displayname, amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS, reason);
+			if (reason != "") AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Command.End-Auction-Reason"), null, displayname, amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS, reason);
 			else AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Command.End-Auction"), null, displayname, amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS, reason);
 			
 		} else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), ender, ender.getDisplayName(), "/as cancel", amountS, getItemName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS);
+		
+		if (!all) Queue.nextAuction();
 		
 	}
 
@@ -223,7 +235,6 @@ public class Auction {
 	}
 	
 	String getItemName(ItemStack item) {
-		return item.getType().name().toLowerCase().replaceAll("_", " ");
+		return item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : object.getItemMeta().hasLocalizedName() ? object.getItemMeta().getLocalizedName() : item.getType().name().toLowerCase().replaceAll("_", " ");
 	}
-	
 }

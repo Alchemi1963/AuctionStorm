@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/servers/plugins/Vault.jar"/>
 	<classpathentry kind="lib" path="/servers/spigot-1.13.2.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Alchemic Library"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Alchemic-Library"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

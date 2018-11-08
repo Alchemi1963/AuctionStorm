@@ -82,12 +82,15 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		valutaP = config.getString("Vault.valutaPlural");
 	}
 	
+	
+	
 	@Override
 	public void onDisable() {
 		
-		if (Queue.current_auction != null) {
-			Queue.current_auction.forceEndAuction("plugin reload", null);
+		if (Queue.getQueueLength() != 0) {
+			Queue.clearQueue(true, "server restarting");
 		}
+		
 		saveConfig();
 		Messenger.print("I don't wanna go...", pluginname);
 		

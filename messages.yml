@@ -27,7 +27,7 @@ AuctionStorm:
     Outbid: "&6You have been automatically outbid by $player$."
     Bid: "$player$ &6has bid $price$ $valuta$ on the $item$."
     Time-Added: "&930 &6seconds have been added."
-    Info: "&l&9=====Current Auction=====\n&r&9Item: &6$item$\n&9Amount: &6$amount$\n&9Starting Bid: &6$price$ $valuta$\n&9Time Remaining: &6$duration$&6seconds"
+    Info: "&l&9=====Current Auction=====\n&r&9Item: &6$item$\n&9Amount: &6$amount$\n&9Starting Bid: &6$price$ $valuta$\n&9Time Remaining: &6$duration$ seconds"
     Info2: "\n&9Highest Bidder: &6$player$\n&9Current Bid: &6$price$"
     End: "&9Sold! To the lovely $player$ &9for &6$price$ $valuta$."
     End-No-Bids: "&9Sold! To no one..."

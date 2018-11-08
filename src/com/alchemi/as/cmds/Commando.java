@@ -43,28 +43,8 @@ public class Commando implements CommandExecutor{
 				
 					Messenger.sendMsg(help_message, player);
 					return true;
-				
-				} else if (args.length >= 2) { //auction start command
-					if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")){
-						int price = 0;
-						int amount = player.getInventory().getItemInMainHand().getAmount();
-						int increment = 10;
-						int duration = 30;
-						
-						if (Library.containsAny(args[1], "0123456789")) price = Integer.valueOf(args[1]);
-						if (args.length >= 3 && Library.containsAny(args[2], "0123456789") && Integer.valueOf(args[1]) > 0) amount = Integer.valueOf(args[2]);
-						if (args.length >= 4 && Library.containsAny(args[3], "0123456789") && Integer.valueOf(args[2]) > 0) increment = Integer.valueOf(args[3]);
-						if (args.length == 5 && Library.containsAny(args[4], "0123456789") && Integer.valueOf(args[4]) >= 30 && Integer.valueOf(args[4]) <= 240) duration = Integer.valueOf(args[4]);
-						
-						if (price == 0) {
-							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, player.getDisplayName(), cmd.getName());
-							return false;
-						}
-						
-						Queue.addAuction(new Auction(player, price, duration, amount, increment));
-						return true;
-					}
-				} else if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")) { 
+					
+				} else if (args[0].equalsIgnoreCase("start") && args.length < 2 || args[0].equalsIgnoreCase("s")  && args.length < 2) { 
 					
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					return false;
@@ -97,14 +77,21 @@ public class Commando implements CommandExecutor{
 							Auction.noAuction(player);
 							return false;
 						}
+						String reason = "";
+						if (args.length >= 2) {
+							for (int x = 1 ; x < args.length; x++) {
+								if (reason != "") reason = reason + " " + args[x];
+								else reason = args[x];
+							}
+						}
 						
 						if (player.equals(Queue.current_auction.getSeller())) {
-							if (args.length == 2) Queue.current_auction.forceEndAuction(args[1]);
+							if (reason != "") Queue.current_auction.forceEndAuction(reason);
 							else Queue.current_auction.forceEndAuction();
 							return true;
 							
 						} else if (player.isOp() || player.hasPermission("as.cancel")) {
-							if (args.length == 2) Queue.current_auction.forceEndAuction(args[1], player);
+							if (reason != "") Queue.current_auction.forceEndAuction(reason, player);
 							else Queue.current_auction.forceEndAuction("", player);
 							return true;
 							
@@ -114,9 +101,29 @@ public class Commando implements CommandExecutor{
 						}
 					}
 					
-				} 
+					else if (args.length >= 2 && args[0].equalsIgnoreCase("start") 
+						|| args.length >= 2 && args[0].equalsIgnoreCase("s")) { //auction start command
+						int price = 0;
+						int amount = player.getInventory().getItemInMainHand().getAmount();
+						int increment = 10;
+						int duration = 30;
+						
+						if (Library.containsAny(args[1], "0123456789")) price = Integer.valueOf(args[1]);
+						if (args.length >= 3 && Library.containsAny(args[2], "0123456789") && Integer.valueOf(args[1]) > 0) amount = Integer.valueOf(args[2]);
+						if (args.length >= 4 && Library.containsAny(args[3], "0123456789") && Integer.valueOf(args[2]) > 0) increment = Integer.valueOf(args[3]);
+						if (args.length == 5 && Library.containsAny(args[4], "0123456789") && Integer.valueOf(args[4]) >= 30 && Integer.valueOf(args[4]) <= 240) duration = Integer.valueOf(args[4]);
+						
+						if (price == 0) {
+							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, player.getDisplayName(), cmd.getName());
+							return false;
+						}
+						
+						new Auction(player, price, duration, amount, increment);
+						return true;					
+					}  
+				}  
 			}
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Unknown") + Commando.bid_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Unknown"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 			return true;
 		}
 		if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
