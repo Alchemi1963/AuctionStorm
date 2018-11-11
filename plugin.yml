@@ -3,55 +3,68 @@ main: com.alchemi.as.AuctionStorm
 author: Alchemi, martijnpu
 version: 0.3
 description: Really nice auction plugin!
+depend: [Vault]
 
 commands:
     auc:
         description: AuctionStorm base command.
         usage: /auc
         aliases: [as, auctionstorm, auction]
-        permission: as.base
     
     bid:
         description: Bid on the current auction.
         usage: /bid <bid> [secret bid]
         aliases: [as bid, auctionstorm bid, auc bid, auction bid]
-        permission: as.base
         
     auc start:
         description: Start an auction using the item in hand.
         usage: /auc start <price> [amount] [increment] [duration]
         aliases: [as start, auctionstorm start, auction start, as s, auctionstorm s, auction s]
-        permission: as.base
         
     auc help:
         description: Display the AuctionStorm help page.
         usage: /auc help
         aliases: [as help, auctionstorm help, auction help]
-        permission: as.base
         
     auc info:
         description: Get info about the current auction.
         usage: /auc info
         aliases: [as info, auctionstorm info, auction info, as i, auctionstorm i, auction i]
-        permission: as.base
         
     auc cancel:
         description: Cancel the current auction.
         usage: /auc cancel
         aliases: [as cancel, auctionstorm cancel, auction cancel, as end, auctionstorm end, auction end]
-        permission: as.base
+        
+    asadmin:
+        description: AuctionStorm admin command.
+        usage: /asadmin
+    
+    asadmin return:
+        description: Return items from the auction specified.
+        usage: /asadmin return <seller> <all/item/money> <id>
+        
+    asadmin info:
+        description: Get info about the specified auction.
+        usage: /asadmin info seller <id>
 
 permissions:
     as.*:
         description: Gives permissions for all AuctionStorm commands.
         children:
             as.base: true
+            as.creative: true
+            as.admin: true
+            as.cancel: true
         default: false
     as.base:
         description: Base AuctionStorm permission.
         default: true
     as.creative:
         description: Permission to start an auction in creative.
+        default: false
+    as.admin:
+        description: Permmision to use the admin command.
         default: false
     as.cancel:
         description: Permission to cancel any and all auctions.

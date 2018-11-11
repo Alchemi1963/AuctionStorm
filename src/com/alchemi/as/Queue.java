@@ -47,7 +47,7 @@ public class Queue {
 	public static void printQueue() { 
 		
 		for (Auction a : queue) {
-			AuctionStorm.instance.messenger.broadcast(a.getItemName(a.getObject()));
+			AuctionStorm.instance.messenger.broadcast(Auction.getItemName(a.getObject()));
 		}
 		
 	}

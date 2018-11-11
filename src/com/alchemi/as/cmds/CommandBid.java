@@ -22,11 +22,14 @@ public class CommandBid implements CommandExecutor{
 				Auction.noAuction((Player)sender);
 				return false;
 			}
-			
-			if (args.length >= 1 && Library.containsAny(args[0], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
-			else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
-			
-			if (args.length == 2 && Library.containsAny(args[1], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
+			try {
+				if (args.length >= 1 && Library.containsAny(args[0], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
+				else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+				
+				if (args.length == 2 && Library.containsAny(args[1], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
+			} catch(NumberFormatException e) {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+			}
 			
 			return true;
 		}

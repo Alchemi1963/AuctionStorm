@@ -1,13 +1,13 @@
 Vault:
-    valutaSingular: "credit"
-    valutaPlural: "credits"
+  valutaSingular: credit
+  valutaPlural: credits
     
 Auction:
-    Sound:
-        Pay: "ENTITY_PLAYER_LEVELUP"
-        Paid: "ENTITY_PLAYER_LEVELUP"
-        Failed: "ENTITY_PLAYER_LEVELUP"
-    Notify:
-        -120
-        -60
-        -30
+  Sound:
+    Pay: ENTITY_PLAYER_LEVELUP
+    Paid: ENTITY_PLAYER_LEVELUP
+    Failed: ENTITY_PLAYER_LEVELUP
+  Notify:
+    - 120
+    - 60
+    - 30

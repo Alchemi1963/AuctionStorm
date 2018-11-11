@@ -1,46 +1,69 @@
-###################
 #    VARIABLES    #
 #                 #
 #    $player$     #
 #    $sender$     #
 #    $amount$     #
 #     $item$      #
+#     $name$      #
 #    $price$      #
 #    $valuta$     #
 #   $duration$    #
 #     $incr$      #
 #    $reason$     #
 #                 #
-###################
 
 AuctionStorm:
   Tag: "&7[&6&lAuctionStorm&r&7]"
 
   Auction:
-    No-Item: "&4You need to hold an item to start an auction."
-    Not-Creative: "&4You have no permission to start an auction in creative."
-    Not-Enough: "&4You don't have $amount$ of $item$."
-    Start: "$player$ &6has started an auction!\nIt is $amount$ $item$ for $price$ $valuta$.\nUse &9/auc info&6 to get more info about it."
-    No-Bid-Self: "&4You cannot bid on your own auction..."
-    No-Bid-Money: "&4You do not have enough money to make this bid..."
-    Low-Bid: "&4Your bid must be higher than $price$."
-    Outbid: "&6You have been automatically outbid by $player$."
-    Bid: "$player$ &6has bid $price$ $valuta$ on the $item$."
-    Time-Added: "&930 &6seconds have been added."
-    Info: "&l&9=====Current Auction=====\n&r&9Item: &6$item$\n&9Amount: &6$amount$\n&9Starting Bid: &6$price$ $valuta$\n&9Time Remaining: &6$duration$ seconds"
-    Info2: "\n&9Highest Bidder: &6$player$\n&9Current Bid: &6$price$"
-    End: "&9Sold! To the lovely $player$ &9for &6$price$ $valuta$."
-    End-No-Bids: "&9Sold! To no one..."
-    Paid-By: "You have been paid $price$ $valuta$ by $player$."
-    Paid-To: "You have paid $player$ $price$ $valuta$."
-    No-Auction: "&6There is currently no auction, you can use &9/as start &6to start one."
-    Notify-Time: "&9$amount$ seconds remaining on the current auction.\nUse &6/auc info&9 to get more info about it."
+    Start: "$player$ &6has started an auction!\nIt is $amount$ $item$ for $price$ $valuta$."
+    StartNamed: "$player$ &6has started an auction!\nIt is $amount$ $item$ named $name$ for $price$ $valuta$."
+    Queued: "&9Your auction has been queued."
+    Wrong:
+        None: "&6There is currently no auction, you can use &9/as start &6to start one."
+        Item: "&4You need to hold an item to start an auction."
+        Creative: "&4You have no permission to start an auction in creative."
+        Enough: "&4You don't have $amount$ of $item$."
+    Bid:
+        Own-Auction: "&4You cannot bid on your own auction..."
+        No-Money: "&4You do not have enough money to make this bid..."
+        Bid: "$player$ &6has bid $price$ $valuta$ on the $item$."
+        Outbid: "&6You have been automatically outbid by $player$."
+        Low: "&4Your bid must be higher than $price$."
+    Time:
+        Added: "&930 &6seconds have been added."
+        Halftime: "&9Half of the time is remaining for the current auction."
+        Notify: "&9$amount$ seconds remaining on the current auction."
+    End:
+        End: "&9Sold! To the lovely $player$ &9for &6$price$ $valuta$."
+        No-Bids: "&9Sold! To no one..."
+        Paid-By: "You have been paid $price$ $valuta$ by $player$."
+        Paid-To: "You have paid $player$ $price$ $valuta$."
+        Forced: "The current auction has been cancelled by $sender$."
+        ForcedReason: "The current auction has been cancelled by $sender$ because of $reason$."
+    Info:
+        Get: "Use &6/auc info&9 to get more info about it."
+        Header: "&l&9=====Current Auction====="
+        LogHeader: "&l&9=======Past Auction========"
+        Item: "\n&r&9Item: &6$item$"
+        ItemNamed: "\n&r&9Item: &6$item$ &9named &6$name$"
+        EnchantmentHeader: "\n&9Enchantments:"
+        Enchantment: "\n    - &6$name$ $amount$"
+        Amount: "\n&9Amount: &6$amount$"
+        StartingBid: "\n&9Starting Bid: &6$price$ $valuta$"
+        Price: "\n&9Price: &6$price$ $valuta$"
+        Bidder: "\n&9Highest Bidder: &6$player$"
+        CurrentBid: "\n&9Current Bid: &6$price$ $valuta$"
+        Time: "\n&o&9Time Remaining: &c$duration$ seconds"
+        Footer: "\n&l&9========================="
     
   Command:
     No-Permission: "&c&oYou don't have permission to use &9$sender$&c.&r&c If you believe this is an error, &nplease contact an administrator."
     Wrong-Format: "&cPlease use: &9"
     Unknown: "&cUnknown command. Use &9/as help &cfor more information."
-    End-Auction: "The current auction has been cancelled by $sender$."
-    End-Auction-Reason: " The current auction has been cancelled by $sender$ for $reason$."
-
-File-Version-Do-Not-Edit: 0
+    Admin:
+        Items-Returned: "&9Your items have been returned."
+        Money-Returned: "&9You have recieved a refund."
+        Money-Taken: "&4$player$ has gotten a refund for your auction of $item$."
+        Already-Refunded: "&cThis auction has already been refunded."
+        No-Buyer: "&cThis auction had no buyer."

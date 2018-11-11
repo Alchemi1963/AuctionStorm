@@ -22,7 +22,11 @@ public class AuctionTimer implements Runnable{
 			AuctionStorm.instance.messenger.broadcast("&6Going twice...", AuctionStorm.instance.pluginname);
 		
 		} else if (AuctionStorm.config.getIntegerList("Auction.Notify").contains(time)) {
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Notify-Time"), null, null, String.valueOf(time));
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Notify"), null, null, String.valueOf(time));
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"));
+		} else if (time == Queue.current_auction.getDuration()/2) {
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Halftime"), null, null, String.valueOf(time));
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"));
 		}
 		
 		time--;

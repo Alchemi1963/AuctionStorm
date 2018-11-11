@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.alchemi.al.FileManager;
 import com.alchemi.al.Messenger;
+import com.alchemi.as.cmds.CommandAdmin;
 import com.alchemi.as.cmds.CommandBid;
 import com.alchemi.as.cmds.Commando;
 
@@ -24,62 +25,69 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	public FileManager getFileManager() {
 		return fileManager;
 	}
-	private final int MESSAGES_FILE_VERSION = 0;
-	private final int CONFIG_FILE_VERSION = 0;
+	private final int MESSAGES_FILE_VERSION = 9;
+	private final int CONFIG_FILE_VERSION = 9;
+	
 	
 	public static String valutaS;
 	public static String valutaP;
 	
 	public static AuctionStorm instance;
 	public static FileConfiguration config;
+	public static Logging logger;
 
 	@Override
 	public void onEnable() {
 		instance = this;
 		
-		
-		pluginname = getDescription().getName();
-
-		Messenger.print("Vworp vworp vworp", pluginname);
-		
-		//init resources
-		if (!setupEconomy() ) {
-			Messenger.print("[%s] - Disabled due to no Vault dependency found!", pluginname);
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-		
-		//registry
-		registerCommands();
-
 		//start martijnpu
 		saveDefaultConfig();
 		fileManager = new FileManager(this, new String[]{"config.yml", "messages.yml"}, null, null);
 		fileManager.saveDefaultYML("config.yml");
 		fileManager.saveDefaultYML("messages.yml");
+		
+		messenger = new Messenger(this, fileManager);
 
 		if(!fileManager.getFileConfig("messages.yml").isSet("File-Version-Do-Not-Edit") || !fileManager.getFileConfig("messages.yml").get("File-Version-Do-Not-Edit").equals(MESSAGES_FILE_VERSION)) {
-			Messenger.print("Your messages file is outdated! Updating...", pluginname);
+			messenger.print("Your messages file is outdated! Updating...");
 			fileManager.updateConfig("messages.yml");
 			fileManager.getFileConfig("messages.yml").set("File-Version-Do-Not-Edit", MESSAGES_FILE_VERSION);
 			fileManager.saveConfig("messages.yml");
-			Messenger.print("File successfully updated!", pluginname);
+			messenger.print("File successfully updated!");
 		}
 		if(!getConfig().isSet("File-Version-Do-Not-Edit") || !getConfig().get("File-Version-Do-Not-Edit").equals(CONFIG_FILE_VERSION)) {
-			Messenger.print("Your messages file is outdated! Updating...", pluginname);
+			messenger.print("Your config file is outdated! Updating...");
 			fileManager.updateConfig("config.yml");
 			getConfig().set("File-Version-Do-Not-Edit", CONFIG_FILE_VERSION);
 			saveConfig();
-			Messenger.print("File successfully updated!", pluginname);
-		}
+			messenger.print("File successfully updated!");
+		}		
 		
 		//stop martijnpu
-		messenger = new Messenger(this, fileManager);
+
+		pluginname = getDescription().getName();
+		
+		
+		
+		//init resources
+		if (!setupEconomy() ) {
+			messenger.print("[%s] - Disabled due to no Vault dependency found!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+		
+		logger = new Logging("log.yml");
+		
+		//registry
+		registerCommands();
+		
 		
 		config = getConfig();
 		
 		valutaS = config.getString("Vault.valutaSingular");
 		valutaP = config.getString("Vault.valutaPlural");
+		
+		messenger.print("&1Vworp vworp vworp");
 	}
 	
 	
@@ -92,7 +100,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		}
 		
 		saveConfig();
-		Messenger.print("I don't wanna go...", pluginname);
+		messenger.print("&4I don't wanna go...");
 		
 	}
 	
@@ -103,11 +111,14 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		getCommand("auc info").setExecutor(new Commando());
 		getCommand("auc cancel").setExecutor(new Commando());
 		getCommand("bid").setExecutor(new CommandBid());
+		getCommand("asadmin").setExecutor(new CommandAdmin());
+		getCommand("asadmin return").setExecutor(new CommandAdmin());
+		getCommand("asadmin info").setExecutor(new CommandAdmin());
 	}
 	
 	public void checkFileExists(File file) {
 		if (!file.exists()) {
-			Messenger.print(file.getName() + " not found, creating!", pluginname);
+			messenger.print(file.getName() + " not found, creating!");
 			if (file.getName().equals("config.yml")) {
 				saveDefaultConfig();
 			}
@@ -117,7 +128,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 			
 		} else {
 			
-			Messenger.print(file.getName() + " found, loading!", pluginname);
+			messenger.print(file.getName() + " found, loading!");
 			
 		}
 	}
