@@ -1,4 +1,4 @@
-package com.alchemi.as;
+package com.alchemi.as.util;
 
 import java.util.Map.Entry;
 
@@ -9,12 +9,14 @@ import org.bukkit.inventory.ItemStack;
 
 import com.alchemi.al.CarbonDating;
 import com.alchemi.al.Messenger;
+import com.alchemi.as.Auction;
+import com.alchemi.as.AuctionStorm;
 
 public class AuctionLog{
 
 	private final Player seller;
-	private final Player buyer;
-	private final int price;
+	private Player buyer;
+	private int price;
 	private final ItemStack object;
 	private final boolean refunded;
 	private final CarbonDating identifier;
@@ -61,6 +63,14 @@ public class AuctionLog{
 	
 	public boolean hasBeenRefunded() {
 		return refunded;
+	}
+	
+	public void setBuyer(Player buyer) {
+		this.buyer = buyer;
+	}
+	
+	public void setPrice(int price) {
+		this.price = price;
 	}
 	
 	public void getInfo(CommandSender sender) {

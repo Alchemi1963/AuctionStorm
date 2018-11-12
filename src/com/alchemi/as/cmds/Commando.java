@@ -39,7 +39,7 @@ public class Commando implements CommandExecutor{
 			Player player = (Player)sender;
 						
 			if (args.length > 0) {
-				if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) {
+				if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) { //help command
 				
 					Messenger.sendMsg(help_message, player);
 					return true;
@@ -57,6 +57,12 @@ public class Commando implements CommandExecutor{
 							Auction.noAuction(player);
 							return false;
 						}
+						
+						if (args.length == 1) {
+							Queue.current_auction.bid((Player) sender);
+							return true;
+						}
+						
 						try {
 							if (args.length >= 2 && Library.containsAny(args[1], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
 							else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + bid_usage, player, player.getDisplayName(), cmd.getName());
@@ -74,7 +80,7 @@ public class Commando implements CommandExecutor{
 						
 						return true;
 					
-					} else if (args[0].equalsIgnoreCase("end") || args[0].equalsIgnoreCase("cancel")) { //end command
+					} else if (args[0].equalsIgnoreCase("end") || args[0].equalsIgnoreCase("cancel")) { //cancel command
 						
 						if (Queue.current_auction == null) {
 							Auction.noAuction(player);
@@ -106,24 +112,19 @@ public class Commando implements CommandExecutor{
 					
 					else if (args.length >= 2 && args[0].equalsIgnoreCase("start") 
 						|| args.length >= 2 && args[0].equalsIgnoreCase("s")) { //auction start command
-						int price = 0;
+						int price = AuctionStorm.config.getInt("Auction.Start-Defaults.Price");
 						int amount = player.getInventory().getItemInMainHand().getAmount();
-						int increment = 10;
-						int duration = 60;
+						int increment = AuctionStorm.config.getInt("Auction.Start-Defaults.Increment");
+						int duration = AuctionStorm.config.getInt("Auction.Start-Defaults.Duration");
 						
 						try {
-							if (Library.containsAny(args[1], "0123456789")) price = Integer.valueOf(args[1]);
-							if (args.length >= 3 && Library.containsAny(args[2], "0123456789") && Integer.valueOf(args[1]) > 0) amount = Integer.valueOf(args[2]);
-							if (args.length >= 4 && Library.containsAny(args[3], "0123456789") && Integer.valueOf(args[2]) > 0) increment = Integer.valueOf(args[3]);
-							if (args.length == 5 && Library.containsAny(args[4], "0123456789") && Integer.valueOf(args[4]) >= 30 && Integer.valueOf(args[4]) <= 240) duration = Integer.valueOf(args[4]);
+							price = Integer.valueOf(args[1]);
+							if (args.length >= 3) amount = Integer.valueOf(args[2]);
+							if (args.length >= 4) increment = Integer.valueOf(args[3]);
+							if (args.length == 5) duration = Integer.valueOf(args[4]);
 						
 						} catch(NumberFormatException e) {
 							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, player.getDisplayName(), cmd.getName());
-						}
-							
-						if (price == 0) {
-							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, player.getDisplayName(), cmd.getName());
-							return false;
 						}
 						
 						new Auction(player, price, duration, amount, increment);

@@ -22,6 +22,12 @@ public class CommandBid implements CommandExecutor{
 				Auction.noAuction((Player)sender);
 				return false;
 			}
+			
+			if (args.length == 0) {
+				Queue.current_auction.bid((Player) sender);
+				return true;
+			}
+			
 			try {
 				if (args.length >= 1 && Library.containsAny(args[0], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
 				else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());

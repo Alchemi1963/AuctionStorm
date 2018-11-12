@@ -1,4 +1,4 @@
-package com.alchemi.as;
+package com.alchemi.as.util;
 
 import java.util.TreeMap;
 

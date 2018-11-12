@@ -1,4 +1,4 @@
-package com.alchemi.as;
+package com.alchemi.as.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import com.alchemi.al.CarbonDating;
+import com.alchemi.as.AuctionStorm;
 
 public class Logging {
 
@@ -37,11 +38,21 @@ public class Logging {
 		logger.createSection(log.getSeller() + "." + datetime.getCarbonDate());
 		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Object", log.getObject());
 		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Price", log.getPrice());
-		if (log.getBuyer() != null ) logger.addDefault(log.getSeller() + "." + datetime.getCarbonDate() + ".Buyer", log.getBuyer());
+		if (log.getBuyer() != null ) logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Buyer", log.getBuyer());
 		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Refunded", log.hasBeenRefunded());
 		logger.addDefault(log.getSeller() + "." + datetime.getCarbonDate() + ".Refunded", false);
 		
 		saveLog();
+	}
+	
+	public void updateAuctionLog(AuctionLog log) {
+		
+		CarbonDating datetime = log.getIdentifier();
+		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Object", log.getObject());
+		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Price", log.getPrice());
+		if (log.getBuyer() != null ) logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Buyer", log.getBuyer());
+		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Refunded", log.hasBeenRefunded());
+		
 	}
 	
 	public void saveLog() {

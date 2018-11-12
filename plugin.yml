@@ -13,7 +13,7 @@ commands:
     
     bid:
         description: Bid on the current auction.
-        usage: /bid <bid> [secret bid]
+        usage: /bid [bid] [secret bid]
         aliases: [as bid, auctionstorm bid, auc bid, auction bid]
         
     auc start:
@@ -47,6 +47,10 @@ commands:
     asadmin info:
         description: Get info about the specified auction.
         usage: /asadmin info seller <id>
+        
+    asadmin reload:
+        description: Reload the config files.
+        usage: /asadmin reload [config]
 
 permissions:
     as.*:
@@ -55,6 +59,8 @@ permissions:
             as.base: true
             as.creative: true
             as.admin: true
+            as.reload: true
+            as.return: true
             as.cancel: true
         default: false
     as.base:
@@ -66,6 +72,12 @@ permissions:
     as.admin:
         description: Permmision to use the admin command.
         default: false
+    as.reload:
+        description: Permission to reload the config files.
+        default: false
+    as.return:
+        description: Permission to refund auctions.
+        default: false 
     as.cancel:
         description: Permission to cancel any and all auctions.
         default: false

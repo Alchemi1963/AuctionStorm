@@ -4,6 +4,7 @@ Vault:
     
 Auction:
   Sound:
+    Play: true
     Pay: ENTITY_PLAYER_LEVELUP
     Paid: ENTITY_PLAYER_LEVELUP
     Failed: ENTITY_PLAYER_LEVELUP
@@ -11,3 +12,23 @@ Auction:
     - 120
     - 60
     - 30
+  AllowCreative: false
+  LogAuctions: true
+  AntiSnipe-Treshold: 5
+  AntiSnipe-Time-Added: 30
+  Start-Defaults:
+    Price: 0
+    Increment: 10
+    Duration: 60
+  Maximum-Values:
+    Bid: -1
+    Price: -1
+    Increment: -1
+    Duration: 240
+  #KEEP THESE ABOVE OR EQUAL TO 0!
+  Minimum-Values: 
+    Price: 0
+    Amount: 0
+    Increment: 0
+    Duration: 30
+  

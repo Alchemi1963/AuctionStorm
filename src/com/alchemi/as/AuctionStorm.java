@@ -12,6 +12,7 @@ import com.alchemi.al.Messenger;
 import com.alchemi.as.cmds.CommandAdmin;
 import com.alchemi.as.cmds.CommandBid;
 import com.alchemi.as.cmds.Commando;
+import com.alchemi.as.util.Logging;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -25,8 +26,8 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	public FileManager getFileManager() {
 		return fileManager;
 	}
-	private final int MESSAGES_FILE_VERSION = 9;
-	private final int CONFIG_FILE_VERSION = 9;
+	private final int MESSAGES_FILE_VERSION = 12;
+	private final int CONFIG_FILE_VERSION = 12;
 	
 	
 	public static String valutaS;
@@ -43,15 +44,15 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		//start martijnpu
 		saveDefaultConfig();
 		fileManager = new FileManager(this, new String[]{"config.yml", "messages.yml"}, null, null);
-		fileManager.saveDefaultYML("config.yml");
+		saveDefaultConfig();
 		fileManager.saveDefaultYML("messages.yml");
 		
 		messenger = new Messenger(this, fileManager);
 
-		if(!fileManager.getFileConfig("messages.yml").isSet("File-Version-Do-Not-Edit") || !fileManager.getFileConfig("messages.yml").get("File-Version-Do-Not-Edit").equals(MESSAGES_FILE_VERSION)) {
+		if(!fileManager.getConfig("messages.yml").isSet("File-Version-Do-Not-Edit") || !fileManager.getConfig("messages.yml").get("File-Version-Do-Not-Edit").equals(MESSAGES_FILE_VERSION)) {
 			messenger.print("Your messages file is outdated! Updating...");
 			fileManager.updateConfig("messages.yml");
-			fileManager.getFileConfig("messages.yml").set("File-Version-Do-Not-Edit", MESSAGES_FILE_VERSION);
+			fileManager.getConfig("messages.yml").set("File-Version-Do-Not-Edit", MESSAGES_FILE_VERSION);
 			fileManager.saveConfig("messages.yml");
 			messenger.print("File successfully updated!");
 		}
@@ -76,7 +77,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
             return;
         }
 		
-		logger = new Logging("log.yml");
+		if (config.getBoolean("Auction.LogAuctions")) logger = new Logging("log.yml");
 		
 		//registry
 		registerCommands();
@@ -114,6 +115,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		getCommand("asadmin").setExecutor(new CommandAdmin());
 		getCommand("asadmin return").setExecutor(new CommandAdmin());
 		getCommand("asadmin info").setExecutor(new CommandAdmin());
+		getCommand("asadmin reload").setExecutor(new CommandAdmin());
 	}
 	
 	public void checkFileExists(File file) {
