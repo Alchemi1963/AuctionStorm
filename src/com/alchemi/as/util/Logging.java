@@ -35,14 +35,29 @@ public class Logging {
 	public void saveAuctionLog(AuctionLog log) {
 	
 		CarbonDating datetime = log.getIdentifier();
+		logger.set("Last-Auction.ID", datetime.getCarbonDate());
+		logger.set("Last-Auction.seller", log.getSeller());
 		logger.createSection(log.getSeller() + "." + datetime.getCarbonDate());
+		logger.set(log.getSeller() + ".UUID", log.getSellerUUID());
 		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Object", log.getObject());
 		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Price", log.getPrice());
-		if (log.getBuyer() != null ) logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Buyer", log.getBuyer());
+		if (log.getBuyer() != null ) {
+			logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Buyer", log.getBuyer());
+			logger.set(log.getSeller() + "." + datetime.getCarbonDate() + "Buyer.UUID", log.getBuyerUUID());
+		}
 		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Refunded", log.hasBeenRefunded());
 		logger.addDefault(log.getSeller() + "." + datetime.getCarbonDate() + ".Refunded", false);
 		
 		saveLog();
+	}
+	
+	public AuctionLog getLastAuction() {
+		
+		CarbonDating dt = new CarbonDating(logger.getString("Last-Auction.ID"));
+		String seller = logger.getString("Last-Auction.seller");
+		
+		return this.readLog(seller, dt);
+		
 	}
 	
 	public void updateAuctionLog(AuctionLog log) {
@@ -50,8 +65,13 @@ public class Logging {
 		CarbonDating datetime = log.getIdentifier();
 		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Object", log.getObject());
 		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Price", log.getPrice());
-		if (log.getBuyer() != null ) logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Buyer", log.getBuyer());
+		if (log.getBuyer() != null ) {
+			logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Buyer", log.getBuyer());
+			logger.set(log.getSeller() + "." + datetime.getCarbonDate() + "Buyer.UUID", log.getBuyerUUID());
+		}
 		logger.set(log.getSeller() + "." + datetime.getCarbonDate() + ".Refunded", log.hasBeenRefunded());
+		
+		saveLog();
 		
 	}
 	
@@ -68,18 +88,29 @@ public class Logging {
 		saveLog();
 	}
 	
+	public boolean hasLog(String seller, CarbonDating datetime) {
+		return logger.contains(seller) && logger.contains(seller + "." + datetime.getCarbonDate());
+	}
+	
+	public boolean hasLatestLog() {
+		return logger.contains("Last-Auction") && logger.getString("Last-Auction.ID") != null && logger.getString("Last-Auction.seller") != null;
+	}
+	
 	public AuctionLog readLog(String seller, CarbonDating datetime) {
 		
+		String sellerID = logger.getString(seller + ".UUID");
 		ItemStack Object = logger.getItemStack(seller + "." + datetime.getCarbonDate() + ".Object");
 		int price = logger.getInt(seller + "." + datetime.getCarbonDate() + ".Price");
 		String buyer = logger.getString(seller + "." + datetime.getCarbonDate() + ".Buyer");
+		String buyerID = logger.getString(seller + "." + datetime.getCarbonDate() + "Buyer.UUID", "");
 		boolean refunded = logger.getBoolean(seller + "." + datetime.getCarbonDate() + ".Refunded");
+		
 		
 		if (Object == null) {
 			return null;
 		}
 	
-		return new AuctionLog(seller, buyer, price, Object, refunded, datetime);
+		return new AuctionLog(seller, sellerID, buyer, buyerID, price, Object, refunded, datetime);
 		
 	}
 }

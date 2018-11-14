@@ -35,7 +35,7 @@ public class Commando implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		if (Library.checkCmdPermission(cmd, sender, "as.base", "auc") && sender instanceof Player) {
+		if (AuctionStorm.hasPermission(sender, "as.base") && sender instanceof Player && cmd.getName().equals("auctionstorm")) {
 			Player player = (Player)sender;
 						
 			if (args.length > 0) {
@@ -99,7 +99,7 @@ public class Commando implements CommandExecutor{
 							else Queue.current_auction.forceEndAuction();
 							return true;
 							
-						} else if (player.isOp() || player.hasPermission("as.cancel")) {
+						} else if (AuctionStorm.hasPermission(player, "as.cancel")) {
 							if (reason != "") Queue.current_auction.forceEndAuction(reason, player);
 							else Queue.current_auction.forceEndAuction("", player);
 							return true;

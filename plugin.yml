@@ -1,9 +1,9 @@
 name: AuctionStorm
 main: com.alchemi.as.AuctionStorm
 author: Alchemi, martijnpu
-version: 0.3
+version: 0.5
 description: Really nice auction plugin!
-depend: [Vault]
+depend: [Vault, AlchemicLibrary]
 
 commands:
     auc:
@@ -50,7 +50,11 @@ commands:
         
     asadmin reload:
         description: Reload the config files.
-        usage: /asadmin reload [config]
+        usage: /asadmin reload [config.yml]
+        
+    asadmin defaults:
+        description: Reset the config files to default.
+        usage: /asadmin defaults [config.yml]
 
 permissions:
     as.*:
@@ -61,6 +65,7 @@ permissions:
             as.admin: true
             as.reload: true
             as.return: true
+            as.defaults: true
             as.cancel: true
         default: false
     as.base:
@@ -74,6 +79,9 @@ permissions:
         default: false
     as.reload:
         description: Permission to reload the config files.
+        default: false
+    as.defaults:
+        description: Permission to reset the config files.
         default: false
     as.return:
         description: Permission to refund auctions.

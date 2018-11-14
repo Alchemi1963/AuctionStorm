@@ -4,6 +4,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -109,7 +110,7 @@ public class Auction {
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Item"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			return;
 						
-		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !seller.hasPermission("as.creative") && !seller.isOp() && !AuctionStorm.config.getBoolean("Auction.AllowCreative")) {
+		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !AuctionStorm.hasPermission(seller, "as.creative") && !AuctionStorm.config.getBoolean("Auction.AllowCreative")) {
 			
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Creative"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			giveItemStack(object, seller);
@@ -305,7 +306,7 @@ public class Auction {
 		
 		giveItemStack(object, seller);
 		
-		if (ender == null || ender.hasPermission("as.cancel") || ender.isOp() || ender == seller) {
+		if (ender == null || AuctionStorm.hasPermission(ender, "as.cancel") || ender == seller) {
 		
 			String displayname;
 			if (ender == null) displayname = "the server"; 
@@ -332,11 +333,16 @@ public class Auction {
 		return item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : null;
 	}
 	
-	public static void giveItemStack(ItemStack item, Player pl) {
-		if (pl.getInventory().firstEmpty() == -1) {
-			pl.getWorld().dropItem(pl.getLocation(), item);
+	public static void giveItemStack(ItemStack item, OfflinePlayer seller) {
+		if (!seller.isOnline()) {
+			AuctionStorm.gq.addPlayer(seller, item);
+			return;
+		}
+		
+		if (seller.getPlayer().getInventory().firstEmpty() == -1) {
+			seller.getPlayer().getWorld().dropItem(seller.getPlayer().getLocation(), item);
 		} else {
-			pl.getInventory().addItem(item);
+			seller.getPlayer().getInventory().addItem(item);
 		}
 	}
 }

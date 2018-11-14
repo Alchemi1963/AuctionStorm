@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.alchemi.al.CarbonDating;
-import com.alchemi.al.Library;
 import com.alchemi.al.Messenger;
 import com.alchemi.as.AuctionStorm;
 import com.alchemi.as.Queue;
@@ -20,7 +19,7 @@ public class CommandAdmin implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		if (Library.checkCmdPermission(cmd, sender, "as.admin", "asadmin")) {
+		if (AuctionStorm.hasPermission(sender, "as.admin") && cmd.getName().equals("asadmin")) {
 			CarbonDating datetime = null;
 			
 			if (args.length == 0) {
@@ -31,7 +30,7 @@ public class CommandAdmin implements CommandExecutor{
 			
 			if (args[0].equalsIgnoreCase("return")) { //return command
 				
-				if (!sender.hasPermission("as.return")) {
+				if (!AuctionStorm.hasPermission(sender, "as.return")) {
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					return false;
 				
@@ -59,13 +58,13 @@ public class CommandAdmin implements CommandExecutor{
 				}
 				
 				if (args[1].equalsIgnoreCase("all")) {
-					AuctionStorm.logger.readLog(args[2], datetime).returnAll();
+					AuctionStorm.logger.readLog(args[2], datetime).returnAll(sender);
 				}
 				else if (args[1].equalsIgnoreCase("item")) {
-					AuctionStorm.logger.readLog(args[2], datetime).returnItemToSeller();
+					AuctionStorm.logger.readLog(args[2], datetime).returnItemToSeller(sender);
 				}
 				else if (args[1].equalsIgnoreCase("money")) {
-					AuctionStorm.logger.readLog(args[2], datetime).returnMoneyToBuyer();
+					AuctionStorm.logger.readLog(args[2], datetime).returnMoneyToBuyer(sender);
 				} 
 				else {
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + return_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
@@ -79,6 +78,18 @@ public class CommandAdmin implements CommandExecutor{
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Logging-Disabled"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.Logging-Disabled"), AuctionStorm.instance.pluginname, cmd.getName());
 					return true;
+				}
+				if (args.length == 2 && args[1].equalsIgnoreCase("latest")) {
+					
+					if (AuctionStorm.logger.hasLatestLog()) {
+						AuctionStorm.logger.getLastAuction().getInfo(sender);
+						return true;
+					}
+					else {
+						if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Logs") + info_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+						else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.No-Logs") + info_usage, AuctionStorm.instance.pluginname, cmd.getName());
+						return false;
+					}
 				}
 				
 				if (args.length < 3) {
@@ -102,7 +113,7 @@ public class CommandAdmin implements CommandExecutor{
 			}
 			
 			else if (args[0].equalsIgnoreCase("reload")) { //reload command
-				if (!sender.hasPermission("as.reload")) {
+				if (!AuctionStorm.hasPermission(sender, "as.reload")) {
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					return false;
 				} else if (args.length == 2 && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
@@ -125,11 +136,35 @@ public class CommandAdmin implements CommandExecutor{
 					}
 				}
 				
+				AuctionStorm.instance.messenger.broadcast("&6Configs have been reloaded!");
+				
 			}
 			
+			else if (args[0].equalsIgnoreCase("defaults")) {
+				if (!AuctionStorm.hasPermission(sender, "as.default-reload")) {
+					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+					return false;
+				} else if (args.length == 2 && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
+					AuctionStorm.instance.getFileManager().reloadDefaultConfig(args[1]);
+					if (args[1].equalsIgnoreCase("config.yml")) {
+						AuctionStorm.config = AuctionStorm.instance.getConfig();
+						
+						if (Queue.getQueueLength() != 0) {
+							Queue.clearQueue(true, "server restarting");
+						}
+					}
+				} else {
+					AuctionStorm.instance.getFileManager().reloadDefaultConfig();
+					AuctionStorm.config = AuctionStorm.instance.getConfig();
+						
+					if (Queue.getQueueLength() != 0) {
+						Queue.clearQueue(true, "config reset");
+					}
+				}
+				AuctionStorm.instance.messenger.broadcast("&6Configs have been reset to default!");
+			}
 		
 		}
 		return true;
 	}
-
 }

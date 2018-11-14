@@ -16,7 +16,7 @@ public class CommandBid implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		if (Library.checkCmdPermission(cmd, sender, "as.base", "bid") && sender instanceof Player) {
+		if (AuctionStorm.hasPermission(sender, "as.base") && sender instanceof Player && cmd.getName().equals("bid")) {
 			
 			if (Queue.current_auction == null) {
 				Auction.noAuction((Player)sender);

@@ -17,7 +17,7 @@ AuctionStorm:
 
   Auction:
     Start: "$player$ &6has started an auction!\nIt is $amount$ $item$ for $price$ $valuta$."
-    StartNamed: "$player$ &6has started an auction!\nIt is $amount$ $item$ named $name$ for $price$ $valuta$."
+    StartNamed: "$player$ &6has started an auction!\nIt is $amount$ $item$ named $name$&6 for $price$ $valuta$."
     Queued: "&9Your auction has been queued."
     Wrong:
         None: "&6There is currently no auction, you can use &9/as start &6to start one."
@@ -52,11 +52,11 @@ AuctionStorm:
     Info:
         Get: "Use &6/auc info&9 to get more info about it."
         Header: "&l&9=====Current Auction====="
-        LogHeader: "&l&9=======Past Auction========"
+        LogHeader: "&l&9====$name$===="
         Item: "\n&r&9Item: &6$item$"
         ItemNamed: "\n&r&9Item: &6$item$ &9named &6$name$"
         EnchantmentHeader: "\n&9Enchantments:"
-        Enchantment: "\n    - &6$name$ $amount$"
+        Enchantment: "\n    - &6$name$&6 $amount$"
         Amount: "\n&9Amount: &6$amount$"
         StartingBid: "\n&9Starting Bid: &6$price$ $valuta$"
         Price: "\n&9Price: &6$price$ $valuta$"
@@ -69,8 +69,11 @@ AuctionStorm:
     No-Permission: "&c&oYou don't have permission to use &9$sender$&c.&r&c If you believe this is an error, &nplease contact an administrator."
     Wrong-Format: "&cPlease use: &9"
     Unknown: "&cUnknown command. Use &9/as help &cfor more information."
+    Given: "&9You have been given $amount$ $item$."
     Admin:
         Logging-Disabled: "&cLogging has been disabled by the server admins."
+        No-Logs: "&cThere are currently no logs."
+        Log-Non-Existent: "&cThis log doesn't exists."
         Items-Returned: "&9Your items have been returned."
         Money-Returned: "&9You have recieved a refund."
         Money-Taken: "&4$player$ has gotten a refund for your auction of $item$."

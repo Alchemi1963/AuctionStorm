@@ -2,7 +2,9 @@ package com.alchemi.as;
 
 import java.io.File;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,13 +14,19 @@ import com.alchemi.al.Messenger;
 import com.alchemi.as.cmds.CommandAdmin;
 import com.alchemi.as.cmds.CommandBid;
 import com.alchemi.as.cmds.Commando;
+import com.alchemi.as.util.GiveQueue;
 import com.alchemi.as.util.Logging;
+import com.alchemi.as.util.events.UserLoginHandler;
 
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 
 public class AuctionStorm extends JavaPlugin implements Listener {
 	public String pluginname;
 	public static Economy econ;
+	public static Permission perms;
+	
+	public static boolean VaultPerms = false;
 
 	private FileManager fileManager;
 	public Messenger messenger;
@@ -26,8 +34,8 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	public FileManager getFileManager() {
 		return fileManager;
 	}
-	private final int MESSAGES_FILE_VERSION = 12;
-	private final int CONFIG_FILE_VERSION = 12;
+	private final int MESSAGES_FILE_VERSION = 14;
+	private final int CONFIG_FILE_VERSION = 14;
 	
 	
 	public static String valutaS;
@@ -36,19 +44,27 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	public static AuctionStorm instance;
 	public static FileConfiguration config;
 	public static Logging logger;
+	public static GiveQueue gq;
 
 	@Override
 	public void onEnable() {
 		instance = this;
+		pluginname = getDescription().getName();
 		
 		//start martijnpu
-		saveDefaultConfig();
-		fileManager = new FileManager(this, new String[]{"config.yml", "messages.yml"}, null, null);
-		saveDefaultConfig();
+		
+		fileManager = new FileManager(this, new String[]{"config.yml", "messages.yml", "giveQueue.yml"}, null, null, null);
+		fileManager.saveDefaultYML("config.yml");
 		fileManager.saveDefaultYML("messages.yml");
+		fileManager.saveDefaultYML("giveQueue.yml");
 		
 		messenger = new Messenger(this, fileManager);
-
+		if(!fileManager.hasConfig("giveQueue.yml")) {
+			messenger.print("No give queue found, creating yml...");
+			fileManager.updateConfig("giveQueue.yml");
+			fileManager.saveConfig("giveQueue.yml");
+			messenger.print("Give queue successfully created!");
+		}
 		if(!fileManager.getConfig("messages.yml").isSet("File-Version-Do-Not-Edit") || !fileManager.getConfig("messages.yml").get("File-Version-Do-Not-Edit").equals(MESSAGES_FILE_VERSION)) {
 			messenger.print("Your messages file is outdated! Updating...");
 			fileManager.updateConfig("messages.yml");
@@ -60,16 +76,11 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 			messenger.print("Your config file is outdated! Updating...");
 			fileManager.updateConfig("config.yml");
 			getConfig().set("File-Version-Do-Not-Edit", CONFIG_FILE_VERSION);
-			saveConfig();
+			fileManager.saveConfig("config.yml");
 			messenger.print("File successfully updated!");
 		}		
 		
 		//stop martijnpu
-
-		pluginname = getDescription().getName();
-		
-		
-		
 		//init resources
 		if (!setupEconomy() ) {
 			messenger.print("[%s] - Disabled due to no Vault dependency found!");
@@ -77,21 +88,26 @@ public class AuctionStorm extends JavaPlugin implements Listener {
             return;
         }
 		
-		if (config.getBoolean("Auction.LogAuctions")) logger = new Logging("log.yml");
+		if (setupPermission()) {
+			messenger.print("Using Vault based permissions!");
+			VaultPerms = true;
+		}
+		
+		gq = new GiveQueue(fileManager.getConfig("giveQueue.yml"));
 		
 		//registry
 		registerCommands();
-		
+		getServer().getPluginManager().registerEvents(new UserLoginHandler(), this);
 		
 		config = getConfig();
+		
+		if (config.getBoolean("Auction.LogAuctions")) logger = new Logging("log.yml");
 		
 		valutaS = config.getString("Vault.valutaSingular");
 		valutaP = config.getString("Vault.valutaPlural");
 		
 		messenger.print("&1Vworp vworp vworp");
 	}
-	
-	
 	
 	@Override
 	public void onDisable() {
@@ -116,6 +132,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		getCommand("asadmin return").setExecutor(new CommandAdmin());
 		getCommand("asadmin info").setExecutor(new CommandAdmin());
 		getCommand("asadmin reload").setExecutor(new CommandAdmin());
+		getCommand("asadmin defaults").setExecutor(new CommandAdmin());
 	}
 	
 	public void checkFileExists(File file) {
@@ -135,15 +152,31 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		}
 	}
 	
+	public static boolean hasPermission(Player player, String perm) {
+		
+		return VaultPerms ? perms.has(player, perm) || player.isOp() : player.hasPermission(perm) || player.isOp();
+	}
+	
+	public static boolean hasPermission(CommandSender sender, String perm) {
+		return sender instanceof Player ? hasPermission((Player) sender, perm) : true;
+	}
+	
 	private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
+        if (getServer().getPluginManager().getPlugin("Vault") == null) return false;
+        
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
+        if (rsp == null) return false;
+        
         econ = rsp.getProvider();
         return econ != null;
     }
+	
+	private boolean setupPermission() {
+		if (getServer().getPluginManager().getPlugin("Vault") == null) return false;
+		RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+		if (rsp == null) return false;
+		
+		perms = rsp.getProvider();
+		return perms != null;
+	}
 }
