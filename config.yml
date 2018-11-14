@@ -43,4 +43,7 @@ Auction:
     Amount: 0
     Increment: 0
     Duration: 30
+  #List of items banned from auctioning.
+  #Default: empty
+  Banned-Items:
   

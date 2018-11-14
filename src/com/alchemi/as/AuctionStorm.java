@@ -1,7 +1,10 @@
 package com.alchemi.as;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -34,8 +37,8 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	public FileManager getFileManager() {
 		return fileManager;
 	}
-	private final int MESSAGES_FILE_VERSION = 14;
-	private final int CONFIG_FILE_VERSION = 14;
+	private final int MESSAGES_FILE_VERSION = 15;
+	private final int CONFIG_FILE_VERSION = 15;
 	
 	
 	public static String valutaS;
@@ -45,6 +48,8 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	public static FileConfiguration config;
 	public static Logging logger;
 	public static GiveQueue gq;
+	
+	public static List<Material> banned_items = new ArrayList<Material>();
 
 	@Override
 	public void onEnable() {
@@ -75,6 +80,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		if(!getConfig().isSet("File-Version-Do-Not-Edit") || !getConfig().get("File-Version-Do-Not-Edit").equals(CONFIG_FILE_VERSION)) {
 			messenger.print("Your config file is outdated! Updating...");
 			fileManager.updateConfig("config.yml");
+			if (!getConfig().isSet("Auction.Banned-Items")) getConfig().set("Auction.Banned-Items", Material.AIR.name());
 			getConfig().set("File-Version-Do-Not-Edit", CONFIG_FILE_VERSION);
 			fileManager.saveConfig("config.yml");
 			messenger.print("File successfully updated!");
@@ -82,6 +88,20 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		
 		//stop martijnpu
 		//init resources
+		config = getConfig();
+		
+		if (config.getBoolean("Auction.LogAuctions")) logger = new Logging("log.yml");
+		
+		if (!config.getStringList("Auction.Banned-Items").isEmpty()) {
+			for (String mat : config.getStringList("Auction.Banned-Items")) {
+				
+				try {
+					banned_items.add(Material.valueOf(Material.class, mat));
+				} catch(Exception ignored) {}
+				
+			}
+		}
+		
 		if (!setupEconomy() ) {
 			messenger.print("[%s] - Disabled due to no Vault dependency found!");
             getServer().getPluginManager().disablePlugin(this);
@@ -99,9 +119,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		registerCommands();
 		getServer().getPluginManager().registerEvents(new UserLoginHandler(), this);
 		
-		config = getConfig();
 		
-		if (config.getBoolean("Auction.LogAuctions")) logger = new Logging("log.yml");
 		
 		valutaS = config.getString("Vault.valutaSingular");
 		valutaP = config.getString("Vault.valutaPlural");

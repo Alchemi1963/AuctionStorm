@@ -1,5 +1,8 @@
 package com.alchemi.as.cmds;
 
+import java.util.ArrayList;
+
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -120,6 +123,18 @@ public class CommandAdmin implements CommandExecutor{
 					AuctionStorm.instance.getFileManager().reloadConfig(args[1]);
 					if (args[1].equalsIgnoreCase("config.yml")) {
 						AuctionStorm.config = AuctionStorm.instance.getConfig();
+						AuctionStorm.valutaP = AuctionStorm.config.getString("Vault.valutaPlural");
+						AuctionStorm.valutaS = AuctionStorm.config.getString("Vault.valutaSingular");
+						AuctionStorm.banned_items = new ArrayList<Material>();
+						if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
+							for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
+								
+								try {
+									AuctionStorm.banned_items.add(Material.valueOf(Material.class, mat));
+								} catch(Exception ignored) {}
+								
+							}
+						}
 						
 						if (Queue.getQueueLength() != 0) {
 							Queue.clearQueue(true, "server restarting");
@@ -129,6 +144,18 @@ public class CommandAdmin implements CommandExecutor{
 					for (String file : AuctionStorm.instance.getFileManager().getFiles().keySet()) {
 						AuctionStorm.instance.getFileManager().reloadConfig(file);
 						AuctionStorm.config = AuctionStorm.instance.getConfig();
+						AuctionStorm.valutaP = AuctionStorm.config.getString("Vault.valutaPlural");
+						AuctionStorm.valutaS = AuctionStorm.config.getString("Vault.valutaSingular");
+						AuctionStorm.banned_items = new ArrayList<Material>();
+						if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
+							for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
+								
+								try {
+									AuctionStorm.banned_items.add(Material.valueOf(Material.class, mat));
+								} catch(Exception ignored) {}
+								
+							}
+						}
 						
 						if (Queue.getQueueLength() != 0) {
 							Queue.clearQueue(true, "config reload");
@@ -148,6 +175,18 @@ public class CommandAdmin implements CommandExecutor{
 					AuctionStorm.instance.getFileManager().reloadDefaultConfig(args[1]);
 					if (args[1].equalsIgnoreCase("config.yml")) {
 						AuctionStorm.config = AuctionStorm.instance.getConfig();
+						AuctionStorm.valutaP = AuctionStorm.config.getString("Vault.valutaPlural");
+						AuctionStorm.valutaS = AuctionStorm.config.getString("Vault.valutaSingular");
+						AuctionStorm.banned_items = new ArrayList<Material>();
+						if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
+							for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
+								
+								try {
+									AuctionStorm.banned_items.add(Material.valueOf(Material.class, mat));
+								} catch(Exception ignored) {}
+								
+							}
+						}
 						
 						if (Queue.getQueueLength() != 0) {
 							Queue.clearQueue(true, "server restarting");
@@ -156,6 +195,18 @@ public class CommandAdmin implements CommandExecutor{
 				} else {
 					AuctionStorm.instance.getFileManager().reloadDefaultConfig();
 					AuctionStorm.config = AuctionStorm.instance.getConfig();
+					AuctionStorm.valutaP = AuctionStorm.config.getString("Vault.valutaPlural");
+					AuctionStorm.valutaS = AuctionStorm.config.getString("Vault.valutaSingular");
+					AuctionStorm.banned_items = new ArrayList<Material>();
+					if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
+						for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
+							
+							try {
+								AuctionStorm.banned_items.add(Material.valueOf(Material.class, mat));
+							} catch(Exception ignored) {}
+							
+						}
+					}
 						
 					if (Queue.getQueueLength() != 0) {
 						Queue.clearQueue(true, "config reset");

@@ -31,6 +31,7 @@ AuctionStorm:
         Increment: "&cYou need to specify an increment between $amount$ and $incr$."
         IncrementInf: "&cYou need to specify an increment greater than $amount$."
         Amount: "&cYou need to specify an amount greater that $amount$."
+        Banned: "&cThis item cannot be auctioned."
     Bid:
         Own-Auction: "&4You cannot bid on your own auction..."
         No-Money: "&4You do not have enough money to make this bid..."
