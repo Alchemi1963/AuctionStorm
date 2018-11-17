@@ -20,7 +20,7 @@ public class CommandBid implements CommandExecutor{
 			
 			if (Queue.current_auction == null) {
 				Auction.noAuction((Player)sender);
-				return false;
+				return true;
 			}
 			
 			if (args.length == 0) {
@@ -40,7 +40,7 @@ public class CommandBid implements CommandExecutor{
 			return true;
 		}
 		if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
-		return false;
+		return true;
 	}
 
 	

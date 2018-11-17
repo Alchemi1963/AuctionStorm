@@ -13,6 +13,5 @@ public class UserLoginHandler implements Listener {
 		if (AuctionStorm.gq.isPlayerQueued(e.getPlayer())) {
 			AuctionStorm.gq.give(e.getPlayer());
 		}
-	}
-	
+	}	
 }

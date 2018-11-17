@@ -35,7 +35,7 @@ public class Commando implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		if (AuctionStorm.hasPermission(sender, "as.base") && sender instanceof Player && cmd.getName().equals("auctionstorm")) {
+		if (AuctionStorm.hasPermission(sender, "as.base") && sender instanceof Player && cmd.getName().equals("auc")) {
 			Player player = (Player)sender;
 						
 			if (args.length > 0) {
@@ -47,7 +47,7 @@ public class Commando implements CommandExecutor{
 				} else if (args[0].equalsIgnoreCase("start") && args.length < 2 || args[0].equalsIgnoreCase("s")  && args.length < 2) { 
 					
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
-					return false;
+					return true;
 					
 				} else if (args.length >= 1) { 
 					
@@ -55,7 +55,7 @@ public class Commando implements CommandExecutor{
 					
 						if (Queue.current_auction == null) {
 							Auction.noAuction(player);
-							return false;
+							return true;
 						}
 						
 						if (args.length == 1) {
@@ -84,7 +84,7 @@ public class Commando implements CommandExecutor{
 						
 						if (Queue.current_auction == null) {
 							Auction.noAuction(player);
-							return false;
+							return true;
 						}
 						String reason = "";
 						if (args.length >= 2) {
@@ -106,7 +106,7 @@ public class Commando implements CommandExecutor{
 							
 						} else {
 							if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
-							return false;
+							return true;
 						}
 					}
 					
@@ -136,7 +136,7 @@ public class Commando implements CommandExecutor{
 			return true;
 		}
 		if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
-		return false;
+		return true;
 		
 		
 	}

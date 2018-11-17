@@ -1,5 +1,5 @@
 Vault: #Put your currency name here
-  valutaSingular: credit
+  valutaSingular: credot
   valutaPlural: credits
     
 Auction:
@@ -10,24 +10,24 @@ Auction:
     Pay: ENTITY_PLAYER_LEVELUP
     Paid: ENTITY_PLAYER_LEVELUP
     Failed: ENTITY_PLAYER_LEVELUP
-  
+    
   #Notify the players on these intervals (120 seconds remaining)
   #Default: 120, 60 & 30
   Notify: 
     - 120
     - 60
     - 30
-  
-  #Allow the creation of auctions in creative by default.
+    
+  #Allow the creation of auctions in creative by default
   #Default: false
   AllowCreative: false
   LogAuctions: true
-  
-  #Amount of seconds before anti-snipe kicks in.
+    
+  #Amount of seconds before anti-snipe kicks in
   #Default: 5
   AntiSnipe-Treshold: 5
-  #Seconds added when someone bids when anti-snipe is active.
-  #Default: 30  
+  #Seconds added when someone bids when anti-snipe is active
+  #Default: 30
   AntiSnipe-Time-Added: 30
   Start-Defaults:
     Price: 0
@@ -38,12 +38,12 @@ Auction:
     Price: -1
     Increment: -1
     Duration: 240
-  Minimum-Values: #KEEP THESE VALUES ABOVE OR EQUAL TO 0! 
+  Minimum-Values: #Keep minimal values above 0!
     Price: 0
     Amount: 0
     Increment: 0
     Duration: 30
-  #List of items banned from auctioning.
-  #Default: empty
+  #List of items banned from auctioning
+  #Default: AIR
   Banned-Items:
-  
+    - AIR

@@ -28,14 +28,14 @@ public class CommandAdmin implements CommandExecutor{
 			if (args.length == 0) {
 				if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + admin_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 				else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + admin_usage, AuctionStorm.instance.pluginname, cmd.getName());
-				return false;
+				return true;
 			}
 			
 			if (args[0].equalsIgnoreCase("return")) { //return command
 				
 				if (!AuctionStorm.hasPermission(sender, "as.return")) {
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
-					return false;
+					return true;
 				
 				} else if (!AuctionStorm.config.getBoolean("Auction.LogAuctions")) {
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Logging-Disabled"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
@@ -46,7 +46,7 @@ public class CommandAdmin implements CommandExecutor{
 				if (args.length < 4) {
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + return_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + return_usage, AuctionStorm.instance.pluginname, cmd.getName());
-					return false;
+					return true;
 				}
 				
 				if (args.length == 4) datetime = new CarbonDating(args[3]);
@@ -57,7 +57,7 @@ public class CommandAdmin implements CommandExecutor{
 				if (datetime == null || datetime.getCarbonDate() == null) {
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + return_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + return_usage, AuctionStorm.instance.pluginname, cmd.getName());
-					return false;
+					return true;
 				}
 				
 				if (args[1].equalsIgnoreCase("all")) {
@@ -72,7 +72,7 @@ public class CommandAdmin implements CommandExecutor{
 				else {
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + return_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + return_usage, AuctionStorm.instance.pluginname, cmd.getName());
-					return false;
+					return true;
 				}
 			}
 			
@@ -91,14 +91,14 @@ public class CommandAdmin implements CommandExecutor{
 					else {
 						if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Logs") + info_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 						else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.No-Logs") + info_usage, AuctionStorm.instance.pluginname, cmd.getName());
-						return false;
+						return true;
 					}
 				}
 				
 				if (args.length < 3) {
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + info_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + info_usage, AuctionStorm.instance.pluginname, cmd.getName());
-					return false;
+					return true;
 				}
 				
 				if (args.length == 3) datetime = new CarbonDating(args[2]);
@@ -109,7 +109,7 @@ public class CommandAdmin implements CommandExecutor{
 				if (datetime == null || datetime.getCarbonDate() == null) {
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + info_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + info_usage, AuctionStorm.instance.pluginname, cmd.getName());
-					return false;
+					return true;
 				}
 				
 				AuctionStorm.logger.readLog(args[1], datetime).getInfo(sender);
@@ -118,7 +118,7 @@ public class CommandAdmin implements CommandExecutor{
 			else if (args[0].equalsIgnoreCase("reload")) { //reload command
 				if (!AuctionStorm.hasPermission(sender, "as.reload")) {
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
-					return false;
+					return true;
 				} else if (args.length == 2 && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
 					AuctionStorm.instance.getFileManager().reloadConfig(args[1]);
 					if (args[1].equalsIgnoreCase("config.yml")) {
@@ -129,9 +129,7 @@ public class CommandAdmin implements CommandExecutor{
 						if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
 							for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
 								
-								try {
-									AuctionStorm.banned_items.add(Material.valueOf(Material.class, mat));
-								} catch(Exception ignored) {}
+								AuctionStorm.banned_items.add(Material.getMaterial(mat));
 								
 							}
 						}
@@ -150,9 +148,7 @@ public class CommandAdmin implements CommandExecutor{
 						if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
 							for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
 								
-								try {
-									AuctionStorm.banned_items.add(Material.valueOf(Material.class, mat));
-								} catch(Exception ignored) {}
+								AuctionStorm.banned_items.add(Material.getMaterial(mat));
 								
 							}
 						}
@@ -170,7 +166,7 @@ public class CommandAdmin implements CommandExecutor{
 			else if (args[0].equalsIgnoreCase("defaults")) {
 				if (!AuctionStorm.hasPermission(sender, "as.default-reload")) {
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
-					return false;
+					return true;
 				} else if (args.length == 2 && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
 					AuctionStorm.instance.getFileManager().reloadDefaultConfig(args[1]);
 					if (args[1].equalsIgnoreCase("config.yml")) {
@@ -181,9 +177,7 @@ public class CommandAdmin implements CommandExecutor{
 						if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
 							for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
 								
-								try {
-									AuctionStorm.banned_items.add(Material.valueOf(Material.class, mat));
-								} catch(Exception ignored) {}
+								AuctionStorm.banned_items.add(Material.getMaterial(mat));
 								
 							}
 						}
@@ -194,20 +188,23 @@ public class CommandAdmin implements CommandExecutor{
 					}
 				} else {
 					AuctionStorm.instance.getFileManager().reloadDefaultConfig();
-					AuctionStorm.config = AuctionStorm.instance.getConfig();
+					AuctionStorm.config = null;
+					
+					AuctionStorm.config = AuctionStorm.instance.getFileManager().getConfig("config.yml");
 					AuctionStorm.valutaP = AuctionStorm.config.getString("Vault.valutaPlural");
 					AuctionStorm.valutaS = AuctionStorm.config.getString("Vault.valutaSingular");
 					AuctionStorm.banned_items = new ArrayList<Material>();
+					
+					System.out.println(AuctionStorm.config.getStringList("Auction.Banned-Items"));
+					
 					if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
 						for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
 							
-							try {
-								AuctionStorm.banned_items.add(Material.valueOf(Material.class, mat));
-							} catch(Exception ignored) {}
+							AuctionStorm.banned_items.add(Material.getMaterial(mat));
 							
 						}
 					}
-						
+					
 					if (Queue.getQueueLength() != 0) {
 						Queue.clearQueue(true, "config reset");
 					}

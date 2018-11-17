@@ -61,8 +61,11 @@ public class Auction {
 		object = seller.getInventory().getItemInMainHand();
 		
 		//check values
+		System.out.println(AuctionStorm.banned_items);
+		System.out.println(object.getType());
 		if (AuctionStorm.banned_items.contains(object.getType())) {
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Banned"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
+			return;
 		}
 		if (!(price > AuctionStorm.config.getInt("Auction.Minimum-Values.Price") && price < AuctionStorm.config.getInt("Auction.Maximum-Values.Price"))) {
 			if (AuctionStorm.config.getInt("Auction.Maximum-Values.Price") != -1) {

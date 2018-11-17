@@ -59,7 +59,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		//start martijnpu
 		
 		fileManager = new FileManager(this, new String[]{"config.yml", "messages.yml", "giveQueue.yml"}, null, null, null);
-		fileManager.saveDefaultYML("config.yml");
+		saveDefaultConfig();
 		fileManager.saveDefaultYML("messages.yml");
 		fileManager.saveDefaultYML("giveQueue.yml");
 		
@@ -80,12 +80,11 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		if(!getConfig().isSet("File-Version-Do-Not-Edit") || !getConfig().get("File-Version-Do-Not-Edit").equals(CONFIG_FILE_VERSION)) {
 			messenger.print("Your config file is outdated! Updating...");
 			fileManager.updateConfig("config.yml");
-			if (!getConfig().isSet("Auction.Banned-Items")) getConfig().set("Auction.Banned-Items", Material.AIR.name());
 			getConfig().set("File-Version-Do-Not-Edit", CONFIG_FILE_VERSION);
 			fileManager.saveConfig("config.yml");
 			messenger.print("File successfully updated!");
-		}		
-		
+		}
+
 		//stop martijnpu
 		//init resources
 		config = getConfig();
@@ -95,9 +94,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		if (!config.getStringList("Auction.Banned-Items").isEmpty()) {
 			for (String mat : config.getStringList("Auction.Banned-Items")) {
 				
-				try {
-					banned_items.add(Material.valueOf(Material.class, mat));
-				} catch(Exception ignored) {}
+				banned_items.add(Material.getMaterial(mat));
 				
 			}
 		}
@@ -123,6 +120,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		
 		valutaS = config.getString("Vault.valutaSingular");
 		valutaP = config.getString("Vault.valutaPlural");
+		messenger.print(valutaP);
 		
 		messenger.print("&1Vworp vworp vworp");
 	}
