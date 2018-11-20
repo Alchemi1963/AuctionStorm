@@ -120,7 +120,6 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		
 		valutaS = config.getString("Vault.valutaSingular");
 		valutaP = config.getString("Vault.valutaPlural");
-		messenger.print(valutaP);
 		
 		messenger.print("&1Vworp vworp vworp");
 	}
@@ -173,7 +172,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	}
 	
 	public static boolean hasPermission(CommandSender sender, String perm) {
-		return sender instanceof Player ? hasPermission((Player) sender, perm) : true;
+		return sender instanceof Player || sender.isOp() ? hasPermission((Player) sender, perm) : true;
 	}
 	
 	private boolean setupEconomy() {
