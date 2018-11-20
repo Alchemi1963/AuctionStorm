@@ -67,35 +67,35 @@ public class Auction {
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Banned"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			return;
 		}
-		if (!(price > AuctionStorm.config.getInt("Auction.Minimum-Values.Price") && price < AuctionStorm.config.getInt("Auction.Maximum-Values.Price"))) {
-			if (AuctionStorm.config.getInt("Auction.Maximum-Values.Price") != -1) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Price"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.config.getInt("Auction.Minimum-Values.Price")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Increment")));
+		if (!(price > AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price") && price < AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price"))) {
+			if (AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price") != -1) {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Price"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
 				return;
-			} else if (price < AuctionStorm.config.getInt("Auction.Minimum-Values.Price")) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.PriceInf"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.config.getInt("Auction.Minimum-Values.Price")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Increment")));
-				return;
-			}
-		}
-		if (!(duration > AuctionStorm.config.getInt("Auction.Minimum-Values.Duration") && duration < AuctionStorm.config.getInt("Auction.Maximum-Values.Duration"))) {
-			if (AuctionStorm.config.getInt("Auction.Maximum-Values.Duration") != -1) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Duration"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.config.getInt("Auction.Minimum-Values.Duration")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Increment")));
-				return;
-			} else if (price < AuctionStorm.config.getInt("Auction.Minimum-Values.Duration")) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.DurationInf"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.config.getInt("Auction.Minimum-Values.Duration")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Increment")));
+			} else if (price < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price")) {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.PriceInf"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
 				return;
 			}
 		}
-		if (!(increment> AuctionStorm.config.getInt("Auction.Minimum-Values.Increment") && increment < AuctionStorm.config.getInt("Auction.Maximum-Values.Increment"))) {
-			if (AuctionStorm.config.getInt("Auction.Maximum-Values.Increment") != -1) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Increment"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.config.getInt("Auction.Minimum-Values.Increment")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Increment")));
+		if (!(duration > AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration") && duration < AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration"))) {
+			if (AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration") != -1) {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Duration"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
 				return;
-			} else if (price < AuctionStorm.config.getInt("Auction.Minimum-Values.Increment")) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.IncrementInf"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.config.getInt("Auction.Minimum-Values.Increment")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Increment")));
+			} else if (price < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration")) {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.DurationInf"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
 				return;
 			}
 		}
-		if (amount < AuctionStorm.config.getInt("Auction.Minimum-Values.Amount")) {
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Amount"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.config.getInt("Auction.Minimum-Values.Amount")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Increment")));
+		if (!(increment> AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment") && increment < AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment"))) {
+			if (AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment") != -1) {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Increment"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
+				return;
+			} else if (price < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment")) {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.IncrementInf"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
+				return;
+			}
+		}
+		if (amount < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Amount")) {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Amount"), seller, seller.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Amount")), getItemName(object), getDisplayName(object), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")), AuctionStorm.valutaP, String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")), String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
 			return;
 		}
 		
@@ -116,7 +116,7 @@ public class Auction {
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Item"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			return;
 						
-		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !AuctionStorm.hasPermission(seller, "as.creative") && !AuctionStorm.config.getBoolean("Auction.AllowCreative")) {
+		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !AuctionStorm.hasPermission(seller, "as.creative") && !AuctionStorm.instance.config.getBoolean("Auction.AllowCreative")) {
 			
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Creative"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			giveItemStack(object, seller);
@@ -130,7 +130,7 @@ public class Auction {
 			return;
 			
 		}
-		if (Queue.getQueueLength() > 1) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Queued"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
+		if (Queue.getQueueLength() >= 1) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Queued"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 		Queue.addAuction(this);
 		
 	}
@@ -160,7 +160,7 @@ public class Auction {
 		atimer = new AuctionTimer(duration);
 		task_id = timer.runTaskTimer(AuctionStorm.instance, atimer, 0, 20).getTaskId();
 		
-		if (AuctionStorm.config.getBoolean("Auction.LogAuctions")) {
+		if (AuctionStorm.instance.config.getBoolean("Auction.LogAuctions")) {
 			log = new AuctionLog(seller, null, price, object);
 			AuctionStorm.logger.saveAuctionLog(log);
 		}
@@ -187,8 +187,8 @@ public class Auction {
 		} else if (price > bid) {
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Low"), bidder, bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			return;
-		} else if (bid > AuctionStorm.config.getInt("Auction.Maximum-Values.Bid") && AuctionStorm.config.getInt("Auction.Maximum-Values.Bid") != -1) {
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Max"), bidder, bidder.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.config.getInt("Auction.Maximum-Values.Bid")), getItemName(object), getDisplayName(object), String.valueOf(bid), AuctionStorm.valutaP, durationS, incrementS);
+		} else if (bid > AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Bid") && AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Bid") != -1) {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Max"), bidder, bidder.getDisplayName(), "[SERVER]", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Bid")), getItemName(object), getDisplayName(object), String.valueOf(bid), AuctionStorm.valutaP, durationS, incrementS);
 			return;
 		}
 		
@@ -215,8 +215,8 @@ public class Auction {
 		
 		AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Bid"), bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), String.valueOf(bid), AuctionStorm.valutaP, durationS, incrementS);
 		
-		if (atimer.time < AuctionStorm.config.getInt("Auction.AntiSnipe-Treshold")) {
-			atimer.time += AuctionStorm.config.getInt("Auction.AntiSnipe-Time-Added");
+		if (atimer.time < AuctionStorm.instance.config.getInt("Auction.AntiSnipe-Treshold")) {
+			atimer.time += AuctionStorm.instance.config.getInt("Auction.AntiSnipe-Time-Added");
 			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Added"), bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), String.valueOf(bid), AuctionStorm.valutaP, durationS, incrementS);
 		}
 	}
@@ -245,17 +245,17 @@ public class Auction {
 	
 	public void endAuction() {		
 		if (highest_bidder != null) {
-			if (AuctionStorm.config.getBoolean("Auction.LogAuctions")) {
+			if (AuctionStorm.instance.config.getBoolean("Auction.LogAuctions")) {
 				log.setBuyer(highest_bidder);
 				log.setPrice(current_bid);
 				AuctionStorm.logger.updateAuctionLog(log);
 			}
 			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End.End"), highest_bidder.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), String.valueOf(current_bid), AuctionStorm.valutaP, durationS, incrementS);
 			
-			if (AuctionStorm.config.getBoolean("Auction.Sound.Play")) {
+			if (AuctionStorm.instance.config.getBoolean("Auction.Sound.Play")) {
 				try {
-					highest_bidder.playSound(highest_bidder.getLocation(), Sound.valueOf(AuctionStorm.config.getString("Auction.Sound.Pay")), 1.0F, 1.0F);
-					seller.playSound(seller.getLocation(), Sound.valueOf(AuctionStorm.config.getString("Auction.Sound.Paid")), 1.0F, 1.0F);
+					highest_bidder.playSound(highest_bidder.getLocation(), Sound.valueOf(AuctionStorm.instance.config.getString("Auction.Sound.Pay")), 1.0F, 1.0F);
+					seller.playSound(seller.getLocation(), Sound.valueOf(AuctionStorm.instance.config.getString("Auction.Sound.Paid")), 1.0F, 1.0F);
 				} catch (Exception e) {
 					e.printStackTrace();
 					highest_bidder.playSound(highest_bidder.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
@@ -274,9 +274,9 @@ public class Auction {
 		} else {
 			
 
-			if (AuctionStorm.config.getBoolean("Auction.Sound.Play")) {
+			if (AuctionStorm.instance.config.getBoolean("Auction.Sound.Play")) {
 				try {
-					seller.playSound(seller.getLocation(), Sound.valueOf(AuctionStorm.config.getString("Auction.Sound.Failed")), 1.0F, 1.0F);
+					seller.playSound(seller.getLocation(), Sound.valueOf(AuctionStorm.instance.config.getString("Auction.Sound.Failed")), 1.0F, 1.0F);
 				} catch (Exception e) {
 					e.printStackTrace();
 					seller.playSound(seller.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);

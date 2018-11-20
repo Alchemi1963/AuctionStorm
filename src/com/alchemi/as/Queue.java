@@ -66,16 +66,24 @@ public class Queue {
 		
 		try { AuctionStorm.instance.getServer().getScheduler().cancelTask(current_auction.task_id); }
 		catch (Exception e) { e.printStackTrace(); }
-		
+			
 		current_auction = null;
 				
 		if (queue.size() > 1) {
 		
 			current_auction = queue.get(1);
-			queue.get(1).startAuction();
+			AuctionStorm.instance.getServer().getScheduler().runTaskLater(AuctionStorm.instance, new Runnable() {
+				
+				@Override
+				public void run() {
+					Queue.current_auction.startAuction();
+					
+				}
+			}, AuctionStorm.instance.config.getInt("Auction.Start-Delay") * 20);
+			
 			
 		}
-		queue.remove(0);		
+		queue.remove(0);
 		
 	}
 	

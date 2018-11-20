@@ -112,10 +112,10 @@ public class Commando implements CommandExecutor{
 					
 					else if (args.length >= 2 && args[0].equalsIgnoreCase("start") 
 						|| args.length >= 2 && args[0].equalsIgnoreCase("s")) { //auction start command
-						int price = AuctionStorm.config.getInt("Auction.Start-Defaults.Price");
+						int price = AuctionStorm.instance.config.getInt("Auction.Start-Defaults.Price");
 						int amount = player.getInventory().getItemInMainHand().getAmount();
-						int increment = AuctionStorm.config.getInt("Auction.Start-Defaults.Increment");
-						int duration = AuctionStorm.config.getInt("Auction.Start-Defaults.Duration");
+						int increment = AuctionStorm.instance.config.getInt("Auction.Start-Defaults.Increment");
+						int duration = AuctionStorm.instance.config.getInt("Auction.Start-Defaults.Duration");
 						
 						try {
 							price = Integer.valueOf(args[1]);

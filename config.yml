@@ -1,5 +1,5 @@
 Vault: #Put your currency name here
-  valutaSingular: credot
+  valutaSingular: credit
   valutaPlural: credits
     
 Auction:
@@ -29,6 +29,10 @@ Auction:
   #Seconds added when someone bids when anti-snipe is active
   #Default: 30
   AntiSnipe-Time-Added: 30
+  
+  #Seconds to wait before starting next auction in queue.
+  #Default: 2
+  Start-Delay: 2
   Start-Defaults:
     Price: 0
     Increment: 10

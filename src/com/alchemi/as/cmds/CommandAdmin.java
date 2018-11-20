@@ -37,7 +37,7 @@ public class CommandAdmin implements CommandExecutor{
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					return true;
 				
-				} else if (!AuctionStorm.config.getBoolean("Auction.LogAuctions")) {
+				} else if (!AuctionStorm.instance.config.getBoolean("Auction.LogAuctions")) {
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Logging-Disabled"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.Logging-Disabled"), AuctionStorm.instance.pluginname, cmd.getName());
 					return true;
@@ -77,7 +77,7 @@ public class CommandAdmin implements CommandExecutor{
 			}
 			
 			else if (args[0].equalsIgnoreCase("info")) { //info command
-				if (!AuctionStorm.config.getBoolean("Auction.LogAuctions")) {
+				if (!AuctionStorm.instance.config.getBoolean("Auction.LogAuctions")) {
 					if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Logging-Disabled"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.Logging-Disabled"), AuctionStorm.instance.pluginname, cmd.getName());
 					return true;
@@ -120,46 +120,28 @@ public class CommandAdmin implements CommandExecutor{
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 					return true;
 				} else if (args.length == 2 && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
-					AuctionStorm.instance.getFileManager().reloadConfig(args[1]);
+					AuctionStorm.instance.fileManager.reloadConfig(args[1]);
 					if (args[1].equalsIgnoreCase("config.yml")) {
-						AuctionStorm.config = AuctionStorm.instance.getConfig();
-						AuctionStorm.valutaP = AuctionStorm.config.getString("Vault.valutaPlural");
-						AuctionStorm.valutaS = AuctionStorm.config.getString("Vault.valutaSingular");
-						AuctionStorm.banned_items = new ArrayList<Material>();
-						if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
-							for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
-								
-								AuctionStorm.banned_items.add(Material.getMaterial(mat));
-								
-							}
-						}
 						
 						if (Queue.getQueueLength() != 0) {
-							Queue.clearQueue(true, "server restarting");
+							Queue.clearQueue(true, "plugin reloaded");
 						}
 					}
 				} else {
 					for (String file : AuctionStorm.instance.getFileManager().getFiles().keySet()) {
-						AuctionStorm.instance.getFileManager().reloadConfig(file);
-						AuctionStorm.config = AuctionStorm.instance.getConfig();
-						AuctionStorm.valutaP = AuctionStorm.config.getString("Vault.valutaPlural");
-						AuctionStorm.valutaS = AuctionStorm.config.getString("Vault.valutaSingular");
-						AuctionStorm.banned_items = new ArrayList<Material>();
-						if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
-							for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
-								
-								AuctionStorm.banned_items.add(Material.getMaterial(mat));
-								
-							}
-						}
+						AuctionStorm.instance.messenger.print(file);
+						AuctionStorm.instance.fileManager.reloadConfig(file);
 						
 						if (Queue.getQueueLength() != 0) {
 							Queue.clearQueue(true, "config reload");
 						}
 					}
+					
 				}
 				
-				AuctionStorm.instance.messenger.broadcast("&6Configs have been reloaded!");
+				AuctionStorm.instance.reloadConfigValues();
+				
+				AuctionStorm.instance.messenger.broadcast("&9Configs have been reloaded!");
 				
 			}
 			
@@ -170,12 +152,12 @@ public class CommandAdmin implements CommandExecutor{
 				} else if (args.length == 2 && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
 					AuctionStorm.instance.getFileManager().reloadDefaultConfig(args[1]);
 					if (args[1].equalsIgnoreCase("config.yml")) {
-						AuctionStorm.config = AuctionStorm.instance.getConfig();
-						AuctionStorm.valutaP = AuctionStorm.config.getString("Vault.valutaPlural");
-						AuctionStorm.valutaS = AuctionStorm.config.getString("Vault.valutaSingular");
+						AuctionStorm.instance.config = AuctionStorm.instance.getConfig();
+						AuctionStorm.valutaP = AuctionStorm.instance.config.getString("Vault.valutaPlural");
+						AuctionStorm.valutaS = AuctionStorm.instance.config.getString("Vault.valutaSingular");
 						AuctionStorm.banned_items = new ArrayList<Material>();
-						if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
-							for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
+						if (!AuctionStorm.instance.config.getStringList("Auction.Banned-Items").isEmpty()) {
+							for (String mat : AuctionStorm.instance.config.getStringList("Auction.Banned-Items")) {
 								
 								AuctionStorm.banned_items.add(Material.getMaterial(mat));
 								
@@ -188,17 +170,17 @@ public class CommandAdmin implements CommandExecutor{
 					}
 				} else {
 					AuctionStorm.instance.getFileManager().reloadDefaultConfig();
-					AuctionStorm.config = null;
+					AuctionStorm.instance.config = null;
 					
-					AuctionStorm.config = AuctionStorm.instance.getFileManager().getConfig("config.yml");
-					AuctionStorm.valutaP = AuctionStorm.config.getString("Vault.valutaPlural");
-					AuctionStorm.valutaS = AuctionStorm.config.getString("Vault.valutaSingular");
+					AuctionStorm.instance.config = AuctionStorm.instance.getFileManager().getConfig("config.yml");
+					AuctionStorm.valutaP = AuctionStorm.instance.config.getString("Vault.valutaPlural");
+					AuctionStorm.valutaS = AuctionStorm.instance.config.getString("Vault.valutaSingular");
 					AuctionStorm.banned_items = new ArrayList<Material>();
 					
-					System.out.println(AuctionStorm.config.getStringList("Auction.Banned-Items"));
+					System.out.println(AuctionStorm.instance.config.getStringList("Auction.Banned-Items"));
 					
-					if (!AuctionStorm.config.getStringList("Auction.Banned-Items").isEmpty()) {
-						for (String mat : AuctionStorm.config.getStringList("Auction.Banned-Items")) {
+					if (!AuctionStorm.instance.config.getStringList("Auction.Banned-Items").isEmpty()) {
+						for (String mat : AuctionStorm.instance.config.getStringList("Auction.Banned-Items")) {
 							
 							AuctionStorm.banned_items.add(Material.getMaterial(mat));
 							

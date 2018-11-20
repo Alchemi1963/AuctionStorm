@@ -31,21 +31,21 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	
 	public static boolean VaultPerms = false;
 
-	private FileManager fileManager;
+	public FileManager fileManager;
 	public Messenger messenger;
 	
 	public FileManager getFileManager() {
 		return fileManager;
 	}
 	private final int MESSAGES_FILE_VERSION = 15;
-	private final int CONFIG_FILE_VERSION = 15;
+	private final int CONFIG_FILE_VERSION = 17;
 	
 	
 	public static String valutaS;
 	public static String valutaP;
 	
 	public static AuctionStorm instance;
-	public static FileConfiguration config;
+	public FileConfiguration config;
 	public static Logging logger;
 	public static GiveQueue gq;
 	
@@ -59,7 +59,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		//start martijnpu
 		
 		fileManager = new FileManager(this, new String[]{"config.yml", "messages.yml", "giveQueue.yml"}, null, null, null);
-		saveDefaultConfig();
+		fileManager.saveDefaultYML("config.yml");
 		fileManager.saveDefaultYML("messages.yml");
 		fileManager.saveDefaultYML("giveQueue.yml");
 		
@@ -80,7 +80,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		if(!getConfig().isSet("File-Version-Do-Not-Edit") || !getConfig().get("File-Version-Do-Not-Edit").equals(CONFIG_FILE_VERSION)) {
 			messenger.print("Your config file is outdated! Updating...");
 			fileManager.updateConfig("config.yml");
-			getConfig().set("File-Version-Do-Not-Edit", CONFIG_FILE_VERSION);
+			fileManager.getConfig("config.yml").set("File-Version-Do-Not-Edit", CONFIG_FILE_VERSION);
 			fileManager.saveConfig("config.yml");
 			messenger.print("File successfully updated!");
 		}
@@ -91,7 +91,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		
 		if (config.getBoolean("Auction.LogAuctions")) logger = new Logging("log.yml");
 		
-		if (!config.getStringList("Auction.Banned-Items").isEmpty()) {
+		if (!((List<?>) config.get("Auction.Banned-Items", new ArrayList<String>())).isEmpty()) {
 			for (String mat : config.getStringList("Auction.Banned-Items")) {
 				
 				banned_items.add(Material.getMaterial(mat));
@@ -132,7 +132,6 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 			Queue.clearQueue(true, "server restarting");
 		}
 		
-		saveConfig();
 		messenger.print("&4I don't wanna go...");
 		
 	}
@@ -194,5 +193,21 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		
 		perms = rsp.getProvider();
 		return perms != null;
+	}
+
+	public void reloadConfigValues() {
+		
+		this.config = fileManager.getConfig("config.yml");
+		valutaP = config.getString("Vault.valutaPlural");
+		valutaS = config.getString("Vault.valutaSingular");
+		banned_items = new ArrayList<Material>();
+		if (!((List<?>) config.get("Auction.Banned-Items", new ArrayList<String>())).isEmpty()) {
+			for (String mat : config.getStringList("Auction.Banned-Items")) {
+				
+				banned_items.add(Material.getMaterial(mat));
+				
+			}
+		}
+		
 	}
 }
