@@ -20,6 +20,7 @@ import com.alchemi.as.cmds.Commando;
 import com.alchemi.as.util.GiveQueue;
 import com.alchemi.as.util.Logging;
 import com.alchemi.as.util.events.UserLoginHandler;
+import com.alchemi.as.util.events.TabComplete
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -55,8 +56,8 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	public void onEnable() {
 		instance = this;
 		pluginname = getDescription().getName();
-		
-		//start martijnpu
+
+		//start files
 		
 		fileManager = new FileManager(this, new String[]{"config.yml", "messages.yml", "giveQueue.yml"}, null, null, null);
 		fileManager.saveDefaultYML("config.yml");
@@ -85,7 +86,6 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 			messenger.print("File successfully updated!");
 		}
 
-		//stop martijnpu
 		//init resources
 		config = getConfig();
 		
@@ -147,6 +147,10 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		getCommand("asadmin info").setExecutor(new CommandAdmin());
 		getCommand("asadmin reload").setExecutor(new CommandAdmin());
 		getCommand("asadmin defaults").setExecutor(new CommandAdmin());
+
+		getCommand("auc").setTabCompleter(new TabComplete());
+		getCommand("bid").setTabCompleter(new TabComplete());
+		getCommand("asadmin").setTabCompleter(new TabComplete());
 	}
 	
 	public void checkFileExists(File file) {
