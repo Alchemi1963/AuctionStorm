@@ -20,7 +20,7 @@ import com.alchemi.as.cmds.Commando;
 import com.alchemi.as.util.GiveQueue;
 import com.alchemi.as.util.Logging;
 import com.alchemi.as.util.events.UserLoginHandler;
-import com.alchemi.as.util.events.TabComplete
+import com.alchemi.as.util.events.TabComplete;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -176,7 +176,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	}
 	
 	public static boolean hasPermission(CommandSender sender, String perm) {
-		return sender instanceof Player || sender.isOp() ? hasPermission((Player) sender, perm) : true;
+		return sender instanceof Player ? sender.isOp() || hasPermission((Player) sender, perm) : true;
 	}
 	
 	private boolean setupEconomy() {

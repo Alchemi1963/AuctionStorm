@@ -5,7 +5,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.alchemi.al.Library;
 import com.alchemi.al.Messenger;
 import com.alchemi.as.Auction;
 import com.alchemi.as.AuctionStorm;
@@ -29,10 +28,10 @@ public class CommandBid implements CommandExecutor{
 			}
 			
 			try {
-				if (args.length >= 1 && Library.containsAny(args[0], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
+				if (args.length >= 1 && args[0] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
 				else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 				
-				if (args.length == 2 && Library.containsAny(args[1], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
+				if (args.length == 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
 			} catch(NumberFormatException e) {
 				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
 			}

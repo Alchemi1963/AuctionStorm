@@ -4,8 +4,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
-import com.alchemi.al.Library;
 import com.alchemi.al.Messenger;
 import com.alchemi.as.Auction;
 import com.alchemi.as.AuctionStorm;
@@ -64,10 +65,10 @@ public class Commando implements CommandExecutor{
 						}
 						
 						try {
-							if (args.length >= 2 && Library.containsAny(args[1], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
+							if (args.length >= 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
 							else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + bid_usage, player, player.getDisplayName(), cmd.getName());
 							
-							if (args.length == 3 && Library.containsAny(args[2], "0123456789")) Queue.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
+							if (args.length == 3 && args[2] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
 						
 						} catch(NumberFormatException e) {
 							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
@@ -99,7 +100,7 @@ public class Commando implements CommandExecutor{
 							else Queue.current_auction.forceEndAuction();
 							return true;
 							
-						} else if (AuctionStorm.hasPermission(player, "as.cancel")) {
+						} else if (AuctionStorm.hasPermission(sender, "as.cancel")) {
 							if (reason != "") Queue.current_auction.forceEndAuction(reason, player);
 							else Queue.current_auction.forceEndAuction("", player);
 							return true;
@@ -111,7 +112,7 @@ public class Commando implements CommandExecutor{
 					}
 					
 					else if (args.length >= 2 && args[0].equalsIgnoreCase("start") 
-						|| args.length >= 2 && args[0].equalsIgnoreCase("s")) { //auction start command
+						|| args.length >= 2 && args[0].equalsIgnoreCase("s")) { //start command
 						int price = AuctionStorm.instance.config.getInt("Auction.Start-Defaults.Price");
 						int amount = player.getInventory().getItemInMainHand().getAmount();
 						int increment = AuctionStorm.instance.config.getInt("Auction.Start-Defaults.Increment");
@@ -119,12 +120,22 @@ public class Commando implements CommandExecutor{
 						
 						try {
 							price = Integer.valueOf(args[1]);
-							if (args.length >= 3) amount = Integer.valueOf(args[2]);
 							if (args.length >= 4) increment = Integer.valueOf(args[3]);
 							if (args.length == 5) duration = Integer.valueOf(args[4]);
 						
 						} catch(NumberFormatException e) {
 							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, player.getDisplayName(), cmd.getName());
+						}
+						
+						
+						try {
+							if (args.length >= 3) {
+								amount = Integer.valueOf(args[2]);
+							}
+						} catch (Exception e){
+							if (args.length >= 3 && args[2].equalsIgnoreCase("all")) {
+								amount = scanInventory(player.getInventory(), player.getInventory().getItemInMainHand());
+							}
 						}
 						
 						new Auction(player, price, duration, amount, increment);
@@ -139,6 +150,19 @@ public class Commando implements CommandExecutor{
 		return true;
 		
 		
+	}
+
+	public static int scanInventory(PlayerInventory inventory, ItemStack itemInMainHand) {
+		int size = 0;
+		
+		for (ItemStack stack : inventory) {
+			if (stack == null) continue;
+			if (stack.isSimilar(itemInMainHand)) {
+				size += stack.getAmount();
+			}
+		}
+		
+		return size;
 	}
 
 	

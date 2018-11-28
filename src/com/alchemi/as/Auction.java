@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import com.alchemi.al.CarbonDating;
 import com.alchemi.al.Library;
 import com.alchemi.al.Messenger;
+import com.alchemi.as.cmds.Commando;
 import com.alchemi.as.util.AuctionLog;
 import com.alchemi.as.util.AuctionTimer;
 import com.alchemi.as.util.RomanNumber;
@@ -61,8 +62,6 @@ public class Auction {
 		object = seller.getInventory().getItemInMainHand();
 		
 		//check values
-		System.out.println(AuctionStorm.banned_items);
-		System.out.println(object.getType());
 		if (AuctionStorm.banned_items.contains(object.getType())) {
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Banned"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			return;
@@ -107,6 +106,10 @@ public class Auction {
 			object.setAmount(handAmount-amount);
 			seller.getInventory().setItemInMainHand(object);
 			object.setAmount(amount);
+		} else if (Commando.scanInventory(seller.getInventory(), object) >= amount){
+			
+			object = getFromInventory(object, amount);
+			
 		} else {
 			seller.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 		}
@@ -125,6 +128,8 @@ public class Auction {
 		} 
 		if (object.getAmount() < this.amount) {
 			
+			System.out.println(object.getAmount());
+			System.out.println(this.amount);
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Enough"), seller, seller.getDisplayName(), "[SERVER]", amountS, getItemName(object), getDisplayName(object), priceS, AuctionStorm.valutaP, durationS, incrementS);
 			giveItemStack(object, seller);
 			return;
@@ -135,6 +140,40 @@ public class Auction {
 		
 	}
 	
+	private ItemStack getFromInventory(ItemStack object2, int amount2) {
+		int size = amount2 - seller.getInventory().getItemInMainHand().getAmount();
+		int invsize = Commando.scanInventory(seller.getInventory(), object2);
+		object2.setAmount(amount2);
+		seller.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+		for (ItemStack s : seller.getInventory()) {
+			
+			if (size <= 0) {
+				ItemStack ret = object2.clone();
+				int diff = invsize - amount2;
+				while (diff > 64) {
+					diff -= 64;
+				}
+				ret.setAmount(diff);
+				seller.getInventory().setItem(seller.getInventory().firstEmpty(), ret);
+				break;
+			}
+			
+			if (s == null) continue;
+			
+			if (s.isSimilar(object2)) {
+				
+				
+				size -= s.getAmount();
+				int slot = seller.getInventory().first(s);
+				s.setAmount(0);
+				seller.getInventory().setItem(slot, s);
+				
+			}
+		}
+		if (size > 0) object2.setAmount(amount2 - size);
+		return object2;
+	}
+
 	public int getDuration() {
 		return duration;
 	}
@@ -343,6 +382,13 @@ public class Auction {
 		if (!seller.isOnline()) {
 			AuctionStorm.gq.addPlayer(seller, item);
 			return;
+		}
+		
+		if (item.getAmount() > 64) { 
+			ItemStack item2 = item.clone();
+			item2.setAmount(item.getAmount() - 64);
+			giveItemStack(item2, seller);
+			item.setAmount(64);
 		}
 		
 		if (seller.getPlayer().getInventory().firstEmpty() == -1) {

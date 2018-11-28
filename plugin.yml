@@ -1,6 +1,6 @@
 name: AuctionStorm
 main: com.alchemi.as.AuctionStorm
-authors:[Alchemi, martijnpu]
+authors: [Alchemi, martijnpu]
 version: 0.5
 description: Really nice auction plugin!
 depend: [Vault, AlchemicLibrary]

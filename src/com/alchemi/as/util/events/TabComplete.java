@@ -16,7 +16,7 @@ public class TabComplete implements TabCompleter {
         List<String> tabSuggest = new ArrayList<>();
         List<String> list = new ArrayList<>();
 
-        if (!sender instanceof Player)
+        if (!(sender instanceof Player))
             return tabSuggest;
 
         if (!sender.hasPermission("as.base"))
