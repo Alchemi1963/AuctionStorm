@@ -148,13 +148,19 @@ public class Auction {
 		for (ItemStack s : seller.getInventory()) {
 			
 			if (size <= 0) {
+				
 				ItemStack ret = object2.clone();
 				int diff = invsize - amount2;
 				while (diff > 64) {
 					diff -= 64;
 				}
 				ret.setAmount(diff);
-				seller.getInventory().setItem(seller.getInventory().firstEmpty(), ret);
+				for (ItemStack s2 : seller.getInventory()) {
+					if (s2 != null && s2.isSimilar(ret)) {
+						ret.setAmount(ret.getAmount() - s2.getAmount());
+					}
+				}
+				giveItemStack(ret, seller);
 				break;
 			}
 			
