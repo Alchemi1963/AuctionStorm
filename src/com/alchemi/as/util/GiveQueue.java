@@ -31,10 +31,19 @@ public class GiveQueue {
 		
 	}
 	
+	@SuppressWarnings("serial")
 	public void give(Player p) {
 		if (queue.containsKey(p.getName())) {
 			Auction.giveItemStack(queue.get(p.getName()), p);
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Given"), p, null, AuctionStorm.instance.pluginname, String.valueOf(queue.get(p.getName()).getAmount()), Auction.getItemName(queue.get(p.getName())));
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Given"), p, new HashMap<String, String>() {
+				{
+					put("$sender$", AuctionStorm.instance.pluginname);
+					put("$amount$", String.valueOf(queue.get(p.getName()).getAmount()));
+					put("$item$", Auction.getItemName(queue.get(p.getName())));
+					put("$name$", Auction.getDisplayName(queue.get(p.getName())));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			});
 			
 			queue.remove(p.getName());
 			players.remove(p.getName());

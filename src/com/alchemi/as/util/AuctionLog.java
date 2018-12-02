@@ -1,5 +1,6 @@
 package com.alchemi.as.util;
 
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
 
@@ -18,6 +19,8 @@ public class AuctionLog{
 
 	private final OfflinePlayer seller;
 	private OfflinePlayer buyer;
+	private String sellerName;
+	private String buyerName;
 	private UUID sellerID = null;
 	private UUID buyerID = null;
 	
@@ -37,6 +40,12 @@ public class AuctionLog{
 		this.object = object;
 		this.refunded = false;
 		this.identifier = CarbonDating.getCurrentDateTime();
+		
+		if (seller.isOnline()) sellerName = seller.getDisplayName();
+		else sellerName = this.seller.getName();
+		
+		if (buyer != null && buyer.isOnline()) buyerName = buyer.getDisplayName();
+		else if (buyer != null) buyerName = this.buyer.getName();
 		
 	}
 	
@@ -59,6 +68,12 @@ public class AuctionLog{
 		else if (AuctionStorm.instance.getServer().getPlayer(seller) != null) this.seller = AuctionStorm.instance.getServer().getPlayer(seller);
 		else this.seller = null;
 		if (this.buyer == null && this.buyerID != null) this.buyer = AuctionStorm.instance.getServer().getOfflinePlayer(this.buyerID);
+		
+		if (this.seller.isOnline()) sellerName = this.seller.getPlayer().getDisplayName();
+		else sellerName = this.seller.getName();
+		
+		if (this.buyer != null && this.buyer.isOnline()) buyerName = this.buyer.getPlayer().getDisplayName();
+		else if (this.buyer != null) buyerName = this.buyer.getName();
 	}
 	
 	public String getBuyer() {
@@ -102,29 +117,92 @@ public class AuctionLog{
 		this.price = price;
 	}
 	
+	@SuppressWarnings("serial")
 	public void getInfo(CommandSender sender) {
 		String amountS = String.valueOf(object.getAmount());
 		String priceS = String.valueOf(price);
-		String displayName;
-		try {
-			displayName = ((Player) seller).getDisplayName();
-		} catch (ClassCastException ignored) {
-			displayName = seller.getName();
-		}
 
-		String msg = Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.LogHeader"), null, null, null, null, identifier.getCarbonDate());
-		if (Auction.getDisplayName(object) != null) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.ItemNamed"), displayName, "[SERVER]", amountS, Auction.getItemName(object), Auction.getDisplayName(object), priceS, AuctionStorm.valutaP);
-		else msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Item"), displayName, "[SERVER]", amountS, Auction.getItemName(object), Auction.getItemName(object), priceS, AuctionStorm.valutaP);
-		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Amount"), displayName, "[SERVER]", amountS, Auction.getItemName(object), Auction.getDisplayName(object), priceS, AuctionStorm.valutaP);
+		String msg = Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.LogHeader"), new HashMap<String, String>() {
+			{
+				put("$name$", identifier.getCarbonDate());
+			}
+		});
+		if (Auction.getDisplayName(object) != null) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.ItemNamed"), new HashMap<String, String>() {
+			{
+				put("$name$", sellerName);
+				put("$amount$", amountS);
+				put("$item$", Auction.getItemName(object));
+				put("$name$", Auction.getDisplayName(object));
+				put("$price$", priceS);
+				put("$valuta$", AuctionStorm.valutaP);
+			}
+		}); 
+		else msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Item"), new HashMap<String, String>() {
+			{
+				put("$name$", sellerName);
+				put("$amount$", amountS);
+				put("$item$", Auction.getItemName(object));
+				put("$name$", Auction.getDisplayName(object));
+				put("$price$", priceS);
+				put("$valuta$", AuctionStorm.valutaP);
+			}
+		});
+		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Amount"), new HashMap<String, String>() {
+			{
+				put("$name$", sellerName);
+				put("$amount$", amountS);
+				put("$item$", Auction.getItemName(object));
+				put("$name$", Auction.getDisplayName(object));
+				put("$price$", priceS);
+				put("$valuta$", AuctionStorm.valutaP);
+			}
+		}); 
+		
 		//show enchantments if present
 		if (!object.getEnchantments().isEmpty()) {
-			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.EnchantmentHeader"), displayName, "[SERVER]", amountS, Auction.getItemName(object), Auction.getDisplayName(object), priceS, AuctionStorm.valutaP);
+			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.EnchantmentHeader"), new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", amountS);
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", priceS);
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
 			for (Entry<Enchantment, Integer> ench : object.getEnchantments().entrySet()) {
-				msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Enchantment"), displayName, "[SERVER]", RomanNumber.toRoman(ench.getValue()), Auction.getItemName(object), ench.getKey().getKey().getKey(), priceS, AuctionStorm.valutaP);
+				msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Enchantment"), new HashMap<String, String>() {
+					{
+						put("$name$", sellerName);
+						put("$amount$", RomanNumber.toRoman(ench.getValue()));
+						put("$item$", Auction.getItemName(object));
+						put("$name$", ench.getKey().getKey().getKey());
+						put("$price$", priceS);
+						put("$valuta$", AuctionStorm.valutaP);
+					}
+				});
 			}
 		}
-		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Price"), displayName, "[SERVER]", amountS, Auction.getItemName(object), Auction.getDisplayName(object), priceS, AuctionStorm.valutaP);
-		if (buyer != null) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Bidder"), buyer.getPlayer().getDisplayName(), "[SERVER]", amountS, Auction.getItemName(object), Auction.getDisplayName(object), priceS, AuctionStorm.valutaP);
+		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Price"), new HashMap<String, String>() {
+			{
+				put("$name$", sellerName);
+				put("$amount$", amountS);
+				put("$item$", Auction.getItemName(object));
+				put("$name$", Auction.getDisplayName(object));
+				put("$price$", priceS);
+				put("$valuta$", AuctionStorm.valutaP);
+			}
+		}); 
+		if (buyer != null) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Bidder"), new HashMap<String, String>() {
+			{
+				put("$name$", buyer.getPlayer().getDisplayName());
+				put("$amount$", amountS);
+				put("$item$", Auction.getItemName(object));
+				put("$name$", Auction.getDisplayName(object));
+				put("$price$", priceS);
+				put("$valuta$", AuctionStorm.valutaP);
+			}
+		}); 
 		msg = msg + AuctionStorm.instance.messenger.getMessage("Auction.Info.Footer").substring(0, AuctionStorm.instance.messenger.getMessage("Auction.Info.Footer").length() - 1);
 		
 		if (sender instanceof Player) {
@@ -134,74 +212,209 @@ public class AuctionLog{
 		}
 	}
 
+	@SuppressWarnings("serial")
 	public void returnAll(CommandSender sender) {
-		String displayName;
-		String buyerDisplayName;
-		try {
-			displayName = ((Player) seller).getDisplayName();
-		} catch (ClassCastException ignored) {
-			displayName = seller.getName();
-		}
 		
 		
 		
 		if (refunded) {
-			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), (Player) sender, displayName, AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
-			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), displayName, AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
+			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), (Player) sender, new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
+			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
 			return;
 		} else if (buyer != null) {
-			try {
-				buyerDisplayName = ((Player) buyer).getDisplayName();
-			} catch (ClassCastException ignored) {
-				buyerDisplayName = buyer.getName();
-			}
-			if (buyer.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Money-Returned"), buyer.getPlayer(), displayName, AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
-			if (seller.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Money-Taken"), seller.getPlayer(), buyerDisplayName, AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
+			if (buyer.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Money-Returned"), buyer.getPlayer(), new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
+			if (seller.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Money-Taken"), seller.getPlayer(), new HashMap<String, String>() {
+				{
+					put("$name$", buyerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
 			AuctionStorm.econ.depositPlayer(buyer, price);
 			AuctionStorm.econ.withdrawPlayer(seller, price);
 			
 			
 		} else {
-			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.No-Buyer"), (Player) sender, displayName, AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
-			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.No-Buyer"), displayName, AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
+			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.No-Buyer"), (Player) sender, new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
+			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.No-Buyer"), new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
 		}
 		
-		if (seller.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Items-Returned"), seller.getPlayer(), displayName, AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
+		if (seller.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Items-Returned"), seller.getPlayer(), new HashMap<String, String>() {
+			{
+				put("$name$", sellerName);
+				put("$amount$", String.valueOf(object.getAmount()));
+				put("$item$", Auction.getItemName(object));
+				put("$name$", Auction.getDisplayName(object));
+				put("$price$", String.valueOf(price));
+				put("$valuta$", AuctionStorm.valutaP);
+			}
+		}); 
 		
 		Auction.giveItemStack(object, seller);
 		
 		AuctionStorm.logger.setRefunded(this, identifier);
 	}
 	
+	@SuppressWarnings("serial")
 	public void returnItemToSeller(CommandSender sender) {
 		if (refunded) {
-			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), (Player) sender, seller.getName(), AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
-			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), seller.getName(), AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
+			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), (Player) sender, new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
+			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
 			return;
 		}
 		
-		if (seller.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Items-Returned"), seller.getPlayer(), seller.getPlayer().getDisplayName(), AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
+		if (seller.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Items-Returned"), seller.getPlayer(), new HashMap<String, String>() {
+			{
+				put("$name$", sellerName);
+				put("$amount$", String.valueOf(object.getAmount()));
+				put("$item$", Auction.getItemName(object));
+				put("$name$", Auction.getDisplayName(object));
+				put("$price$", String.valueOf(price));
+				put("$valuta$", AuctionStorm.valutaP);
+			}
+		}); 
 		Auction.giveItemStack(object, seller);
 		
 		AuctionStorm.logger.setRefunded(this, identifier);
 	}
 	
+	@SuppressWarnings("serial")
 	public void returnMoneyToBuyer(CommandSender sender) {
 		if (refunded) {
-			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), (Player) sender, seller.getName(), AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
-			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), seller.getName(), AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
+			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), (Player) sender, new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
+			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.Already-Refunded"), new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
 			return;
 		}
 		
 		if (buyer != null) {
-			if (buyer.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Money-Returned"), buyer.getPlayer(), seller.getPlayer().getDisplayName(), AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
-			if (seller.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Money-Taken"), seller.getPlayer(), buyer.getPlayer().getDisplayName(), AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
+			if (buyer.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Money-Returned"), buyer.getPlayer(), new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
+			if (seller.isOnline()) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.Money-Taken"), seller.getPlayer(), new HashMap<String, String>() {
+				{
+					put("$name$", buyerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
 			AuctionStorm.econ.depositPlayer(buyer, price);
 			AuctionStorm.econ.withdrawPlayer(seller, price);
 			AuctionStorm.logger.setRefunded(this, identifier);
 		} else {
-			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.No-Buyer"), (Player) sender, seller.getName(), AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
-			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.No-Buyer"), seller.getName(), AuctionStorm.instance.messenger.getTag(), String.valueOf(object.getAmount()), Auction.getDisplayName(object), String.valueOf(price));
+			if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Admin.No-Buyer"), (Player) sender, new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
+			else AuctionStorm.instance.messenger.print(AuctionStorm.instance.messenger.getMessage("Command.Admin.No-Buyer"), new HashMap<String, String>() {
+				{
+					put("$name$", sellerName);
+					put("$amount$", String.valueOf(object.getAmount()));
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", String.valueOf(price));
+					put("$valuta$", AuctionStorm.valutaP);
+				}
+			}); 
 		}
 		
 	}

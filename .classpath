@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry excluding="com/alchemi/as/cmds/FileManager.java" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/servers/plugins/Vault.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Valeyard/mc-plugin-workspace/Test-Server/plugins/Vault.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Alchemic-Library"/>
 	<classpathentry kind="lib" path="C:/Users/Valeyard/mc-plugin-workspace/Spigot/Spigot-API/target/spigot-api-1.13.2-R0.1-SNAPSHOT-shaded.jar" sourcepath="C:/Users/Valeyard/mc-plugin-workspace/Spigot/Spigot-API/src/main">
 		<attributes>

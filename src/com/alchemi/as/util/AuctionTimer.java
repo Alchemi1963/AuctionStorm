@@ -1,6 +1,7 @@
 package com.alchemi.as.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.alchemi.as.AuctionStorm;
@@ -18,6 +19,7 @@ public class AuctionTimer implements Runnable{
 		this.duration = duration;
 	}
 	
+	@SuppressWarnings("serial")
 	@Override
 	public void run() {
 		
@@ -27,16 +29,24 @@ public class AuctionTimer implements Runnable{
 			Queue.current_auction.endAuction();
 			
 		} else if (time == 2) {
-			AuctionStorm.instance.messenger.broadcast("&6Going once...", AuctionStorm.instance.pluginname);
+			AuctionStorm.instance.messenger.broadcast("&6Going once...");
 		} else if (time == 1) {
-			AuctionStorm.instance.messenger.broadcast("&6Going twice...", AuctionStorm.instance.pluginname);
+			AuctionStorm.instance.messenger.broadcast("&6Going twice...");
 		
 		} else if (((List<?>) AuctionStorm.instance.config.get("Auction.Notify", new ArrayList<Integer>())).contains(time)) { //custom time notification
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Notify"), null, null, String.valueOf(time));
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Notify"), new HashMap<String, String>() {
+				{
+					put("$amount$", String.valueOf(time));
+				}
+			}); 
 			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"));
 		} 
 		else if (time == Queue.current_auction.getDuration()/2) { //half-time notification
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Halftime"), null, null, String.valueOf(time));
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Halftime"), new HashMap<String, String>() {
+				{
+					put("$amount$", String.valueOf(time));
+				}
+			}); 
 			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"));
 		}
 		

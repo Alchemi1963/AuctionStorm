@@ -1,5 +1,8 @@
 package com.alchemi.as.cmds;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -36,8 +39,14 @@ public class Commando implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
+		Map<String, String> kaart = new HashMap<String, String>();
+		if (sender instanceof Player) kaart.put("$player$", ((Player) sender).getDisplayName());
+		else kaart.put("$player$", AuctionStorm.instance.pluginname);
+		kaart.put("$sender$", cmd.getName());
+		
+		
 		if (AuctionStorm.hasPermission(sender, "as.base") && sender instanceof Player && cmd.getName().equals("auc")) {
-			Player player = (Player)sender;
+			Player player = (Player) sender;
 						
 			if (args.length > 0) {
 				if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) { //help command
@@ -47,7 +56,7 @@ public class Commando implements CommandExecutor{
 					
 				} else if (args[0].equalsIgnoreCase("start") && args.length < 2 || args[0].equalsIgnoreCase("s")  && args.length < 2) { 
 					
-					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, kaart);
 					return true;
 					
 				} else if (args.length >= 1) { 
@@ -60,18 +69,18 @@ public class Commando implements CommandExecutor{
 						}
 						
 						if (args.length == 1) {
-							Queue.current_auction.bid((Player) sender);
+							Queue.current_auction.bid(player);
 							return true;
 						}
 						
 						try {
-							if (args.length >= 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), (Player)sender);
-							else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + bid_usage, player, player.getDisplayName(), cmd.getName());
+							if (args.length >= 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), player);
+							else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + bid_usage, player, kaart);
 							
-							if (args.length == 3 && args[2] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), (Player)sender, true);
+							if (args.length == 3 && args[2] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), player, true);
 						
 						} catch(NumberFormatException e) {
-							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, player, kaart);
 						}
 						return true;
 					
@@ -106,7 +115,7 @@ public class Commando implements CommandExecutor{
 							return true;
 							
 						} else {
-							if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+							if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), sender, kaart);
 							return true;
 						}
 					}
@@ -124,7 +133,7 @@ public class Commando implements CommandExecutor{
 							if (args.length == 5) duration = Integer.valueOf(args[4]);
 						
 						} catch(NumberFormatException e) {
-							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, player.getDisplayName(), cmd.getName());
+							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, kaart);
 						}
 						
 						
@@ -143,13 +152,11 @@ public class Commando implements CommandExecutor{
 					}  
 				}  
 			}
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Unknown"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Unknown"), sender, kaart);
 			return true;
 		}
-		if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), (Player)sender, ((Player) sender).getDisplayName(), cmd.getName());
+		if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), sender, kaart);
 		return true;
-		
-		
 	}
 
 	public static int scanInventory(PlayerInventory inventory, ItemStack itemInMainHand) {
