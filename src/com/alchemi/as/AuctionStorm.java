@@ -19,8 +19,10 @@ import com.alchemi.as.cmds.CommandBid;
 import com.alchemi.as.cmds.Commando;
 import com.alchemi.as.util.GiveQueue;
 import com.alchemi.as.util.Logging;
+import com.alchemi.as.util.events.AdminTabComplete;
+import com.alchemi.as.util.events.BaseTabComplete;
+import com.alchemi.as.util.events.BidTabComplete;
 import com.alchemi.as.util.events.UserLoginHandler;
-import com.alchemi.as.util.events.TabComplete;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -137,20 +139,12 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	
 	private void registerCommands() {
 		getCommand("auc").setExecutor(new Commando());
-		getCommand("auc help").setExecutor(new Commando());
-		getCommand("auc start").setExecutor(new Commando());
-		getCommand("auc info").setExecutor(new Commando());
-		getCommand("auc cancel").setExecutor(new Commando());
 		getCommand("bid").setExecutor(new CommandBid());
 		getCommand("asadmin").setExecutor(new CommandAdmin());
-		getCommand("asadmin return").setExecutor(new CommandAdmin());
-		getCommand("asadmin info").setExecutor(new CommandAdmin());
-		getCommand("asadmin reload").setExecutor(new CommandAdmin());
-		getCommand("asadmin defaults").setExecutor(new CommandAdmin());
 
-		getCommand("auc").setTabCompleter(new TabComplete());
-		getCommand("bid").setTabCompleter(new TabComplete());
-		getCommand("asadmin").setTabCompleter(new TabComplete());
+		getCommand("auc").setTabCompleter(new BaseTabComplete());
+		getCommand("bid").setTabCompleter(new BidTabComplete());
+		getCommand("asadmin").setTabCompleter(new AdminTabComplete());
 	}
 	
 	public void checkFileExists(File file) {

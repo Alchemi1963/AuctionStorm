@@ -14,47 +14,10 @@ commands:
     bid:
         description: Bid on the current auction.
         usage: /bid [bid] [secret bid]
-        aliases: [as bid, auctionstorm bid, auc bid, auction bid]
-        
-    auc start:
-        description: Start an auction using the item in hand.
-        usage: /auc start <price> [amount] [increment] [duration]
-        aliases: [as start, auctionstorm start, auction start, as s, auctionstorm s, auction s]
-        
-    auc help:
-        description: Display the AuctionStorm help page.
-        usage: /auc help
-        aliases: [as help, auctionstorm help, auction help]
-        
-    auc info:
-        description: Get info about the current auction.
-        usage: /auc info
-        aliases: [as info, auctionstorm info, auction info, as i, auctionstorm i, auction i]
-        
-    auc cancel:
-        description: Cancel the current auction.
-        usage: /auc cancel
-        aliases: [as cancel, auctionstorm cancel, auction cancel, as end, auctionstorm end, auction end]
         
     asadmin:
         description: AuctionStorm admin command.
         usage: /asadmin
-    
-    asadmin return:
-        description: Return items from the auction specified.
-        usage: /asadmin return <seller> <all/item/money> <id>
-        
-    asadmin info:
-        description: Get info about the specified auction.
-        usage: /asadmin info seller <id>
-        
-    asadmin reload:
-        description: Reload the config files.
-        usage: /asadmin reload [config.yml]
-        
-    asadmin defaults:
-        description: Reset the config files to default.
-        usage: /asadmin defaults [config.yml]
 
 permissions:
     as.*:

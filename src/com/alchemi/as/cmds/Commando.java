@@ -18,23 +18,25 @@ import com.alchemi.as.Queue;
 
 public class Commando implements CommandExecutor{
 
-	public static final String start_usage = "&9" + AuctionStorm.instance.getCommand("auctionstorm start").getUsage();
-	public static final String bid_usage = "&9" + AuctionStorm.instance.getCommand("bid").getUsage();;
-	public static final String help_usage = "&9" + AuctionStorm.instance.getCommand("auctionstorm help").getUsage();
-	public static final String info_usage = "&9" + AuctionStorm.instance.getCommand("auctionstorm info").getUsage();
+	public static final String start_usage = "&9/auc start <price> [amount] [increment] [duration]";
+	public static final String bid_usage = "&9/bid [bid] [secret bid]";
+	public static final String help_usage = "&9/auc help";
+	public static final String info_usage = "&9/auc info";
+	public static final String cancel_usage = "&9/auc cancel";
 	
-	public static final String start_desc = "&9" + AuctionStorm.instance.getCommand("auctionstorm start").getDescription();
-	public static final String bid_desc = "&9" + AuctionStorm.instance.getCommand("bid").getDescription();
-	public static final String help_desc = "&9" + AuctionStorm.instance.getCommand("auctionstorm help").getDescription();
-	public static final String info_desc = "&9" + AuctionStorm.instance.getCommand("auctionstorm info").getDescription();
+	public static final String start_desc = "&9Start an auction using the item in hand.";
+	public static final String bid_desc = "&9Bid on the current auction.";
+	public static final String help_desc = "&9Display the AuctionStorm help page.";
+	public static final String info_desc = "&9Get info about the current auction.";
+	public static final String cancel_desc = "&9Cancel the current auction.";
 	
 	private static final String help_message = "&6---------- AuctionStorm Help ----------\n"
 			+ start_usage + "&6\n    " + start_desc + "\n"
 			+ help_usage + "\n     Display this page.\n"
 			+ bid_usage + "&6\n    " + bid_desc +  "\n"
-			+ info_usage + "&6\n    " + info_desc
+			+ info_usage + "&6\n    " + info_desc + "\n"
+			+ cancel_usage + "&6\n    " + cancel_desc + "\n"
 			+ "&6---------------------------------------";
-	
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -144,6 +146,8 @@ public class Commando implements CommandExecutor{
 						} catch (Exception e){
 							if (args.length >= 3 && args[2].equalsIgnoreCase("all")) {
 								amount = scanInventory(player.getInventory(), player.getInventory().getItemInMainHand());
+							} else if (args.length >= 3 && args[2].equalsIgnoreCase("hand")) {
+								amount = player.getInventory().getItemInMainHand().getAmount();
 							}
 						}
 						

@@ -17,9 +17,9 @@ import com.alchemi.as.Queue;
 
 public class CommandAdmin implements CommandExecutor{
 	
-	public final String return_usage = AuctionStorm.instance.getCommand("asadmin return").getUsage();
+	public final String return_usage = AuctionStorm.instance.getCommand("asadmin").getUsage();
 	public final String admin_usage = AuctionStorm.instance.getCommand("asadmin").getUsage();
-	public final String info_usage = AuctionStorm.instance.getCommand("asadmin info").getUsage();
+	public final String info_usage = AuctionStorm.instance.getCommand("asadmin").getUsage();
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -126,7 +126,7 @@ public class CommandAdmin implements CommandExecutor{
 				if (!AuctionStorm.hasPermission(sender, "as.reload")) {
 					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), sender, kaart);
 					return true;
-				} else if (args.length == 2 && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
+				} else if (args.length == 2 && !args[1].equalsIgnoreCase("all") && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
 					AuctionStorm.instance.fileManager.reloadConfig(args[1]);
 					if (args[1].equalsIgnoreCase("config.yml")) {
 						
