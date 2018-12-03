@@ -23,7 +23,7 @@
 hs_err_pid*
 /bin/
 
-*.builder.xml
+builder.xml
 *.classpath
 *.project
 
