@@ -492,7 +492,7 @@ public class Auction {
 				secret_bid = 0;
 				secret_bidder = null;
 		} else {
-			bidder2 = secret_bidder;
+			bidder2 = bidder;
 		}
 		
 		current_bid = bid;
