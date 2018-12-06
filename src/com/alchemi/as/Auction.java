@@ -589,7 +589,7 @@ public class Auction {
 						put("$player$", seller.getDisplayName());
 						put("$amount$", RomanNumber.toRoman(ench.getValue()));
 						put("$item$", Auction.getItemName(object));
-						put("$player$", ench.getKey().getKey().getKey());
+						put("$name$", ench.getKey().getKey().getKey());
 						put("$price$", priceS);
 						put("$valuta$", AuctionStorm.valutaP);
 						put("$duration$", String.valueOf(atimer.time));
