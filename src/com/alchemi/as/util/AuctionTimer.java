@@ -46,12 +46,19 @@ public class AuctionTimer implements Runnable{
 			}
 		} 
 		else if (time == Queue.current_auction.getDuration()/2) { //half-time notification
+			
 			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Halftime"), new HashMap<String, String>() {
 				{
 					put("$amount$", String.valueOf(time));
 				}
 			}); 
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"));
+			
+			
+			if (!AuctionStorm.instance.config.getBoolean("Auction.HoverItem")) {
+				AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"));
+			} else {
+				AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"), Queue.current_auction.getInfo(false));
+			}
 		}
 		
 		time--;

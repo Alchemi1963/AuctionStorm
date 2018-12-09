@@ -389,7 +389,6 @@ public class Auction {
 						put("$player$", seller.getDisplayName());
 						put("$amount$", amountS);
 						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
 						put("$price$", priceS);
 						put("$valuta$", AuctionStorm.valutaP);
 						put("$duration$", durationS);
@@ -402,7 +401,6 @@ public class Auction {
 						put("$player$", seller.getDisplayName());
 						put("$amount$", amountS);
 						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
 						put("$price$", priceS);
 						put("$valuta$", AuctionStorm.valutaP);
 						put("$duration$", durationS);
@@ -701,7 +699,7 @@ public class Auction {
 				put("$incr$", incrementS);
 			}
 		});
-		if (highest_bidder != null) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Bidder"), new HashMap<String, String>() {
+		if (highest_bidder != null && headers) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Bidder"), new HashMap<String, String>() {
 			{
 				put("$player$", highest_bidder.getDisplayName());
 				put("$amount$", amountS);
@@ -713,7 +711,7 @@ public class Auction {
 				put("$incr$", incrementS);
 			}
 		});
-		if (current_bid > 0) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.CurrentBid"), new HashMap<String, String>() {
+		if (current_bid > 0 && headers) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.CurrentBid"), new HashMap<String, String>() {
 			{
 				put("$player$", highest_bidder.getDisplayName());
 				put("$amount$", amountS);
@@ -725,18 +723,21 @@ public class Auction {
 				put("$incr$", incrementS);
 			}
 		});
-		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Time"), new HashMap<String, String>() {
-			{
-				put("$player$", seller.getDisplayName());
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", priceS);
-				put("$valuta$", AuctionStorm.valutaP);
-				if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-				put("$incr$", incrementS);
-			}
-		});
+		if (headers) {
+			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Time"), new HashMap<String, String>() {
+				{
+					put("$player$", seller.getDisplayName());
+					put("$amount$", amountS);
+					put("$item$", Auction.getItemName(object));
+					put("$name$", Auction.getDisplayName(object));
+					put("$price$", priceS);
+					put("$valuta$", AuctionStorm.valutaP);
+					if (atimer != null) put("$duration$", String.valueOf(atimer.time));
+					put("$incr$", incrementS);
+				}
+			});
+		}
+		
 		
 		if (headers) msg = msg + AuctionStorm.instance.messenger.getMessage("Auction.Info.Footer");
 		

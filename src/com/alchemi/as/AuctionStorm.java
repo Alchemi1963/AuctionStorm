@@ -40,8 +40,8 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	public FileManager getFileManager() {
 		return fileManager;
 	}
-	private final int MESSAGES_FILE_VERSION = 17;
-	private final int CONFIG_FILE_VERSION = 19;
+	private final int MESSAGES_FILE_VERSION = 20;
+	private final int CONFIG_FILE_VERSION = 20;
 	
 	
 	public static String valutaS;
@@ -67,6 +67,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		fileManager.saveDefaultYML("giveQueue.yml");
 		
 		messenger = new Messenger(this, fileManager);
+		
 		if(!fileManager.hasConfig("giveQueue.yml")) {
 			messenger.print("No give queue found, creating yml...");
 			fileManager.updateConfig("giveQueue.yml");
@@ -75,6 +76,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		}
 		if(!fileManager.getConfig("messages.yml").isSet("File-Version-Do-Not-Edit") || !fileManager.getConfig("messages.yml").get("File-Version-Do-Not-Edit").equals(MESSAGES_FILE_VERSION)) {
 			messenger.print("Your messages file is outdated! Updating...");
+			fileManager.reloadConfig("messages.yml");
 			fileManager.updateConfig("messages.yml");
 			fileManager.getConfig("messages.yml").set("File-Version-Do-Not-Edit", MESSAGES_FILE_VERSION);
 			fileManager.saveConfig("messages.yml");
@@ -82,6 +84,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		}
 		if(!getConfig().isSet("File-Version-Do-Not-Edit") || !getConfig().get("File-Version-Do-Not-Edit").equals(CONFIG_FILE_VERSION)) {
 			messenger.print("Your config file is outdated! Updating...");
+			fileManager.reloadConfig("config.yml");
 			fileManager.updateConfig("config.yml");
 			fileManager.getConfig("config.yml").set("File-Version-Do-Not-Edit", CONFIG_FILE_VERSION);
 			fileManager.saveConfig("config.yml");
