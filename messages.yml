@@ -10,14 +10,15 @@
 #   $duration$    #
 #     $incr$      #
 #    $reason$     #
+#  $durability$   #
 #                 #
 
 AuctionStorm:
   Tag: "&7[&6&lAuctionStorm&r&7]"
 
   Auction:
-    Start: "$player$ &6has started an auction!\nIt is $amount$ $item$ for $price$ $valuta$."
-    StartNamed: "$player$ &6has started an auction!\nIt is $amount$ $item$ named $name$&6 for $price$ $valuta$."
+    Start: "$player$ &6has started an auction!\n&6It is $amount$ $item$ for $price$ $valuta$."
+    StartNamed: "$player$ &6has started an auction!\n&6It is $amount$ $item$ named $name$&6 for $price$ $valuta$."
     Queued: "&9Your auction has been queued."
     Wrong:
         None: "&6There is currently no auction, you can use &9/as start &6to start one."
@@ -51,13 +52,15 @@ AuctionStorm:
         Forced: "The current auction has been cancelled by $sender$."
         ForcedReason: "The current auction has been cancelled by $sender$ because of $reason$."
     Info:
-        Get: "Use &6/auc info&9 to get more info about it."
+        Get: "&9Use &6/auc info&9 to get more info about it."
         Header: "&l&9=====Current Auction====="
         LogHeader: "&l&9====$name$===="
         Item: "\n&r&9Item: &6$item$"
         ItemNamed: "\n&r&9Item: &6$item$ &9named &6$name$"
+        Lore: "\n&9Lore:"
+        Durability: "\n&9Durability: &6$amount$&9/&6$durability$"
         EnchantmentHeader: "\n&9Enchantments:"
-        Enchantment: "\n    - &6$name$&6 $amount$"
+        Enchantment: "\n    &6- $name$&6 $amount$"
         Amount: "\n&9Amount: &6$amount$"
         StartingBid: "\n&9Starting Bid: &6$price$ $valuta$"
         Price: "\n&9Price: &6$price$ $valuta$"

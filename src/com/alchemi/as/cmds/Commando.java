@@ -87,7 +87,7 @@ public class Commando implements CommandExecutor{
 						return true;
 					
 					} else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("i")) { //info command
-						if (Queue.current_auction != null) Queue.current_auction.getInfo(player);
+						if (Queue.current_auction != null) Messenger.sendMsg(Queue.current_auction.getInfo(true), player);
 						else Auction.noAuction(player);
 						
 						return true;

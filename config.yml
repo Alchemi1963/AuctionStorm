@@ -21,7 +21,12 @@ Auction:
   #Allow the creation of auctions in creative by default
   #Default: false
   AllowCreative: false
+  
   LogAuctions: true
+  
+  HoverItem: true
+  
+  displayLore: true
     
   #Amount of seconds before anti-snipe kicks in
   #Default: 5

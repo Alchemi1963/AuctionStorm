@@ -40,8 +40,8 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	public FileManager getFileManager() {
 		return fileManager;
 	}
-	private final int MESSAGES_FILE_VERSION = 15;
-	private final int CONFIG_FILE_VERSION = 17;
+	private final int MESSAGES_FILE_VERSION = 17;
+	private final int CONFIG_FILE_VERSION = 19;
 	
 	
 	public static String valutaS;
