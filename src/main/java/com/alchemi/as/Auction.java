@@ -207,7 +207,7 @@ public class Auction {
 		}
 		
 		
-		if (object.getAmount() == 0) {//getItemName(object).equalsIgnoreCase("air")) {
+		if (getItemName(object).equalsIgnoreCase("air")) {
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Item"), seller, new HashMap<String, String>() {
 				{
 					put("$player$", seller.getDisplayName());

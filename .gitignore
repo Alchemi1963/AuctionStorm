@@ -23,10 +23,13 @@
 hs_err_pid*
 /bin/
 
-builder.xml
-*.classpath
-*.project
+.classpath
+.project
+build.xml
+maven-build.properties
+maven-build.xml
 
 /target/
 /.git/
-/.externalToolBuilders
+/.externalToolBuilders/
+/.settings/

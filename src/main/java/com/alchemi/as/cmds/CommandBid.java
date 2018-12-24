@@ -51,6 +51,4 @@ public class CommandBid implements CommandExecutor{
 		return true;
 	}
 
-	
-	
 }
