@@ -35,7 +35,7 @@ public class GiveQueue {
 	public void give(Player p) {
 		if (queue.containsKey(p.getName())) {
 			Auction.giveItemStack(queue.get(p.getName()), p);
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Given"), p, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Given"), p, new HashMap<String, Object>() {
 				{
 					put("$sender$", AuctionStorm.instance.pluginname);
 					put("$amount$", String.valueOf(queue.get(p.getName()).getAmount()));

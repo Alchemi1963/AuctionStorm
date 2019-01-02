@@ -34,7 +34,7 @@ public class AuctionTimer implements Runnable{
 			AuctionStorm.instance.messenger.broadcast("&6Going twice...");
 		
 		} else if (((List<?>) AuctionStorm.instance.config.get("Auction.Notify", new ArrayList<Integer>())).contains(time)) { //custom time notification
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Notify"), new HashMap<String, String>() {
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Notify"), new HashMap<String, Object>() {
 				{
 					put("$amount$", String.valueOf(time));
 				}
@@ -47,7 +47,7 @@ public class AuctionTimer implements Runnable{
 		} 
 		else if (time == Queue.current_auction.getDuration()/2) { //half-time notification
 			
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Halftime"), new HashMap<String, String>() {
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Halftime"), new HashMap<String, Object>() {
 				{
 					put("$amount$", String.valueOf(time));
 				}

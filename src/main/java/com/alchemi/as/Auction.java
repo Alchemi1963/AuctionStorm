@@ -66,7 +66,7 @@ public class Auction {
 		
 		//check values
 		if (AuctionStorm.banned_items.contains(object.getType())) {
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Banned"), seller, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Banned"), seller, new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -82,7 +82,7 @@ public class Auction {
 		}
 		if (!(price > AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price") && price < AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price"))) {
 			if (AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price") != -1) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Price"), seller, new HashMap<String, String>() {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Price"), seller, new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price")));
@@ -97,7 +97,7 @@ public class Auction {
 				return;
 			} else if (price < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price")) {
 				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.PriceInf"), seller, 
-						new HashMap<String, String>() {
+						new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price")));
@@ -114,7 +114,7 @@ public class Auction {
 		}
 		if (!(duration > AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration") && duration < AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration"))) {
 			if (AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration") != -1) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Duration"), seller, new HashMap<String, String>() {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Duration"), seller, new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration")));
@@ -128,7 +128,7 @@ public class Auction {
 				});
 				return;
 			} else if (price < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration")) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.DurationInf"), seller, new HashMap<String, String>() {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.DurationInf"), seller, new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration")));
@@ -145,7 +145,7 @@ public class Auction {
 		}
 		if (!(increment> AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment") && increment < AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment"))) {
 			if (AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment") != -1) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Increment"), seller, new HashMap<String, String>() {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Increment"), seller, new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment")));
@@ -159,7 +159,7 @@ public class Auction {
 				});
 				return;
 			} else if (price < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment")) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.IncrementInf"), seller, new HashMap<String, String>() {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.IncrementInf"), seller, new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment")));
@@ -175,7 +175,7 @@ public class Auction {
 			}
 		}
 		if (amount < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Amount")) {
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Amount"), seller, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Amount"), seller, new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Amount")));
@@ -208,7 +208,7 @@ public class Auction {
 		
 		
 		if (getItemName(object).equalsIgnoreCase("air")) {
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Item"), seller, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Item"), seller, new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -226,7 +226,7 @@ public class Auction {
 		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !AuctionStorm.hasPermission(seller, "as.creative") && !AuctionStorm.instance.config.getBoolean("Auction.AllowCreative")) {
 			
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Creative"), seller, 
-					new HashMap<String, String>() {
+					new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -246,7 +246,7 @@ public class Auction {
 			
 			System.out.println(object.getAmount());
 			System.out.println(this.amount);
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Enough"), seller, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.Enough"), seller, new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -262,7 +262,7 @@ public class Auction {
 			return;
 			
 		}
-		if (Queue.getQueueLength() >= 1) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Queued"), seller, new HashMap<String, String>() {
+		if (Queue.getQueueLength() >= 1) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Queued"), seller, new HashMap<String, Object>() {
 			{
 				put("$player$", seller.getDisplayName());
 				put("$amount$", amountS);
@@ -356,7 +356,7 @@ public class Auction {
 		if (getDisplayName(object) != null) {
 			
 			if (!AuctionStorm.instance.config.getBoolean("Auction.HoverItem")) {
-				AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.StartNamed"), new HashMap<String, String>() {
+				AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.StartNamed"), new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", amountS);
@@ -369,7 +369,7 @@ public class Auction {
 					}
 				});
 			} else {
-				AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.StartNamed"), getInfo(false), new HashMap<String, String>() {
+				AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.StartNamed"), getInfo(false), new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", amountS);
@@ -384,7 +384,7 @@ public class Auction {
 			}
 		} else {
 			if (!AuctionStorm.instance.config.getBoolean("Auction.HoverItem")) {
-				AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Start"), new HashMap<String, String>() {
+				AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Start"), new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", amountS);
@@ -396,7 +396,7 @@ public class Auction {
 					}
 				});
 			} else {
-				AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.Start"), getInfo(false), new HashMap<String, String>() {
+				AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.Start"), getInfo(false), new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", amountS);
@@ -413,7 +413,7 @@ public class Auction {
 		if (!AuctionStorm.instance.config.getBoolean("Auction.HoverItem")) {
 			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"));
 		} else {
-			AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"), getInfo(false), new HashMap<String, String>() {
+			AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"), getInfo(false), new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -440,7 +440,7 @@ public class Auction {
 	@SuppressWarnings("serial")
 	public void bid(int bid, final Player bidder, boolean secret) {
 		if (bidder.equals(seller)) {
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Own-Auction"), seller, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Own-Auction"), seller, new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -455,7 +455,7 @@ public class Auction {
 			
 			return;
 		} else if (!AuctionStorm.econ.has(bidder, bid)) {
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.No-Money"), bidder, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.No-Money"), bidder, new HashMap<String, Object>() {
 				{
 					put("$player$", bidder.getDisplayName());
 					put("$amount$", amountS);
@@ -469,7 +469,7 @@ public class Auction {
 			});
 			return;
 		} else if (current_bid+increment > bid && current_bid > 0) {
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Low"), bidder, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Low"), bidder, new HashMap<String, Object>() {
 				{
 					put("$player$", bidder.getDisplayName());
 					put("$amount$", amountS);
@@ -483,7 +483,7 @@ public class Auction {
 			});
 			return;
 		} else if (price > bid) {
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Low"), bidder, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Low"), bidder, new HashMap<String, Object>() {
 				{
 					put("$player$", bidder.getDisplayName());
 					put("$amount$", amountS);
@@ -499,7 +499,7 @@ public class Auction {
 			return;
 		} else if (bid > AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Bid") && AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Bid") != -1) {
 			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Max"), bidder, 
-					new HashMap<String, String>() {
+					new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Bid")));
@@ -524,7 +524,7 @@ public class Auction {
 		}
 		Player bidder2;
 		if (bid <= secret_bid) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Outbid"), bidder, new HashMap<String, String>() {
+				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Outbid"), bidder, new HashMap<String, Object>() {
 					{
 						put("$player$", secret_bidder.getDisplayName());
 						put("$amount$", amountS);
@@ -548,7 +548,7 @@ public class Auction {
 		current_bid = bid;
 		highest_bidder = bidder;
 		
-		AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Bid"), new HashMap<String, String>() {
+		AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Bid.Bid"), new HashMap<String, Object>() {
 			{
 				put("$player$", bidder2.getDisplayName());
 				put("$amount$", amountS);
@@ -563,7 +563,7 @@ public class Auction {
 		
 		if (atimer.time < AuctionStorm.instance.config.getInt("Auction.AntiSnipe-Treshold")) {
 			atimer.time += AuctionStorm.instance.config.getInt("Auction.AntiSnipe-Time-Added");
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Added"), new HashMap<String, String>() {
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.Time.Added"), new HashMap<String, Object>() {
 				{
 					put("$player$", bidder2.getDisplayName());
 					put("$amount$", amountS);
@@ -585,7 +585,7 @@ public class Auction {
 		String msg = "";
 		if (headers) msg = AuctionStorm.instance.messenger.getMessage("Auction.Info.Header");
 		
-		if (getDisplayName(object) != null) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.ItemNamed"), new HashMap<String, String>() {
+		if (getDisplayName(object) != null) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.ItemNamed"), new HashMap<String, Object>() {
 			{
 				put("$player$", seller.getDisplayName());
 				put("$amount$", amountS);
@@ -597,7 +597,7 @@ public class Auction {
 				put("$incr$", incrementS);
 			}
 		});
-		else msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Item"), new HashMap<String, String>() {
+		else msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Item"), new HashMap<String, Object>() {
 			{
 				put("$player$", seller.getDisplayName());
 				put("$amount$", amountS);
@@ -610,7 +610,7 @@ public class Auction {
 			}
 		});
 		if(AuctionStorm.instance.config.getBoolean("Auction.displayLore") && object.hasItemMeta() && object.getItemMeta().hasLore()) {
-			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Lore"), new HashMap<String, String>() {
+			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Lore"), new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -629,7 +629,7 @@ public class Auction {
 			
 		}
 		
-		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Amount"), new HashMap<String, String>() {
+		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Amount"), new HashMap<String, Object>() {
 			{
 				put("$player$", seller.getDisplayName());
 				put("$amount$", amountS);
@@ -643,7 +643,7 @@ public class Auction {
 		});
 		//show durability if present
 		if (object.getItemMeta() instanceof Damageable && ((Damageable)object.getItemMeta()).hasDamage()) {
-			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Durability"), new HashMap<String, String>() {
+			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Durability"), new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", String.valueOf(object.getType().getMaxDurability() - ((Damageable)object.getItemMeta()).getDamage()));
@@ -660,7 +660,7 @@ public class Auction {
 		
 		//show enchantments if present
 		if (!object.getEnchantments().isEmpty()) {
-			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.EnchantmentHeader"), new HashMap<String, String>() {
+			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.EnchantmentHeader"), new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -673,7 +673,7 @@ public class Auction {
 				}
 			});
 			for (Entry<Enchantment, Integer> ench : object.getEnchantments().entrySet()) {
-				msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Enchantment"), new HashMap<String, String>() {
+				msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Enchantment"), new HashMap<String, Object>() {
 					{
 						put("$player$", seller.getDisplayName());
 						put("$amount$", RomanNumber.toRoman(ench.getValue()));
@@ -687,7 +687,7 @@ public class Auction {
 				});
 			}
 		}
-		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.StartingBid"), new HashMap<String, String>() {
+		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.StartingBid"), new HashMap<String, Object>() {
 			{
 				put("$player$", seller.getDisplayName());
 				put("$amount$", amountS);
@@ -699,7 +699,7 @@ public class Auction {
 				put("$incr$", incrementS);
 			}
 		});
-		if (highest_bidder != null && headers) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Bidder"), new HashMap<String, String>() {
+		if (highest_bidder != null && headers) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Bidder"), new HashMap<String, Object>() {
 			{
 				put("$player$", highest_bidder.getDisplayName());
 				put("$amount$", amountS);
@@ -711,7 +711,7 @@ public class Auction {
 				put("$incr$", incrementS);
 			}
 		});
-		if (current_bid > 0 && headers) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.CurrentBid"), new HashMap<String, String>() {
+		if (current_bid > 0 && headers) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.CurrentBid"), new HashMap<String, Object>() {
 			{
 				put("$player$", highest_bidder.getDisplayName());
 				put("$amount$", amountS);
@@ -724,7 +724,7 @@ public class Auction {
 			}
 		});
 		if (headers) {
-			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Time"), new HashMap<String, String>() {
+			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Time"), new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -752,7 +752,7 @@ public class Auction {
 				log.setPrice(current_bid);
 				AuctionStorm.logger.updateAuctionLog(log);
 			}
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End.End"), new HashMap<String, String>() {
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End.End"), new HashMap<String, Object>() {
 				{
 					put("$player$", highest_bidder.getDisplayName());
 					put("$amount$", amountS);
@@ -778,7 +778,7 @@ public class Auction {
 			giveItemStack(object, highest_bidder);
 			//take money from highest bidder
 			AuctionStorm.econ.withdrawPlayer(highest_bidder, current_bid);
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.End.Paid-To"), highest_bidder, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.End.Paid-To"), highest_bidder, new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -793,7 +793,7 @@ public class Auction {
 			
 			//give money to seller
 			AuctionStorm.econ.depositPlayer(seller, current_bid);
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.End.Paid-By"), seller, new HashMap<String, String>() {
+			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.End.Paid-By"), seller, new HashMap<String, Object>() {
 				{
 					put("$player$", highest_bidder.getDisplayName());
 					put("$amount$", amountS);
@@ -819,7 +819,7 @@ public class Auction {
 			}
 			
 			giveItemStack(object, seller);
-			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End.No-Bids"), new HashMap<String, String>() {
+			AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End.No-Bids"), new HashMap<String, Object>() {
 				{
 					put("$player$", seller.getDisplayName());
 					put("$amount$", amountS);
@@ -865,7 +865,7 @@ public class Auction {
 			if (ender == null) displayname = "the server"; 
 			else displayname = ender.getDisplayName();
 			
-			if (reason != "") AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End.ForcedReason"), new HashMap<String, String>() {
+			if (reason != "") AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End.ForcedReason"), new HashMap<String, Object>() {
 				{
 					put("$sender$", displayname);
 					put("$amount$", amountS);
@@ -878,7 +878,7 @@ public class Auction {
 					put("$reason$", reason);
 				}
 			});
-			else AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End.Forced"), new HashMap<String, String>() {
+			else AuctionStorm.instance.messenger.broadcast(AuctionStorm.instance.messenger.getMessage("Auction.End.Forced"), new HashMap<String, Object>() {
 				{
 					put("$sender$", displayname);
 					put("$amount$", amountS);
@@ -891,7 +891,7 @@ public class Auction {
 				}
 			});
 			
-		} else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), ender, new HashMap<String, String>() {
+		} else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), ender, new HashMap<String, Object>() {
 			{
 				put("$player$", ender.getDisplayName());
 				put("$sender$", "/as cancel");
@@ -912,7 +912,7 @@ public class Auction {
 
 	@SuppressWarnings("serial")
 	public static void noAuction(Player player) {
-		Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.None"), player, new HashMap<String, String>() {
+		Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Auction.Wrong.None"), player, new HashMap<String, Object>() {
 			{
 				put("$sender$", player.getDisplayName());
 			}

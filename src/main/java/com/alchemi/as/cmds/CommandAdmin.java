@@ -27,7 +27,7 @@ public class CommandAdmin implements CommandExecutor{
 		if (AuctionStorm.hasPermission(sender, "as.admin") && cmd.getName().equals("asadmin")) {
 			CarbonDating datetime = null;
 			
-			Map<String, String> kaart = new HashMap<String, String>();
+			Map<String, Object> kaart = new HashMap<String, Object>();
 			if (sender instanceof Player) kaart.put("$player$", ((Player) sender).getDisplayName());
 			else kaart.put("$player$", AuctionStorm.instance.pluginname);
 			kaart.put("$sender$", cmd.getName());

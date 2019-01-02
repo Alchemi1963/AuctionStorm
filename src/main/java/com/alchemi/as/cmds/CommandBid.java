@@ -18,7 +18,7 @@ public class CommandBid implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		Map<String, String> kaart = new HashMap<String, String>();
+		Map<String, Object> kaart = new HashMap<String, Object>();
 		if (sender instanceof Player) kaart.put("$player$", ((Player) sender).getDisplayName());
 		else kaart.put("$player$", AuctionStorm.instance.pluginname);
 		kaart.put("$sender$", cmd.getName());
