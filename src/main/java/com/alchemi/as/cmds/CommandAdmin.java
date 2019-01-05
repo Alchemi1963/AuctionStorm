@@ -136,7 +136,6 @@ public class CommandAdmin implements CommandExecutor{
 					}
 				} else {
 					for (String file : AuctionStorm.instance.getFileManager().getFiles().keySet()) {
-						AuctionStorm.instance.messenger.print(file);
 						AuctionStorm.instance.fileManager.reloadConfig(file);
 						
 						if (Queue.getQueueLength() != 0) {

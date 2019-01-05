@@ -66,7 +66,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		fileManager.saveDefaultYML("messages.yml");
 		fileManager.saveDefaultYML("giveQueue.yml");
 		
-		messenger = new Messenger(this, fileManager);
+		messenger = new Messenger(fileManager);
 		
 		if(!fileManager.hasConfig("giveQueue.yml")) {
 			messenger.print("No give queue found, creating yml...");
