@@ -71,7 +71,7 @@ AuctionStorm:
     
   Command:
     No-Permission: '&c&oYou don''t have permission to use &9$sender$&c.&r&c If you believe this is an error, &nplease contact an administrator.'
-    Wrong-Format: '&cPlease use: &9'
+    Wrong-Format: '&cPlease use: &9$format$'
     Unknown: '&cUnknown command. Use &9/as help &cfor more information.'
     Given: '&9You have been given $amount$ $item$.'
     Admin:

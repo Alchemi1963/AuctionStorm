@@ -16,7 +16,7 @@ import com.alchemi.al.FileManager;
 import com.alchemi.al.Messenger;
 import com.alchemi.as.cmds.CommandAdmin;
 import com.alchemi.as.cmds.CommandBid;
-import com.alchemi.as.cmds.Commando;
+import com.alchemi.as.cmds.CommandPlayer;
 import com.alchemi.as.util.GiveQueue;
 import com.alchemi.as.util.Logging;
 import com.alchemi.as.util.events.AdminTabComplete;
@@ -25,15 +25,11 @@ import com.alchemi.as.util.events.BidTabComplete;
 import com.alchemi.as.util.events.UserLoginHandler;
 
 import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.permission.Permission;
 
 public class AuctionStorm extends JavaPlugin implements Listener {
 	public String pluginname;
 	public static Economy econ;
-	public static Permission perms;
 	
-	public static boolean VaultPerms = false;
-
 	public FileManager fileManager;
 	public Messenger messenger;
 	
@@ -110,11 +106,6 @@ public class AuctionStorm extends JavaPlugin implements Listener {
             return;
         }
 		
-		if (setupPermission()) {
-			messenger.print("Using Vault based permissions!");
-			VaultPerms = true;
-		}
-		
 		gq = new GiveQueue(fileManager.getConfig("giveQueue.yml"));
 		
 		//registry
@@ -141,7 +132,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	}
 	
 	private void registerCommands() {
-		getCommand("auc").setExecutor(new Commando());
+		getCommand("auc").setExecutor(new CommandPlayer());
 		getCommand("bid").setExecutor(new CommandBid());
 		getCommand("asadmin").setExecutor(new CommandAdmin());
 
@@ -169,11 +160,11 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 	
 	public static boolean hasPermission(Player player, String perm) {
 		
-		return VaultPerms ? perms.has(player, perm) || player.isOp() : player.hasPermission(perm) || player.isOp();
+		return (player.isOp() || player.hasPermission(perm));
 	}
 	
 	public static boolean hasPermission(CommandSender sender, String perm) {
-		return sender instanceof Player ? sender.isOp() || hasPermission((Player) sender, perm) : true;
+		return ( !(sender instanceof Player) || sender.isOp() || sender.hasPermission(perm));
 	}
 	
 	private boolean setupEconomy() {
@@ -185,15 +176,6 @@ public class AuctionStorm extends JavaPlugin implements Listener {
         econ = rsp.getProvider();
         return econ != null;
     }
-	
-	private boolean setupPermission() {
-		if (getServer().getPluginManager().getPlugin("Vault") == null) return false;
-		RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-		if (rsp == null) return false;
-		
-		perms = rsp.getProvider();
-		return perms != null;
-	}
 
 	public void reloadConfigValues() {
 		

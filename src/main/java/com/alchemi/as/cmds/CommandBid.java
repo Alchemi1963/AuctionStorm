@@ -8,7 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.alchemi.al.Messenger;
 import com.alchemi.as.Auction;
 import com.alchemi.as.AuctionStorm;
 import com.alchemi.as.Queue;
@@ -38,16 +37,20 @@ public class CommandBid implements CommandExecutor{
 			
 			try {
 				if (args.length >= 1 && args[0] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), (Player) sender);
-				else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, sender, kaart);
+				else {
+					kaart.put("$format$", CommandPlayer.bid_usage);
+					AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender, kaart);
+				}
 				
 				if (args.length == 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), (Player) sender, true);
 			} catch(NumberFormatException e) {
-				Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, sender, kaart);
+				kaart.put("$format$", CommandPlayer.bid_usage);
+				AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender, kaart);
 			}
 			
 			return true;
 		}
-		if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), sender, kaart);
+		if (sender instanceof Player) AuctionStorm.instance.messenger.sendMessage("Command.No-Permission", sender, kaart);
 		return true;
 	}
 

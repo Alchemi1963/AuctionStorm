@@ -16,7 +16,7 @@ import com.alchemi.as.AuctionStorm;
 import com.alchemi.as.Queue;
 
 
-public class Commando implements CommandExecutor{
+public class CommandPlayer implements CommandExecutor{
 
 	public static final String start_usage = "&9/auc start <price> [amount] [increment] [duration]";
 	public static final String bid_usage = "&9/bid [bid] [secret bid]";
@@ -58,7 +58,8 @@ public class Commando implements CommandExecutor{
 					
 				} else if (args[0].equalsIgnoreCase("start") && args.length < 2 || args[0].equalsIgnoreCase("s")  && args.length < 2) { 
 					
-					Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, kaart);
+					kaart.put("$format$", start_usage);
+					AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", player, kaart);
 					return true;
 					
 				} else if (args.length >= 1) { 
@@ -77,12 +78,16 @@ public class Commando implements CommandExecutor{
 						
 						try {
 							if (args.length >= 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), player);
-							else Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + bid_usage, player, kaart);
+							else {
+								kaart.put("$format$", bid_usage);
+								AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", player, kaart);
+							}
 							
 							if (args.length == 3 && args[2] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), player, true);
 						
 						} catch(NumberFormatException e) {
-							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + Commando.bid_usage, player, kaart);
+							kaart.put("$format$", bid_usage);
+							AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", player, kaart);
 						}
 						return true;
 					
@@ -117,7 +122,7 @@ public class Commando implements CommandExecutor{
 							return true;
 							
 						} else {
-							if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), sender, kaart);
+							if (sender instanceof Player) AuctionStorm.instance.messenger.sendMessage("Command.No-Permission", sender, kaart);
 							return true;
 						}
 					}
@@ -135,7 +140,8 @@ public class Commando implements CommandExecutor{
 							if (args.length == 5) duration = Integer.valueOf(args[4]);
 						
 						} catch(NumberFormatException e) {
-							Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Wrong-Format") + start_usage, player, kaart);
+							kaart.put("$format$", start_usage);
+							AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", player, kaart);
 						}
 						
 						
@@ -156,10 +162,10 @@ public class Commando implements CommandExecutor{
 					}  
 				}  
 			}
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Unknown"), sender, kaart);
+			AuctionStorm.instance.messenger.sendMessage("Command.Unknown", sender, kaart);
 			return true;
 		}
-		if (sender instanceof Player) Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.No-Permission"), sender, kaart);
+		if (sender instanceof Player) AuctionStorm.instance.messenger.sendMessage("Command.No-Permission", sender, kaart);
 		return true;
 	}
 
