@@ -928,11 +928,11 @@ public class Auction {
 			return;
 		}
 		
-		if (item.getAmount() > 64) { 
+		if (item.getAmount() > item.getMaxStackSize()) { 
 			ItemStack item2 = item.clone();
-			item2.setAmount(item.getAmount() - 64);
+			item2.setAmount(item.getAmount() - item.getMaxStackSize());
 			giveItemStack(item2, seller);
-			item.setAmount(64);
+			item.setAmount(item.getMaxStackSize());
 		}
 		
 		if (seller.getPlayer().getInventory().firstEmpty() == -1) {
