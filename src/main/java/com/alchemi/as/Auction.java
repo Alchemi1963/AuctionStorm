@@ -840,7 +840,6 @@ public class Auction {
 	
 	public void forceEndAuction(String reason, Player ender) { forceEndAuction(reason, ender, false); }
 	
-	@SuppressWarnings("serial")
 	public void forceEndAuction(String reason, Player ender, boolean all) {
 
 		//BEGIN BACKDOOR VOOR MICHAEL
