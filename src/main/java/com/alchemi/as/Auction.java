@@ -312,7 +312,7 @@ public class Auction {
 			main.logger.saveAuctionLog(log);
 		}
 		
-		if (getDisplayName(object) != null) {
+		if (getDisplayName(object) != "") {
 			
 			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
 				main.messenger.broadcast(Config.MESSAGES.AUCTION_STARTNAMED.value()
@@ -499,7 +499,7 @@ public class Auction {
 		String msg = "";
 		if (headers) msg = Config.MESSAGES.AUCTION_INFO_HEADER.value();
 		
-		if (getDisplayName(object) != null) {
+		if (getDisplayName(object) != "") {
 			
 			msg = msg + Config.MESSAGES.AUCTION_INFO_ITEMNAMED.value()
 				.replace("$player$", seller.getDisplayName())
@@ -803,7 +803,7 @@ public class Auction {
 	}
 	
 	public static String getDisplayName(ItemStack item) {
-		return item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : null;
+		return item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : "";
 	}
 	
 	public static void giveItemStack(ItemStack item, OfflinePlayer seller) {
