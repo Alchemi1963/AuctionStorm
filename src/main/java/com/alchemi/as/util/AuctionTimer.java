@@ -33,20 +33,20 @@ public class AuctionTimer implements Runnable{
 			AuctionStorm.instance.messenger.broadcast("&6Going twice...");
 		
 		} else if (((List<?>) AuctionStorm.instance.config.get("Auction.Notify", new ArrayList<Integer>())).contains(time)) { //custom time notification
-			AuctionStorm.instance.messenger.sendBroadcast("Auction.Time.Notify", new HashMap<String, Object>() {
+			AuctionStorm.instance.messenger.broadcast("Auction.Time.Notify", new HashMap<String, Object>() {
 				{
 					put("$amount$", String.valueOf(time));
 				}
 			}); 
 			if (!AuctionStorm.instance.config.getBoolean("Auction.HoverItem")) {
-				AuctionStorm.instance.messenger.sendBroadcast("Auction.Info.Get");
+				AuctionStorm.instance.messenger.broadcast("Auction.Info.Get");
 			} else {
 				AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"), Queue.current_auction.getInfo(false));
 			}
 		} 
 		else if (time == Queue.current_auction.getDuration()/2) { //half-time notification
 			
-			AuctionStorm.instance.messenger.sendBroadcast("Auction.Time.Halftime", new HashMap<String, Object>() {
+			AuctionStorm.instance.messenger.broadcast("Auction.Time.Halftime", new HashMap<String, Object>() {
 				{
 					put("$amount$", String.valueOf(time));
 				}
@@ -54,7 +54,7 @@ public class AuctionTimer implements Runnable{
 			
 			
 			if (!AuctionStorm.instance.config.getBoolean("Auction.HoverItem")) {
-				AuctionStorm.instance.messenger.sendBroadcast("Auction.Info.Get");
+				AuctionStorm.instance.messenger.broadcast("Auction.Info.Get");
 			} else {
 				AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"), Queue.current_auction.getInfo(false));
 			}

@@ -10,7 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.alchemi.al.CarbonDating;
+import com.alchemi.al.objects.CarbonDating;
 import com.alchemi.as.AuctionStorm;
 import com.alchemi.as.Queue;
 
@@ -33,24 +33,24 @@ public class CommandAdmin implements CommandExecutor{
 			
 			if (args.length == 0) {
 				kaart.put("$format$", admin_usage);
-				AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender, kaart);
+				AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", sender, kaart);
 				return true;
 			}
 			
 			if (args[0].equalsIgnoreCase("return")) { //return command
 				
 				if (!AuctionStorm.hasPermission(sender, "as.return")) {
-					AuctionStorm.instance.messenger.sendMessage("Command.No-Permission", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.No-Permission", sender, kaart);
 					return true;
 				
 				} else if (!AuctionStorm.instance.config.getBoolean("Auction.LogAuctions")) {
-					AuctionStorm.instance.messenger.sendMessage("Command.Admin.Logging-Disabled", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.Admin.Logging-Disabled", sender, kaart);
 					return true;
 				}
 				
 				if (args.length < 4) {
 					kaart.put("$format$", return_usage);
-					AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender,kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", sender,kaart);
 					return true;
 				}
 				
@@ -61,7 +61,7 @@ public class CommandAdmin implements CommandExecutor{
 				
 				if (datetime == null || datetime.getCarbonDate() == null) {
 					kaart.put("$format$", return_usage);
-					AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", sender, kaart);
 					return true;
 				}
 				
@@ -76,14 +76,14 @@ public class CommandAdmin implements CommandExecutor{
 				} 
 				else {
 					kaart.put("$format$", return_usage);
-					AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", sender, kaart);
 					return true;
 				}
 			}
 			
 			else if (args[0].equalsIgnoreCase("info")) { //info command
 				if (!AuctionStorm.instance.config.getBoolean("Auction.LogAuctions")) {
-					AuctionStorm.instance.messenger.sendMessage("Command.Admin.Logging-Disabled", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.Admin.Logging-Disabled", sender, kaart);
 					return true;
 				}
 				if (args.length == 2 && args[1].equalsIgnoreCase("latest")) {
@@ -94,14 +94,14 @@ public class CommandAdmin implements CommandExecutor{
 					}
 					else {
 						kaart.put("$format$", info_usage);
-						AuctionStorm.instance.messenger.sendMessage("Command.No-Logs", sender, kaart);
+						AuctionStorm.instance.messenger.sendMsg("Command.No-Logs", sender, kaart);
 						return true;
 					}
 				}
 				
 				if (args.length < 3) {
 					kaart.put("$format$", info_usage);
-					AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", sender, kaart);
 					return true;
 				}
 				
@@ -112,7 +112,7 @@ public class CommandAdmin implements CommandExecutor{
 				
 				if (datetime == null || datetime.getCarbonDate() == null) {
 					kaart.put("$format$", info_usage);
-					AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", sender, kaart);
 					return true;
 				}
 				
@@ -121,7 +121,7 @@ public class CommandAdmin implements CommandExecutor{
 			
 			else if (args[0].equalsIgnoreCase("reload")) { //reload command
 				if (!AuctionStorm.hasPermission(sender, "as.reload")) {
-					AuctionStorm.instance.messenger.sendMessage("Command.No-Permission", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.No-Permission", sender, kaart);
 					return true;
 				} else if (args.length == 2 && !args[1].equalsIgnoreCase("all") && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
 					AuctionStorm.instance.fileManager.reloadConfig(args[1]);
@@ -150,7 +150,7 @@ public class CommandAdmin implements CommandExecutor{
 			
 			else if (args[0].equalsIgnoreCase("defaults")) {
 				if (!AuctionStorm.hasPermission(sender, "as.default-reload")) {
-					AuctionStorm.instance.messenger.sendMessage("Command.No-Permission", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.No-Permission", sender, kaart);
 					return true;
 				} else if (args.length == 2 && AuctionStorm.instance.getFileManager().hasConfig(args[1])) {
 					AuctionStorm.instance.getFileManager().reloadDefaultConfig(args[1]);

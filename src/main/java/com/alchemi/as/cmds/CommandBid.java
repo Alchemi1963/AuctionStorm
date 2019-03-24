@@ -39,18 +39,18 @@ public class CommandBid implements CommandExecutor{
 				if (args.length >= 1 && args[0] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), (Player) sender);
 				else {
 					kaart.put("$format$", CommandPlayer.bid_usage);
-					AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender, kaart);
+					AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", sender, kaart);
 				}
 				
 				if (args.length == 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), (Player) sender, true);
 			} catch(NumberFormatException e) {
 				kaart.put("$format$", CommandPlayer.bid_usage);
-				AuctionStorm.instance.messenger.sendMessage("Command.Wrong-Format", sender, kaart);
+				AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", sender, kaart);
 			}
 			
 			return true;
 		}
-		if (sender instanceof Player) AuctionStorm.instance.messenger.sendMessage("Command.No-Permission", sender, kaart);
+		if (sender instanceof Player) AuctionStorm.instance.messenger.sendMsg("Command.No-Permission", sender, kaart);
 		return true;
 	}
 

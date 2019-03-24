@@ -12,8 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.alchemi.al.FileManager;
-import com.alchemi.al.Messenger;
+import com.alchemi.al.configurations.Messenger;
+import com.alchemi.al.deprecated.FileManager;
 import com.alchemi.as.cmds.CommandAdmin;
 import com.alchemi.as.cmds.CommandBid;
 import com.alchemi.as.cmds.CommandPlayer;
@@ -62,7 +62,7 @@ public class AuctionStorm extends JavaPlugin implements Listener {
 		fileManager.saveDefaultYML("messages.yml");
 		fileManager.saveDefaultYML("giveQueue.yml");
 		
-		messenger = new Messenger(fileManager);
+		messenger = new Messenger(this);
 		
 		if(!fileManager.hasConfig("giveQueue.yml")) {
 			messenger.print("No give queue found, creating yml...");
