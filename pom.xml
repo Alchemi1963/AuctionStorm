@@ -4,6 +4,7 @@
   <artifactId>AuctionStorm</artifactId>
   <version>1.4.0 - alpha</version>
   <build>
+    <finalName>${project.name}</finalName>
     <sourceDirectory>src/main/java</sourceDirectory>
     <plugins>
       <plugin>
