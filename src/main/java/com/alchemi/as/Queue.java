@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
 
+import com.alchemi.as.objects.Config;
+
 public class Queue {
 
 	private static ArrayList<Auction> queue = new ArrayList<Auction>();
@@ -47,7 +49,7 @@ public class Queue {
 	public static void printQueue() { 
 		
 		for (Auction a : queue) {
-			AuctionStorm.instance.messenger.broadcast(Auction.getItemName(a.getObject()));
+			main.messenger.broadcast(Auction.getItemName(a.getObject()));
 		}
 		
 	}
@@ -64,7 +66,7 @@ public class Queue {
 	
 	public static void nextAuction() {
 		
-		try { AuctionStorm.instance.getServer().getScheduler().cancelTask(current_auction.task_id); }
+		try { main.instance.getServer().getScheduler().cancelTask(current_auction.task_id); }
 		catch (Exception e) { e.printStackTrace(); }
 			
 		current_auction = null;
@@ -72,14 +74,14 @@ public class Queue {
 		if (queue.size() > 1) {
 		
 			current_auction = queue.get(1);
-			AuctionStorm.instance.getServer().getScheduler().runTaskLater(AuctionStorm.instance, new Runnable() {
+			main.instance.getServer().getScheduler().runTaskLater(main.instance, new Runnable() {
 				
 				@Override
 				public void run() {
 					Queue.current_auction.startAuction();
 					
 				}
-			}, AuctionStorm.instance.config.getInt("Auction.Start-Delay") * 20);
+			}, Config.AUCTION.START_DELAY.asInt() * 20);
 			
 			
 		}

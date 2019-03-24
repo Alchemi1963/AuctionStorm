@@ -1,4 +1,4 @@
-package com.alchemi.as.util.events;
+package com.alchemi.as.listeners.events;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import com.alchemi.as.AuctionStorm;
+import com.alchemi.as.main;
 import com.alchemi.as.Queue;
 
 public class BidTabComplete implements TabCompleter {
@@ -23,7 +23,7 @@ public class BidTabComplete implements TabCompleter {
 		if (!(sender instanceof Player))
 			return tabSuggest;
 
-		if (!AuctionStorm.hasPermission(sender, "as.base"))
+		if (!main.hasPermission(sender, "as.base"))
 			return tabSuggest;
 		
 		if (Queue.current_auction == null) {

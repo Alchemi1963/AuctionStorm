@@ -1,4 +1,4 @@
-package com.alchemi.as.util.events;
+package com.alchemi.as.listeners.events;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import com.alchemi.as.AuctionStorm;
+import com.alchemi.as.main;
 import com.alchemi.as.Queue;
 
 public class BaseTabComplete implements TabCompleter {
@@ -24,7 +24,7 @@ public class BaseTabComplete implements TabCompleter {
 		if (!(sender instanceof Player))
 			return tabSuggest;
 
-		if (!AuctionStorm.hasPermission(sender, "as.base"))
+		if (!main.hasPermission(sender, "as.base"))
 			return tabSuggest;
 		
 		if (args.length == 1 && !Arrays.asList(new String[]{"start", "s", "help", "info", "i", "cancel", "bid"}).contains(args[0])) {
@@ -33,7 +33,7 @@ public class BaseTabComplete implements TabCompleter {
 			list.add("help");
 			list.add("info");
 			if (Queue.current_auction != null) list.add("bid");
-			if (Queue.current_auction != null && Queue.current_auction.getSeller().equals((Player) sender) || AuctionStorm.hasPermission(sender, "as.cancel")) list.add("cancel");
+			if (Queue.current_auction != null && Queue.current_auction.getSeller().equals((Player) sender) || main.hasPermission(sender, "as.cancel")) list.add("cancel");
 			
 		} else if (args.length == 2) {
 			

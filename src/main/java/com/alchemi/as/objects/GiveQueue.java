@@ -1,5 +1,6 @@
-package com.alchemi.as.util;
+package com.alchemi.as.objects;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.alchemi.al.configurations.Messenger;
 import com.alchemi.as.Auction;
-import com.alchemi.as.AuctionStorm;
+import com.alchemi.as.main;
 
 public class GiveQueue {
 
@@ -31,19 +32,15 @@ public class GiveQueue {
 		
 	}
 	
-	@SuppressWarnings("serial")
 	public void give(Player p) {
 		if (queue.containsKey(p.getName())) {
 			Auction.giveItemStack(queue.get(p.getName()), p);
-			Messenger.sendMsg(AuctionStorm.instance.messenger.getMessage("Command.Given"), p, new HashMap<String, Object>() {
-				{
-					put("$sender$", AuctionStorm.instance.pluginname);
-					put("$amount$", String.valueOf(queue.get(p.getName()).getAmount()));
-					put("$item$", Auction.getItemName(queue.get(p.getName())));
-					put("$name$", Auction.getDisplayName(queue.get(p.getName())));
-					put("$valuta$", AuctionStorm.valutaP);
-				}
-			});
+			
+			p.sendMessage(Messenger.cc(Config.MESSAGES.COMMAND_GIVEN.value().replace("$sender$", main.instance.pluginname)
+					.replace("$amount$", String.valueOf(queue.get(p.getName()).getAmount()))
+					.replace("$item$", Auction.getItemName(queue.get(p.getName())))
+					.replace("$name$", Auction.getDisplayName(queue.get(p.getName())))
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())));
 			
 			queue.remove(p.getName());
 			players.remove(p.getName());
@@ -51,7 +48,11 @@ public class GiveQueue {
 			for (String pl : players) {
 				config.set("Queue." + pl, queue.get(pl));
 			}
-			AuctionStorm.instance.getFileManager().saveConfig("giveQueue.yml");
+			try {
+				main.instance.giveQueue.save();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -62,8 +63,12 @@ public class GiveQueue {
 	public void addPlayer(OfflinePlayer seller, ItemStack i) {
 		queue.put(seller.getName(), i);
 		players.add(seller.getName());
-		AuctionStorm.instance.getFileManager().getConfig("giveQueue.yml").set("Queue." + seller.getName() + ".item", i);
-		AuctionStorm.instance.getFileManager().saveConfig("giveQueue.yml");
+		main.instance.giveQueue.set("Queue." + seller.getName() + ".item", i);
+		try {
+			main.instance.giveQueue.save();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

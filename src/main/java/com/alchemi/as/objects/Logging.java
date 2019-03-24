@@ -1,4 +1,4 @@
-package com.alchemi.as.util;
+package com.alchemi.as.objects;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import com.alchemi.al.objects.CarbonDating;
-import com.alchemi.as.AuctionStorm;
+import com.alchemi.as.main;
 
 public class Logging {
 
@@ -17,16 +17,16 @@ public class Logging {
 	
 	public Logging(String fileName) {
 		this.fileName = fileName;
-		this.file = new File(AuctionStorm.instance.getDataFolder(), fileName);
+		this.file = new File(main.instance.getDataFolder(), fileName);
 		if (!this.file.exists()) {
-			AuctionStorm.instance.messenger.print(fileName + " does not exist, creating it now...");
+			main.messenger.print(fileName + " does not exist, creating it now...");
 			
 			try {
 				this.file.createNewFile();
-				AuctionStorm.instance.messenger.print("Log file created as " + fileName);
+				main.messenger.print("Log file created as " + fileName);
 			} catch (IOException e) {
 				e.printStackTrace();
-				AuctionStorm.instance.messenger.print("Could not create " + fileName);
+				main.messenger.print("Could not create " + fileName);
 			}
 		}
 		this.logger = YamlConfiguration.loadConfiguration(file);

@@ -1,7 +1,4 @@
-package com.alchemi.as.cmds;
-
-import java.util.HashMap;
-import java.util.Map;
+package com.alchemi.as.listeners.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,8 +9,9 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.alchemi.al.configurations.Messenger;
 import com.alchemi.as.Auction;
-import com.alchemi.as.AuctionStorm;
 import com.alchemi.as.Queue;
+import com.alchemi.as.main;
+import com.alchemi.as.objects.Config;
 
 
 public class CommandPlayer implements CommandExecutor{
@@ -41,25 +39,23 @@ public class CommandPlayer implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		Map<String, Object> kaart = new HashMap<String, Object>();
-		if (sender instanceof Player) kaart.put("$player$", ((Player) sender).getDisplayName());
-		else kaart.put("$player$", AuctionStorm.instance.pluginname);
-		kaart.put("$sender$", cmd.getName());
-		
-		
-		if (AuctionStorm.hasPermission(sender, "as.base") && sender instanceof Player && cmd.getName().equals("auc")) {
+		if (main.hasPermission(sender, "as.base") && sender instanceof Player && cmd.getName().equals("auc")) {
 			Player player = (Player) sender;
 						
 			if (args.length > 0) {
 				if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) { //help command
 				
-					Messenger.sendMsg(help_message, player);
+					player.sendMessage(Messenger.cc(help_message));
 					return true;
 					
 				} else if (args[0].equalsIgnoreCase("start") && args.length < 2 || args[0].equalsIgnoreCase("s")  && args.length < 2) { 
 					
-					kaart.put("$format$", start_usage);
-					AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", player, kaart);
+					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
+							.replace("$sender$", cmd.getName())
+							.replace("$format$", start_usage)
+							.replace("$player$", ((Player) sender).getDisplayName());
+					
+					sender.sendMessage(Messenger.cc(send));
 					return true;
 					
 				} else if (args.length >= 1) { 
@@ -79,20 +75,30 @@ public class CommandPlayer implements CommandExecutor{
 						try {
 							if (args.length >= 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), player);
 							else {
-								kaart.put("$format$", bid_usage);
-								AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", player, kaart);
+								String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
+										.replace("$sender$", cmd.getName())
+										.replace("$format$", bid_usage)
+										.replace("$player$", ((Player) sender).getDisplayName());
+								
+								sender.sendMessage(Messenger.cc(send));
+								return true;
 							}
 							
 							if (args.length == 3 && args[2] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), player, true);
 						
 						} catch(NumberFormatException e) {
-							kaart.put("$format$", bid_usage);
-							AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", player, kaart);
+							String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
+									.replace("$sender$", cmd.getName())
+									.replace("$format$", bid_usage)
+									.replace("$player$", ((Player) sender).getDisplayName());
+							
+							sender.sendMessage(Messenger.cc(send));
+							
 						}
 						return true;
 					
 					} else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("i")) { //info command
-						if (Queue.current_auction != null) Messenger.sendMsg(Queue.current_auction.getInfo(true), player);
+						if (Queue.current_auction != null) player.sendMessage(Messenger.cc(Queue.current_auction.getInfo(true)));
 						else Auction.noAuction(player);
 						
 						return true;
@@ -116,23 +122,29 @@ public class CommandPlayer implements CommandExecutor{
 							else Queue.current_auction.forceEndAuction();
 							return true;
 							
-						} else if (AuctionStorm.hasPermission(sender, "as.cancel")) {
+						} else if (main.hasPermission(sender, "as.cancel")) {
 							if (reason != "") Queue.current_auction.forceEndAuction(reason, player);
 							else Queue.current_auction.forceEndAuction("", player);
 							return true;
 							
 						} else {
-							if (sender instanceof Player) AuctionStorm.instance.messenger.sendMsg("Command.No-Permission", sender, kaart);
+							if (sender instanceof Player) {
+								String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+										.replace("$sender$", cmd.getName())
+										.replace("$player$", ((Player) sender).getDisplayName());
+								
+								sender.sendMessage(Messenger.cc(send));
+							}
 							return true;
 						}
 					}
 					
 					else if (args.length >= 2 && args[0].equalsIgnoreCase("start") 
 						|| args.length >= 2 && args[0].equalsIgnoreCase("s")) { //start command
-						int price = AuctionStorm.instance.config.getInt("Auction.Start-Defaults.Price");
+						int price = Config.AUCTION.START_DEFAULTS_PRICE.asInt();
 						int amount = player.getInventory().getItemInMainHand().getAmount();
-						int increment = AuctionStorm.instance.config.getInt("Auction.Start-Defaults.Increment");
-						int duration = AuctionStorm.instance.config.getInt("Auction.Start-Defaults.Duration");
+						int increment = Config.AUCTION.START_DEFAULTS_INCREMENT.asInt();
+						int duration = Config.AUCTION.START_DEFAULTS_DURATION.asInt();
 						
 						try {
 							price = Integer.valueOf(args[1]);
@@ -140,8 +152,12 @@ public class CommandPlayer implements CommandExecutor{
 							if (args.length == 5) duration = Integer.valueOf(args[4]);
 						
 						} catch(NumberFormatException e) {
-							kaart.put("$format$", start_usage);
-							AuctionStorm.instance.messenger.sendMsg("Command.Wrong-Format", player, kaart);
+							String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
+									.replace("$sender$", cmd.getName())
+									.replace("$format$", start_usage)
+									.replace("$player$", ((Player) sender).getDisplayName());
+							
+							sender.sendMessage(Messenger.cc(send));
 						}
 						
 						
@@ -162,10 +178,20 @@ public class CommandPlayer implements CommandExecutor{
 					}  
 				}  
 			}
-			AuctionStorm.instance.messenger.sendMsg("Command.Unknown", sender, kaart);
+			String send = Config.MESSAGES.COMMAND_UNKNOWN.value()
+					.replace("$sender$", cmd.getName())
+					.replace("$player$", ((Player) sender).getDisplayName());
+			
+			sender.sendMessage(Messenger.cc(send));
 			return true;
 		}
-		if (sender instanceof Player) AuctionStorm.instance.messenger.sendMsg("Command.No-Permission", sender, kaart);
+		if (sender instanceof Player) {
+			String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+					.replace("$sender$", cmd.getName())
+					.replace("$player$", ((Player) sender).getDisplayName());
+			
+			sender.sendMessage(Messenger.cc(send));
+		}
 		return true;
 	}
 

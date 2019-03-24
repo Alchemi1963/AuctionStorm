@@ -1,6 +1,5 @@
 package com.alchemi.as;
 
-import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.GameMode;
@@ -16,11 +15,11 @@ import org.bukkit.scheduler.BukkitScheduler;
 import com.alchemi.al.Library;
 import com.alchemi.al.configurations.Messenger;
 import com.alchemi.al.objects.CarbonDating;
-import com.alchemi.as.cmds.CommandPlayer;
-import com.alchemi.as.util.AuctionLog;
-import com.alchemi.as.util.AuctionTimer;
-import com.alchemi.as.util.RomanNumber;
-
+import com.alchemi.as.listeners.commands.CommandPlayer;
+import com.alchemi.as.objects.AuctionLog;
+import com.alchemi.as.objects.AuctionTimer;
+import com.alchemi.as.objects.Config;
+import com.alchemi.as.objects.RomanNumber;
 
 public class Auction {
 
@@ -64,133 +63,108 @@ public class Auction {
 		object = seller.getInventory().getItemInMainHand();
 		
 		//check values
-		if (AuctionStorm.banned_items.contains(object.getType())) {
-			AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.Banned", seller, new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			}); 
+		if (main.banned_items.contains(object.getType())) {
+			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_BANNED.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			return;
 		}
-		if (!(price > AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price") && price < AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price"))) {
-			if (AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price") != -1) {
-				AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.Price", seller, new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price")));
-						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
-						put("$price$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")));
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")));
-						put("$incr$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
-					}
-				});
+		if (!(price > Config.AUCTION.MINIMUM_VALUES_PRICE.asInt() && price < Config.AUCTION.MAXIMUM_VALUES_PRICE.asInt())) {
+			if (Config.AUCTION.MAXIMUM_VALUES_PRICE.asInt() != -1) {
+				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_PRICE.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_PRICE.asString())
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
 				return;
-			} else if (price < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price")) {
-				AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.PriceInf", seller, 
-						new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Price")));
-						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
-						put("$price$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")));
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")));
-						put("$incr$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
-					}
-				});
+			} else if (price < Config.AUCTION.MINIMUM_VALUES_PRICE.asInt()) {
+				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_PRICEINF.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_PRICE.asString())
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
 				return;
 			}
 		}
-		if (!(duration > AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration") && duration < AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration"))) {
-			if (AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration") != -1) {
-				AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.Duration", seller, new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration")));
-						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
-						put("$price$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")));
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")));
-						put("$incr$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
-					}
-				});
+		if (!(duration > Config.AUCTION.MINIMUM_VALUES_DURATION.asInt() && duration < Config.AUCTION.MAXIMUM_VALUES_DURATION.asInt())) {
+			if (Config.AUCTION.MAXIMUM_VALUES_DURATION.asInt() != -1) {
+				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_DURATION.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_DURATION.asString())
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
 				return;
-			} else if (price < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration")) {
-				AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.DurationInf", seller, new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Duration")));
-						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
-						put("$price$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")));
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")));
-						put("$incr$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
-					}
-				});
+			} else if (price < Config.AUCTION.MINIMUM_VALUES_DURATION.asInt()) {
+				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_DURATIONINF.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_DURATION.asString())
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
 				return;
 			}
 		}
-		if (!(increment> AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment") && increment < AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment"))) {
-			if (AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment") != -1) {
-				AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.Increment", seller, new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment")));
-						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
-						put("$price$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")));
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")));
-						put("$incr$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
-					}
-				});
+		if (!(increment > Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt() && increment < Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asInt())) {
+			if (Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asInt() != -1) {
+				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_INCREMENT.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_AMOUNT.asString())
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
 				return;
-			} else if (price < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment")) {
-				AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.IncrementInf", seller, new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Increment")));
-						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
-						put("$price$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")));
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")));
-						put("$incr$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
-					}
-				});
+			} else if (price < Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt()) {
+				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_INCREMENTINF.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_INCREMENT.asString())
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
 				return;
 			}
 		}
-		if (amount < AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Amount")) {
-			AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.Amount", seller, new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Minimum-Values.Amount")));
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Price")));
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Duration")));
-					put("$incr$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Increment")));
-				}
-			});
+		if (amount < Config.AUCTION.MINIMUM_VALUES_AMOUNT.asInt()) {
+			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_AMOUNT.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_AMOUNT.asString())
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
+					.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
 			return;
 		}
 		
 		
-		this.timer = AuctionStorm.instance.getServer().getScheduler();
+		this.timer = main.instance.getServer().getScheduler();
 		int handAmount = object.getAmount();
 		
 		if (handAmount > amount) {
@@ -207,72 +181,58 @@ public class Auction {
 		
 		
 		if (getItemName(object).equalsIgnoreCase("air")) {
-			AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.Item", seller, new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_ITEM.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			
 			return;
 						
-		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !AuctionStorm.hasPermission(seller, "as.creative") && !AuctionStorm.instance.config.getBoolean("Auction.AllowCreative")) {
+		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !main.hasPermission(seller, "as.creative") && !Config.AUCTION.ALLOWCREATIVE.asBoolean()) {
 			
-			AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.Creative", seller, 
-					new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_CREATIVE.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			giveItemStack(object, seller);
 			return;
 			
 		} 
 		if (object.getAmount() < this.amount) {
 			
-			System.out.println(object.getAmount());
-			System.out.println(this.amount);
-			AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.Enough", seller, new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_ENOUGH.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			giveItemStack(object, seller);
 			return;
 			
 		}
-		if (Queue.getQueueLength() >= 1) AuctionStorm.instance.messenger.sendMsg("Auction.Queued", seller, new HashMap<String, Object>() {
-			{
-				put("$player$", seller.getDisplayName());
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", priceS);
-				put("$valuta$", AuctionStorm.valutaP);
-				put("$duration$", durationS);
-				put("$incr$", incrementS);
-			}
-		});
+		if (Queue.getQueueLength() >= 1) seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_QUEUED.value()
+				.replace("$player$", seller.getDisplayName())
+				.replace("$amount$", amountS)
+				.replace("$item$", Auction.getItemName(object))
+				.replace("$name$", Auction.getDisplayName(object))
+				.replace("$price$", priceS)
+				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+				.replace("$duration$", durationS)
+				.replace("$incr$", incrementS)));
+		
 		Queue.addAuction(this);
 		
 	}
@@ -341,89 +301,74 @@ public class Auction {
 		return increment;
 	}
 	
-	@SuppressWarnings("serial")
+	
 	public void startAuction() {
 		//20 ticks/second * 60 seconds/minute = 1200 ticks/minute
 		atimer = new AuctionTimer(duration);
-		task_id = timer.runTaskTimer(AuctionStorm.instance, atimer, 0, 20).getTaskId();
+		task_id = timer.runTaskTimer(main.instance, atimer, 0, 20).getTaskId();
 		
-		if (AuctionStorm.instance.config.getBoolean("Auction.LogAuctions")) {
+		if (Config.AUCTION.LOGAUCTIONS.asBoolean()) {
 			log = new AuctionLog(seller, null, price, object);
-			AuctionStorm.logger.saveAuctionLog(log);
+			main.logger.saveAuctionLog(log);
 		}
 		
 		if (getDisplayName(object) != null) {
 			
-			if (!AuctionStorm.instance.config.getBoolean("Auction.HoverItem")) {
-				AuctionStorm.instance.messenger.broadcast("Auction.StartNamed", new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", amountS);
-						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
-						put("$price$", priceS);
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", durationS);
-						put("$incr$", incrementS);
-					}
-				});
+			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
+				main.messenger.broadcast(Config.MESSAGES.AUCTION_STARTNAMED.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", priceS)
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", durationS)
+						.replace("$incr$", incrementS));
 			} else {
-				AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.StartNamed"), getInfo(false), new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", amountS);
-						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
-						put("$price$", priceS);
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", durationS);
-						put("$incr$", incrementS);
-					}
-				});
+				main.messenger.broadcastHover(Config.MESSAGES.AUCTION_STARTNAMED.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", priceS)
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", durationS)
+						.replace("$incr$", incrementS), getInfo(false));
 			}
 		} else {
-			if (!AuctionStorm.instance.config.getBoolean("Auction.HoverItem")) {
-				AuctionStorm.instance.messenger.broadcast("Auction.Start", new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", amountS);
-						put("$item$", Auction.getItemName(object));
-						put("$price$", priceS);
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", durationS);
-						put("$incr$", incrementS);
-					}
-				});
+			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
+				main.messenger.broadcast(Config.MESSAGES.AUCTION_START.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$price$", priceS)
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", durationS)
+						.replace("$incr$", incrementS));
 			} else {
-				AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.Start"), getInfo(false), new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", amountS);
-						put("$item$", Auction.getItemName(object));
-						put("$price$", priceS);
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", durationS);
-						put("$incr$", incrementS);
-					}
-				});
+				main.messenger.broadcastHover(Config.MESSAGES.AUCTION_START.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$price$", priceS)
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", durationS)
+						.replace("$incr$", incrementS), getInfo(false));
 			}
 		}
 		
-		if (!AuctionStorm.instance.config.getBoolean("Auction.HoverItem")) {
-			AuctionStorm.instance.messenger.broadcast("Auction.Info.Get");
+		if (!Config.AUCTION.HOVERITEM.asBoolean()) {
+			main.messenger.broadcast(Config.MESSAGES.AUCTION_INFO_GET.value());
 		} else {
-			AuctionStorm.instance.messenger.broadcastHover(AuctionStorm.instance.messenger.getMessage("Auction.Info.Get"), getInfo(false), new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			main.messenger.broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS), getInfo(false));
 		}
 		
 	}
@@ -436,78 +381,63 @@ public class Auction {
 		
 	}
 	
-	public void bid(int bid, final Player bidder, boolean secret) {
+	public void bid(int bid, Player bidder, boolean secret) {
 		if (bidder.equals(seller)) {
-			AuctionStorm.instance.messenger.sendMsg("Auction.Bid.Own-Auction", seller, new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_OWN_AUCTION.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			
 			return;
-		} else if (!AuctionStorm.econ.has(bidder, bid)) {
-			AuctionStorm.instance.messenger.sendMsg("Auction.Bid.No-Money", bidder, new HashMap<String, Object>() {
-				{
-					put("$player$", bidder.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+		} else if (!main.econ.has(bidder, bid)) {
+			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_NO_MONEY.value()
+					.replace("$player$", bidder.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			return;
 		} else if (current_bid+increment > bid && current_bid > 0) {
-			AuctionStorm.instance.messenger.sendMsg("Auction.Bid.Low", bidder, new HashMap<String, Object>() {
-				{
-					put("$player$", bidder.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", String.valueOf(current_bid + increment));
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_LOW.value()
+					.replace("$player$", bidder.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", String.valueOf(current_bid + increment))
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			return;
 		} else if (price > bid) {
-			AuctionStorm.instance.messenger.sendMsg("Auction.Bid.Low", bidder, new HashMap<String, Object>() {
-				{
-					put("$player$", bidder.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_LOW.value()
+					.replace("$player$", bidder.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			
 			return;
-		} else if (bid > AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Bid") && AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Bid") != -1) {
-			AuctionStorm.instance.messenger.sendMsg("Auction.Bid.Max", bidder, new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", String.valueOf(AuctionStorm.instance.config.getInt("Auction.Maximum-Values.Bid")));
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", String.valueOf(current_bid));
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+		} else if (bid > Config.AUCTION.MAXIMUM_VALUES_BID.asInt() && Config.AUCTION.MAXIMUM_VALUES_BID.asInt() != -1) {
+			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_MAX.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", Config.AUCTION.MAXIMUM_VALUES_BID.asString())
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", String.valueOf(current_bid))
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			return;
 		} 
 		
@@ -519,59 +449,47 @@ public class Auction {
 			return;
 			
 		}
-		Player bidder2;
 		if (bid <= secret_bid) {
-				AuctionStorm.instance.messenger.sendMsg("Auction.Bid.Outbid", bidder, new HashMap<String, Object>() {
-					{
-						put("$player$", secret_bidder.getDisplayName());
-						put("$amount$", amountS);
-						put("$item$", Auction.getItemName(object));
-						put("$name$", Auction.getDisplayName(object));
-						put("$price$", priceS);
-						put("$valuta$", AuctionStorm.valutaP);
-						put("$duration$", durationS);
-						put("$incr$", incrementS);
-					}
-				});
-				bid = secret_bid;
-				bidder2 = secret_bidder;
-				
-				secret_bid = 0;
-				secret_bidder = null;
-		} else {
-			bidder2 = bidder;
+			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_OUTBID.value()
+					.replace("$player$", secret_bidder.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
+			bid = secret_bid;
+			bidder = secret_bidder;
+			
+			secret_bid = 0;
+			secret_bidder = null;
 		}
 		
 		current_bid = bid;
-		highest_bidder = bidder2;
+		highest_bidder = bidder;
 		
-		AuctionStorm.instance.messenger.broadcast("Auction.Bid.Bid", new HashMap<String, Object>() {
-			{
-				put("$player$", bidder2.getDisplayName());
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", String.valueOf(current_bid));
-				put("$valuta$", AuctionStorm.valutaP);
-				put("$duration$", durationS);
-				put("$incr$", incrementS);
-			}
-		});
+		main.messenger.broadcast(Config.MESSAGES.AUCTION_BID_BID.value()
+				.replace("$player$", bidder.getDisplayName())
+				.replace("$amount$", amountS)
+				.replace("$item$", Auction.getItemName(object))
+				.replace("$name$", Auction.getDisplayName(object))
+				.replace("$price$", String.valueOf(current_bid))
+				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+				.replace("$duration$", durationS)
+				.replace("$incr$", incrementS));
 		
-		if (atimer.time < AuctionStorm.instance.config.getInt("Auction.AntiSnipe-Treshold")) {
-			atimer.time += AuctionStorm.instance.config.getInt("Auction.AntiSnipe-Time-Added");
-			AuctionStorm.instance.messenger.broadcast("Auction.Time.Added", new HashMap<String, Object>() {
-				{
-					put("$player$", bidder2.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+		if (atimer.time < Config.AUCTION.ANTISNIPE_TRESHOLD.asInt()) {
+			atimer.time += Config.AUCTION.ANTISNIPE_TIME_ADDED.asInt();
+			main.messenger.broadcast(Config.MESSAGES.AUCTION_TIME_ADDED.value()
+					.replace("$player$", bidder.getDisplayName())
+					.replace("$amount$", Config.AUCTION.ANTISNIPE_TIME_ADDED.asString())
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS));
 			
 		}
 	}
@@ -579,45 +497,45 @@ public class Auction {
 	public String getInfo(boolean headers) {
 		
 		String msg = "";
-		if (headers) msg = AuctionStorm.instance.messenger.getMessage("Auction.Info.Header");
+		if (headers) msg = Config.MESSAGES.AUCTION_INFO_HEADER.value();
 		
-		if (getDisplayName(object) != null) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.ItemNamed"), new HashMap<String, Object>() {
-			{
-				put("$player$", seller.getDisplayName());
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", priceS);
-				put("$valuta$", AuctionStorm.valutaP);
-				if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-				put("$incr$", incrementS);
-			}
-		});
-		else msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Item"), new HashMap<String, Object>() {
-			{
-				put("$player$", seller.getDisplayName());
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", priceS);
-				put("$valuta$", AuctionStorm.valutaP);
-				if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-				put("$incr$", incrementS);
-			}
-		});
-		if(AuctionStorm.instance.config.getBoolean("Auction.displayLore") && object.hasItemMeta() && object.getItemMeta().hasLore()) {
-			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Lore"), new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-					put("$incr$", incrementS);
-				}
-			}); 
+		if (getDisplayName(object) != null) {
+			
+			msg = msg + Config.MESSAGES.AUCTION_INFO_ITEMNAMED.value()
+				.replace("$player$", seller.getDisplayName())
+				.replace("$amount$", amountS)
+				.replace("$item$", Auction.getItemName(object))
+				.replace("$name$", Auction.getDisplayName(object))
+				.replace("$price$", priceS)
+				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+				.replace("$incr$", incrementS);
+			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
+			
+		}
+		else {
+			
+			msg = msg + Config.MESSAGES.AUCTION_INFO_ITEM.value()
+				.replace("$player$", seller.getDisplayName())
+				.replace("$amount$", amountS)
+				.replace("$item$", Auction.getItemName(object))
+				.replace("$name$", Auction.getDisplayName(object))
+				.replace("$price$", priceS)
+				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+				.replace("$incr$", incrementS);
+			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
+			
+		}
+		if(Config.AUCTION.DISPLAYLORE.asBoolean() && object.hasItemMeta() && object.getItemMeta().hasLore()) {
+			msg = msg + Config.MESSAGES.AUCTION_INFO_LORE.value()
+			.replace("$player$", seller.getDisplayName())
+			.replace("$amount$", amountS)
+			.replace("$item$", Auction.getItemName(object))
+			.replace("$name$", Auction.getDisplayName(object))
+			.replace("$price$", priceS)
+			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+			.replace("$incr$", incrementS);
+		
+			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 			
 			for (String s : object.getItemMeta().getLore()) {
 				msg += "\n&5&o" + s;
@@ -625,145 +543,134 @@ public class Auction {
 			
 		}
 		
-		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Amount"), new HashMap<String, Object>() {
-			{
-				put("$player$", seller.getDisplayName());
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", priceS);
-				put("$valuta$", AuctionStorm.valutaP);
-				if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-				put("$incr$", incrementS);
-			}
-		});
+		msg = msg + Config.MESSAGES.AUCTION_INFO_AMOUNT.value()
+		.replace("$player$", seller.getDisplayName())
+		.replace("$amount$", amountS)
+		.replace("$item$", Auction.getItemName(object))
+		.replace("$name$", Auction.getDisplayName(object))
+		.replace("$price$", priceS)
+		.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+		.replace("$incr$", incrementS);
+	
+		if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
+		
 		//show durability if present
 		if (object.getItemMeta() instanceof Damageable && ((Damageable)object.getItemMeta()).hasDamage()) {
-			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Durability"), new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", String.valueOf(object.getType().getMaxDurability() - ((Damageable)object.getItemMeta()).getDamage()));
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-					put("$incr$", incrementS);
-					put("$durability$", String.valueOf(object.getType().getMaxDurability()));
-				}
-			});
+			msg = msg + Config.MESSAGES.AUCTION_INFO_DURABILITY.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", String.valueOf(object.getType().getMaxDurability() - ((Damageable)object.getItemMeta()).getDamage()))
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$incr$", incrementS)
+					.replace("$durability$", String.valueOf(object.getType().getMaxDurability()));
+			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
+					
 		}
 		
 		//show enchantments if present
 		if (!object.getEnchantments().isEmpty()) {
-			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.EnchantmentHeader"), new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-					put("$incr$", incrementS);
-				}
-			});
+			msg = msg + Config.MESSAGES.AUCTION_INFO_ENCHANTMENTHEADER.value()
+			.replace("$player$", seller.getDisplayName())
+			.replace("$amount$", amountS)
+			.replace("$item$", Auction.getItemName(object))
+			.replace("$name$", Auction.getDisplayName(object))
+			.replace("$price$", priceS)
+			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+			.replace("$incr$", incrementS);
+			
+			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
+			
 			for (Entry<Enchantment, Integer> ench : object.getEnchantments().entrySet()) {
-				msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Enchantment"), new HashMap<String, Object>() {
-					{
-						put("$player$", seller.getDisplayName());
-						put("$amount$", RomanNumber.toRoman(ench.getValue()));
-						put("$item$", Auction.getItemName(object));
-						put("$name$", ench.getKey().getKey().getKey().replaceAll("_", " "));
-						put("$price$", priceS);
-						put("$valuta$", AuctionStorm.valutaP);
-						if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-						put("$incr$", incrementS);
-					}
-				});
+				msg = msg + Config.MESSAGES.AUCTION_INFO_ENCHANTMENTHEADER.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", RomanNumber.toRoman(ench.getValue()))
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", ench.getKey().getKey().getKey().replaceAll("_", " "))
+						.replace("$price$", priceS)
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$incr$", incrementS);
+				
+				if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 			}
 		}
-		msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.StartingBid"), new HashMap<String, Object>() {
-			{
-				put("$player$", seller.getDisplayName());
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", priceS);
-				put("$valuta$", AuctionStorm.valutaP);
-				if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-				put("$incr$", incrementS);
-			}
-		});
-		if (highest_bidder != null && headers) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Bidder"), new HashMap<String, Object>() {
-			{
-				put("$player$", highest_bidder.getDisplayName());
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", String.valueOf(current_bid));
-				put("$valuta$", AuctionStorm.valutaP);
-				if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-				put("$incr$", incrementS);
-			}
-		});
-		if (current_bid > 0 && headers) msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.CurrentBid"), new HashMap<String, Object>() {
-			{
-				put("$player$", highest_bidder.getDisplayName());
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", String.valueOf(current_bid));
-				put("$valuta$", AuctionStorm.valutaP);
-				if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-				put("$incr$", incrementS);
-			}
-		});
+		
+		msg = msg + Config.MESSAGES.AUCTION_INFO_STARTINGBID.value()
+		.replace("$player$", seller.getDisplayName())
+		.replace("$amount$", amountS)
+		.replace("$item$", Auction.getItemName(object))
+		.replace("$name$", Auction.getDisplayName(object))
+		.replace("$price$", priceS)
+		.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+		.replace("$incr$", incrementS);
+		
+		if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
+		
+		if (highest_bidder != null && headers) {
+			msg = msg + Config.MESSAGES.AUCTION_INFO_BIDDER.value()
+				.replace("$player$", highest_bidder.getDisplayName())
+				.replace("$amount$", amountS)
+				.replace("$item$", Auction.getItemName(object))
+				.replace("$name$", Auction.getDisplayName(object))
+				.replace("$price$", String.valueOf(current_bid))
+				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+				.replace("$incr$", incrementS);
+		
+			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
+		}
+		
+		if (current_bid > 0 && headers) { 
+			msg = msg + Config.MESSAGES.AUCTION_INFO_CURRENTBID.value()
+				.replace("$player$", highest_bidder.getDisplayName())
+				.replace("$amount$", amountS)
+				.replace("$item$", Auction.getItemName(object))
+				.replace("$name$", Auction.getDisplayName(object))
+				.replace("$price$", String.valueOf(current_bid))
+				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+				.replace("$incr$", incrementS);
+				
+				if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
+		}
 		if (headers) {
-			msg = msg + Messenger.parseVars(AuctionStorm.instance.messenger.getMessage("Auction.Info.Time"), new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					if (atimer != null) put("$duration$", String.valueOf(atimer.time));
-					put("$incr$", incrementS);
-				}
-			});
+			msg = msg + Config.MESSAGES.AUCTION_INFO_TIME.value()
+			.replace("$player$", seller.getDisplayName())
+			.replace("$amount$", amountS)
+			.replace("$item$", Auction.getItemName(object))
+			.replace("$name$", Auction.getDisplayName(object))
+			.replace("$price$", priceS)
+			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+			.replace("$incr$", incrementS);
+			
+			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
+		
+			msg = msg + Config.MESSAGES.AUCTION_INFO_FOOTER.value();
 		}
-		
-		
-		if (headers) msg = msg + AuctionStorm.instance.messenger.getMessage("Auction.Info.Footer");
 		
 		return msg;
 	}
 	
 	public void endAuction() {		
 		if (highest_bidder != null) {
-			if (AuctionStorm.instance.config.getBoolean("Auction.LogAuctions")) {
+			if (Config.AUCTION.LOGAUCTIONS.asBoolean()) {
 				log.setBuyer(highest_bidder);
 				log.setPrice(current_bid);
-				AuctionStorm.logger.updateAuctionLog(log);
+				main.logger.updateAuctionLog(log);
 			}
-			AuctionStorm.instance.messenger.broadcast("Auction.End.End", new HashMap<String, Object>() {
-				{
-					put("$player$", highest_bidder.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", String.valueOf(current_bid));
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			main.messenger.broadcast(Config.MESSAGES.AUCTION_END_END.value()
+					.replace("$player$", highest_bidder.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", String.valueOf(current_bid))
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS));
 			
-			if (AuctionStorm.instance.config.getBoolean("Auction.Sound.Play")) {
+			if (Config.AUCTION.SOUND_PLAY.asBoolean()) {
 				try {
-					highest_bidder.playSound(highest_bidder.getLocation(), Sound.valueOf(AuctionStorm.instance.config.getString("Auction.Sound.Pay")), 1.0F, 1.0F);
-					seller.playSound(seller.getLocation(), Sound.valueOf(AuctionStorm.instance.config.getString("Auction.Sound.Paid")), 1.0F, 1.0F);
+					highest_bidder.playSound(highest_bidder.getLocation(), Config.AUCTION.SOUND_PAY.asSound(), 1.0F, 1.0F);
+					seller.playSound(seller.getLocation(), Config.AUCTION.SOUND_PAID.asSound(), 1.0F, 1.0F);
 				} catch (Exception e) {
 					e.printStackTrace();
 					highest_bidder.playSound(highest_bidder.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
@@ -771,42 +678,37 @@ public class Auction {
 				}
 			}
 			giveItemStack(object, highest_bidder);
+
 			//take money from highest bidder
-			AuctionStorm.econ.withdrawPlayer(highest_bidder, current_bid);
-			AuctionStorm.instance.messenger.sendMsg("Auction.End.Paid-To", highest_bidder, new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", String.valueOf(current_bid));
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			main.econ.withdrawPlayer(highest_bidder, current_bid);
+			highest_bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_END_PAID_TO.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", String.valueOf(current_bid))
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 			
 			//give money to seller
-			AuctionStorm.econ.depositPlayer(seller, current_bid);
-			AuctionStorm.instance.messenger.sendMsg("Auction.End.Paid-By", seller, new HashMap<String, Object>() {
-				{
-					put("$player$", highest_bidder.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", String.valueOf(current_bid));
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", durationS);
-					put("$incr$", incrementS);
-				}
-			});
+			main.econ.depositPlayer(seller, current_bid);
+			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_END_PAID_BY.value()
+					.replace("$player$", highest_bidder.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", String.valueOf(current_bid))
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", durationS)
+					.replace("$incr$", incrementS)));
 
 		} else {
 			
 
-			if (AuctionStorm.instance.config.getBoolean("Auction.Sound.Play")) {
+			if (Config.AUCTION.SOUND_PLAY.asBoolean()) {
 				try {
-					seller.playSound(seller.getLocation(), Sound.valueOf(AuctionStorm.instance.config.getString("Auction.Sound.Failed")), 1.0F, 1.0F);
+					seller.playSound(seller.getLocation(), Config.AUCTION.SOUND_FAILED.asSound(), 1.0F, 1.0F);
 				} catch (Exception e) {
 					e.printStackTrace();
 					seller.playSound(seller.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
@@ -814,18 +716,15 @@ public class Auction {
 			}
 			
 			giveItemStack(object, seller);
-			AuctionStorm.instance.messenger.broadcast("Auction.End.No-Bids", new HashMap<String, Object>() {
-				{
-					put("$player$", seller.getDisplayName());
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", String.valueOf(atimer.time));
-					put("$incr$", incrementS);
-				}
-			});
+			main.messenger.broadcast(Config.MESSAGES.AUCTION_END_NO_BIDS.value()
+					.replace("$player$", seller.getDisplayName())
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", String.valueOf(atimer.time))
+					.replace("$incr$", incrementS));
 		}
 		Queue.nextAuction();
 		
@@ -853,64 +752,50 @@ public class Auction {
 		
 		giveItemStack(object, seller);
 		
-		if (ender == null || AuctionStorm.hasPermission(ender, "as.cancel") || ender == seller) {
+		if (ender == null || main.hasPermission(ender, "as.cancel") || ender == seller) {
 		
 			String displayname;
 			if (ender == null) displayname = "the server"; 
 			else displayname = ender.getDisplayName();
 			
-			if (reason != "") AuctionStorm.instance.messenger.broadcast("Auction.End.ForcedReason", new HashMap<String, Object>() {
-				{
-					put("$sender$", displayname);
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", String.valueOf(atimer.time));
-					put("$incr$", incrementS);
-					put("$reason$", reason);
-				}
-			});
-			else AuctionStorm.instance.messenger.broadcast("Auction.End.Forced", new HashMap<String, Object>() {
-				{
-					put("$sender$", displayname);
-					put("$amount$", amountS);
-					put("$item$", Auction.getItemName(object));
-					put("$name$", Auction.getDisplayName(object));
-					put("$price$", priceS);
-					put("$valuta$", AuctionStorm.valutaP);
-					put("$duration$", String.valueOf(atimer.time));
-					put("$incr$", incrementS);
-				}
-			});
+			if (reason != "") main.messenger.broadcast(Config.MESSAGES.AUCTION_END_FORCEDREASON.value()
+					.replace("$sender$", displayname)
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", String.valueOf(atimer.time))
+					.replace("$incr$", incrementS)
+					.replace("$reason$", reason));
+			else main.messenger.broadcast(Config.MESSAGES.AUCTION_END_FORCED.value()
+					.replace("$sender$", displayname)
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$duration$", String.valueOf(atimer.time))
+					.replace("$incr$", incrementS));
 			
-		} else AuctionStorm.instance.messenger.sendMsg("Command.No-Permission", ender, new HashMap<String, Object>() {
-			{
-				put("$player$", ender.getDisplayName());
-				put("$sender$", "/as cancel");
-				put("$amount$", amountS);
-				put("$item$", Auction.getItemName(object));
-				put("$name$", Auction.getDisplayName(object));
-				put("$price$", priceS);
-				put("$valuta$", AuctionStorm.valutaP);
-				put("$duration$", String.valueOf(atimer.time));
-				put("$incr$", incrementS);
-				put("$reason$", reason);
-			}
-		});
+		} else ender.sendMessage(Messenger.cc(Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+				.replace("$player$", ender.getDisplayName())
+				.replace("$sender$", "/as cancel")
+				.replace("$amount$", amountS)
+				.replace("$item$", Auction.getItemName(object))
+				.replace("$name$", Auction.getDisplayName(object))
+				.replace("$price$", priceS)
+				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+				.replace("$duration$", String.valueOf(atimer.time))
+				.replace("$incr$", incrementS)
+				.replace("$reason$", reason)));
 		
 		if (!all) Queue.nextAuction();
 		
 	}
 
-	@SuppressWarnings("serial")
 	public static void noAuction(Player player) {
-		AuctionStorm.instance.messenger.sendMsg("Auction.Wrong.None", player, new HashMap<String, Object>() {
-			{
-				put("$sender$", player.getDisplayName());
-			}
-		});
+		player.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_NONE.value().replace("$sender$", player.getDisplayName())));
 	}
 	
 	public static String getItemName(ItemStack item) {
@@ -923,21 +808,10 @@ public class Auction {
 	
 	public static void giveItemStack(ItemStack item, OfflinePlayer seller) {
 		if (!seller.isOnline()) {
-			AuctionStorm.gq.addPlayer(seller, item);
+			main.gq.addPlayer(seller, item);
 			return;
 		}
 		
-		if (item.getAmount() > item.getMaxStackSize()) { 
-			ItemStack item2 = item.clone();
-			item2.setAmount(item.getAmount() - item.getMaxStackSize());
-			giveItemStack(item2, seller);
-			item.setAmount(item.getMaxStackSize());
-		}
-		
-		if (seller.getPlayer().getInventory().firstEmpty() == -1) {
-			seller.getPlayer().getWorld().dropItem(seller.getPlayer().getLocation(), item);
-		} else {
-			seller.getPlayer().getInventory().addItem(item);
-		}
+		Library.giveItemStack(item, seller.getPlayer());
 	}
 }

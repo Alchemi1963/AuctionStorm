@@ -1,5 +1,5 @@
 name: AuctionStorm
-main: com.alchemi.as.AuctionStorm
+main: com.alchemi.as.main
 authors: [Alchemi, martijnpu]
 version: ${project.version}
 api-version: 1.13

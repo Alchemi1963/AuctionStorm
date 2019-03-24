@@ -41,7 +41,7 @@ AuctionStorm:
         Low: '&4Your bid must be higher than $price$.'
         Max: '&cYou exceeded the maximum bid of $amount$ $valuta$.'
     Time:
-        Added: '&930 &6seconds have been added.'
+        Added: '&9$amount$ &6seconds have been added.'
         Halftime: '&9Half of the time is remaining for the current auction.'
         Notify: '&9$amount$ seconds remaining on the current auction.'
     End:
