@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import com.alchemi.al.configurations.Messenger;
 import com.alchemi.as.Auction;
 import com.alchemi.as.Queue;
 import com.alchemi.as.main;
@@ -100,7 +101,7 @@ public class CommandPlayer implements CommandExecutor{
 						return true;
 					
 					} else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("i")) { //info command
-						if (Queue.current_auction != null) player.sendMessage(Queue.current_auction.getInfo(true));
+						if (Queue.current_auction != null) player.sendMessage(Messenger.cc(Queue.current_auction.getInfo(true)));
 						else Auction.noAuction(player);
 						
 						return true;

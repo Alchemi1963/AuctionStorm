@@ -3,7 +3,7 @@
   <groupId>com.alchemi</groupId>
   <artifactId>AuctionStorm</artifactId>
   <name>AuctionStorm</name>
-  <version>1.5.0</version>
+  <version>1.5.1</version>
   <build>
     <finalName>${project.name}</finalName>
     <sourceDirectory>src/main/java</sourceDirectory>

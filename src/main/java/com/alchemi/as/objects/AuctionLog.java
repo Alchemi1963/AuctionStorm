@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.alchemi.al.configurations.Messenger;
 import com.alchemi.al.objects.CarbonDating;
 import com.alchemi.as.Auction;
 import com.alchemi.as.main;
@@ -180,7 +181,7 @@ public class AuctionLog{
 		msg = msg + Config.MESSAGES.AUCTION_INFO_FOOTER.value().substring(0, Config.MESSAGES.AUCTION_INFO_FOOTER.value().length() - 1);
 		
 		if (sender instanceof Player) {
-			main.messenger.sendMessage(msg, sender);
+			sender.sendMessage(Messenger.cc(msg));
 		} else {
 			main.messenger.print( "\n" + msg, false);
 		}

@@ -158,7 +158,7 @@ public class CommandAdmin implements CommandExecutor{
 						}
 				}
 				
-				main.messenger.broadcast("&9Configs have been reloaded!");
+				main.messenger.sendMessage("&9Configs have been reloaded!", sender);
 				
 			}
 		}
