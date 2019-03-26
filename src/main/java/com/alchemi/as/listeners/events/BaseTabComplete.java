@@ -27,11 +27,12 @@ public class BaseTabComplete implements TabCompleter {
 		if (!main.hasPermission(sender, "as.base"))
 			return tabSuggest;
 		
-		if (args.length == 1 && !Arrays.asList(new String[]{"start", "s", "help", "info", "i", "cancel", "bid"}).contains(args[0])) {
+		if (args.length == 1 && !Arrays.asList(new String[]{"start", "s", "help", "info", "i", "cancel", "bid", "listqueue"}).contains(args[0])) {
 			
 			list.add("start");
 			list.add("help");
 			list.add("info");
+			list.add("listqueue");
 			if (Queue.current_auction != null) list.add("bid");
 			if (Queue.current_auction != null && Queue.current_auction.getSeller().equals((Player) sender) || main.hasPermission(sender, "as.cancel")) list.add("cancel");
 			
@@ -48,9 +49,16 @@ public class BaseTabComplete implements TabCompleter {
 				list.add("7");
 				list.add("8");
 				list.add("9");
+				list.add("10");
 				
 			} else if (args[0].equalsIgnoreCase("bid") && Queue.current_auction != null) {
 				list.add(String.valueOf(Queue.current_auction.getCurrent_bid() + Queue.current_auction.getIncrement()));
+			} else if (args[0].equalsIgnoreCase("cancel") || args[0].equalsIgnoreCase("end") || args[0].equalsIgnoreCase("c")) {
+				
+				for (int i = 1; i < Queue.getQueueLength(); i++) {
+					list.add(String.valueOf(i));
+				}
+				
 			}
 			
 		} else if (args.length == 3) {
@@ -82,6 +90,7 @@ public class BaseTabComplete implements TabCompleter {
 				list.add("7");
 				list.add("8");
 				list.add("9");
+				list.add("10");
 				
 			}
 			

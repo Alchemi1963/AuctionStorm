@@ -49,8 +49,11 @@ AuctionStorm:
         No-Bids: '&9Sold! To no one...'
         Paid-By: 'You have been paid $price$ $valuta$ by $player$.'
         Paid-To: 'You have paid $player$ $price$ $valuta$.'
+        Cancelled: '&9You cancelled your auction with number $id$.'
         Forced: 'The current auction has been cancelled by $sender$.'
+        ForcedSeller: 'Your auction with number $id$ has been cancelled by $sender$.'
         ForcedReason: 'The current auction has been cancelled by $sender$ because of $reason$.'
+        ForcedReasonSeller: 'Your auction with number $id$ has been cancelled by $sender$ because of $reason$.'
     Info:
         Get: '&9Use &6/auc info&9 to get more info about it.'
         Header: '&l&9=====Current Auction====='
@@ -68,6 +71,12 @@ AuctionStorm:
         CurrentBid: "\n&9Current Bid: &6$price$ $valuta$"
         Time: "\n&o&9Time Remaining: &c$duration$ seconds"
         Footer: "\n&l&9========================="
+    Queue:
+        Header: '&e&l-----Auction Queue-----'
+        Auction: "\n&9&o$id$. &e$amount$&9&ox&e$item$&9 by &f$seller$"
+        Footer: "\n&e&l-------&cPage &d&l$amount$&c/&d&l$total$&e-------"
+        Empty: '&cQueue is empty.'
+        NotAuction: '&9There is no auction with number $id$.'
     
   Command:
     No-Permission: '&c&oYou don''t have permission to use &9$sender$&c.&r&c If you believe this is an error, &nplease contact an administrator.'

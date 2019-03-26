@@ -9,7 +9,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.alchemi.al.configurations.Messenger;
 import com.alchemi.al.objects.CarbonDating;
 import com.alchemi.as.Auction;
 import com.alchemi.as.main;
@@ -181,7 +180,7 @@ public class AuctionLog{
 		msg = msg + Config.MESSAGES.AUCTION_INFO_FOOTER.value().substring(0, Config.MESSAGES.AUCTION_INFO_FOOTER.value().length() - 1);
 		
 		if (sender instanceof Player) {
-			sender.sendMessage(Messenger.cc(msg));
+			main.messenger.sendMessage(msg, sender);
 		} else {
 			main.messenger.print( "\n" + msg, false);
 		}
@@ -199,7 +198,7 @@ public class AuctionLog{
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 				
-			if (sender instanceof Player) sender.sendMessage(Messenger.cc(send));
+			if (sender instanceof Player) main.messenger.sendMessage(send, sender);
 			else main.messenger.print(send);
 				
 			return;
@@ -212,7 +211,7 @@ public class AuctionLog{
 						.replace("$name$", Auction.getDisplayName(object))
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-				buyer.getPlayer().sendMessage(Messenger.cc(send));
+				main.messenger.sendMessage(send, buyer.getPlayer());
 			}
 					
 			if (seller.isOnline()) {
@@ -223,7 +222,7 @@ public class AuctionLog{
 						.replace("$name$", Auction.getDisplayName(object))
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-				seller.getPlayer().sendMessage(Messenger.cc(send));
+				main.messenger.sendMessage(send, seller.getPlayer());
 			}
 			main.econ.depositPlayer(buyer, price);
 			main.econ.withdrawPlayer(seller, price);
@@ -238,7 +237,7 @@ public class AuctionLog{
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			
-		if (sender instanceof Player) sender.sendMessage(Messenger.cc(send));
+		if (sender instanceof Player) main.messenger.sendMessage(send, sender);
 		else main.messenger.print(send);
 		}
 		
@@ -250,7 +249,7 @@ public class AuctionLog{
 					.replace("$name$", Auction.getDisplayName(object))
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-			seller.getPlayer().sendMessage(Messenger.cc(send));
+			main.messenger.sendMessage(send, seller.getPlayer());
 		}
 		
 		Auction.giveItemStack(object, seller);
@@ -269,7 +268,7 @@ public class AuctionLog{
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			
-		if (sender instanceof Player) sender.sendMessage(Messenger.cc(send));
+		if (sender instanceof Player) main.messenger.sendMessage(send, sender);
 		else main.messenger.print(send);
 			return;
 		}
@@ -282,7 +281,7 @@ public class AuctionLog{
 					.replace("$name$", Auction.getDisplayName(object))
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-			seller.getPlayer().sendMessage(Messenger.cc(send));
+			main.messenger.sendMessage(send, seller.getPlayer());
 		}
 		Auction.giveItemStack(object, seller);
 		
@@ -300,7 +299,7 @@ public class AuctionLog{
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			
-		if (sender instanceof Player) sender.sendMessage(Messenger.cc(send));
+		if (sender instanceof Player) main.messenger.sendMessage(send, sender);
 		else main.messenger.print(send);
 			return;
 		}
@@ -314,7 +313,7 @@ public class AuctionLog{
 						.replace("$name$", Auction.getDisplayName(object))
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-				buyer.getPlayer().sendMessage(Messenger.cc(send));
+				main.messenger.sendMessage(send, buyer.getPlayer());
 			}
 			if (seller.isOnline()) {
 				String send = Config.MESSAGES.COMMAND_ADMIN_MONEY_TAKEN.value()
@@ -324,7 +323,7 @@ public class AuctionLog{
 						.replace("$name$", Auction.getDisplayName(object))
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-				seller.getPlayer().sendMessage(Messenger.cc(send));
+				main.messenger.sendMessage(send, seller.getPlayer());
 			}
 			main.econ.depositPlayer(buyer, price);
 			main.econ.withdrawPlayer(seller, price);
@@ -338,7 +337,7 @@ public class AuctionLog{
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			
-		if (sender instanceof Player) sender.sendMessage(Messenger.cc(send));
+		if (sender instanceof Player) main.messenger.sendMessage(send, sender);
 		else main.messenger.print(send);
 		}
 		

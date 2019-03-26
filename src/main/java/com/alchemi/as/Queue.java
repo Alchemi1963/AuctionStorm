@@ -9,6 +9,10 @@ import com.alchemi.as.objects.Config;
 public class Queue {
 
 	private static ArrayList<Auction> queue = new ArrayList<Auction>();
+	public static ArrayList<Auction> getQueue() {
+		return queue;
+	}
+
 	public static Auction current_auction;
 	
 	public static void addAuction(Auction a) { 
@@ -28,6 +32,7 @@ public class Queue {
 		if (returnItems) {
 			
 			for (Auction a : queue) {
+				System.out.println(a.getInfo(false));
 				a.forceEndAuction(reason, ender, true);
 			}
 			
@@ -61,6 +66,17 @@ public class Queue {
 	public static void removeAuction(Auction a) {
 		
 		queue.remove(a);
+		
+	}
+	
+	public static void cancelAuction(int auctionID, Player ender) {cancelAuction(auctionID, ender, "");}
+	
+	public static void cancelAuction(int auctionID, Player ender, String reason) {
+		
+		if (auctionID < getQueueLength()) {
+			queue.get(auctionID).forceEndAuction(reason, ender);
+			queue.remove(auctionID);
+		}
 		
 	}
 	

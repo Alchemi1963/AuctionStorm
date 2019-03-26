@@ -5,7 +5,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.alchemi.al.configurations.Messenger;
 import com.alchemi.as.Auction;
 import com.alchemi.as.Queue;
 import com.alchemi.as.main;
@@ -33,14 +32,15 @@ public class CommandBid implements CommandExecutor{
 				else {
 					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 				}
 				
 				if (args.length == 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), (Player) sender, true);
 			} catch(NumberFormatException e) {
 				
 				String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
-				sender.sendMessage(Messenger.cc(send));
+				
+				main.messenger.sendMessage(send, sender);
 				
 			}
 			
@@ -48,7 +48,8 @@ public class CommandBid implements CommandExecutor{
 		}
 		if (sender instanceof Player) {
 			String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value().replace("$sender$", cmd.getName()).replace("$player$", ((Player) sender).getDisplayName());
-			sender.sendMessage(Messenger.cc(send));
+			
+			main.messenger.sendMessage(send, sender);
 		}
 		return true;
 	}

@@ -5,7 +5,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.alchemi.al.configurations.Messenger;
 import com.alchemi.al.objects.CarbonDating;
 import com.alchemi.as.Queue;
 import com.alchemi.as.main;
@@ -30,7 +29,7 @@ public class CommandAdmin implements CommandExecutor{
 				if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 				else send = send.replace("$player$", main.instance.pluginname);
 				
-				sender.sendMessage(Messenger.cc(send));
+				main.messenger.sendMessage(send, sender);
 				
 				return true;
 			}
@@ -42,7 +41,7 @@ public class CommandAdmin implements CommandExecutor{
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", main.instance.pluginname);
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 					return true;
 				
 				} else if (!Config.AUCTION.LOGAUCTIONS.asBoolean()) {
@@ -50,7 +49,7 @@ public class CommandAdmin implements CommandExecutor{
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", main.instance.pluginname);
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 					
 					return true;
 				}
@@ -60,7 +59,7 @@ public class CommandAdmin implements CommandExecutor{
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", main.instance.pluginname);
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 					return true;
 				}
 				
@@ -74,7 +73,7 @@ public class CommandAdmin implements CommandExecutor{
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", main.instance.pluginname);
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 					return true;
 				}
 				
@@ -92,7 +91,7 @@ public class CommandAdmin implements CommandExecutor{
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", main.instance.pluginname);
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 					return true;
 				}
 			}
@@ -103,7 +102,7 @@ public class CommandAdmin implements CommandExecutor{
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", main.instance.pluginname);
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 					return true;
 				}
 				if (args.length == 2 && args[1].equalsIgnoreCase("latest")) {
@@ -117,7 +116,7 @@ public class CommandAdmin implements CommandExecutor{
 						if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 						else send = send.replace("$player$", main.instance.pluginname);
 						
-						sender.sendMessage(Messenger.cc(send));
+						main.messenger.sendMessage(send, sender);
 						return true;
 					}
 				}
@@ -127,7 +126,7 @@ public class CommandAdmin implements CommandExecutor{
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", main.instance.pluginname);
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 					return true;
 				}
 				
@@ -141,7 +140,7 @@ public class CommandAdmin implements CommandExecutor{
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", main.instance.pluginname);
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 					return true;
 				}
 				

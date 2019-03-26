@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.alchemi.al.configurations.Messenger;
 import com.alchemi.as.Auction;
 import com.alchemi.as.Queue;
 import com.alchemi.as.main;
@@ -20,13 +19,15 @@ public class CommandPlayer implements CommandExecutor{
 	public static final String bid_usage = "&9/bid [bid] [secret bid]";
 	public static final String help_usage = "&9/auc help";
 	public static final String info_usage = "&9/auc info";
-	public static final String cancel_usage = "&9/auc cancel";
+	public static final String cancel_usage = "&9/auc cancel [id]";
+	public static final String queue_usage = "&9/auc listqueue [page]";
 	
 	public static final String start_desc = "&9Start an auction using the item in hand.";
 	public static final String bid_desc = "&9Bid on the current auction.";
 	public static final String help_desc = "&9Display the AuctionStorm help page.";
 	public static final String info_desc = "&9Get info about the current auction.";
 	public static final String cancel_desc = "&9Cancel the current auction.";
+	public static final String queue_desc = "&9List the current queue.";
 	
 	private static final String help_message = "&6---------- AuctionStorm Help ----------\n"
 			+ start_usage + "&6\n    " + start_desc + "\n"
@@ -34,6 +35,7 @@ public class CommandPlayer implements CommandExecutor{
 			+ bid_usage + "&6\n    " + bid_desc +  "\n"
 			+ info_usage + "&6\n    " + info_desc + "\n"
 			+ cancel_usage + "&6\n    " + cancel_desc + "\n"
+			+ queue_usage + "&6\n    " + queue_desc + "\n"
 			+ "&6---------------------------------------";
 	
 	@Override
@@ -45,7 +47,7 @@ public class CommandPlayer implements CommandExecutor{
 			if (args.length > 0) {
 				if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) { //help command
 				
-					player.sendMessage(Messenger.cc(help_message));
+					main.messenger.sendMessage(help_message, player);
 					return true;
 					
 				} else if (args[0].equalsIgnoreCase("start") && args.length < 2 || args[0].equalsIgnoreCase("s")  && args.length < 2) { 
@@ -55,7 +57,7 @@ public class CommandPlayer implements CommandExecutor{
 							.replace("$format$", start_usage)
 							.replace("$player$", ((Player) sender).getDisplayName());
 					
-					sender.sendMessage(Messenger.cc(send));
+					main.messenger.sendMessage(send, sender);
 					return true;
 					
 				} else if (args.length >= 1) { 
@@ -80,7 +82,7 @@ public class CommandPlayer implements CommandExecutor{
 										.replace("$format$", bid_usage)
 										.replace("$player$", ((Player) sender).getDisplayName());
 								
-								sender.sendMessage(Messenger.cc(send));
+								main.messenger.sendMessage(send, sender);
 								return true;
 							}
 							
@@ -92,51 +94,146 @@ public class CommandPlayer implements CommandExecutor{
 									.replace("$format$", bid_usage)
 									.replace("$player$", ((Player) sender).getDisplayName());
 							
-							sender.sendMessage(Messenger.cc(send));
+							main.messenger.sendMessage(send, sender);
 							
 						}
 						return true;
 					
 					} else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("i")) { //info command
-						if (Queue.current_auction != null) player.sendMessage(Messenger.cc(Queue.current_auction.getInfo(true)));
+						if (Queue.current_auction != null) player.sendMessage(Queue.current_auction.getInfo(true));
 						else Auction.noAuction(player);
 						
 						return true;
 					
-					} else if (args[0].equalsIgnoreCase("end") || args[0].equalsIgnoreCase("cancel")) { //cancel command
+					} else if (args[0].equalsIgnoreCase("end") || args[0].equalsIgnoreCase("cancel") || args[0].equalsIgnoreCase("c")) { //cancel command
 						
-						if (Queue.current_auction == null) {
-							Auction.noAuction(player);
-							return true;
-						}
-						String reason = "";
-						if (args.length >= 2) {
-							for (int x = 1 ; x < args.length; x++) {
-								if (reason != "") reason = reason + " " + args[x];
-								else reason = args[x];
+						if (args.length > 1) {
+							try {
+								int id = Integer.valueOf(args[1]);
+								if (id >= Queue.getQueueLength() ) {
+									main.messenger.sendMessage(Config.MESSAGES.AUCTION_QUEUE_NOTAUCTION.value().replace("$id$", args[1]), sender);
+									return true;
+								}
+								
+								if (player.equals(Queue.getQueue().get(id).getSeller()) || player.isOp() || player.hasPermission("as.cancel")) {
+									String reason = "";
+									if (args.length >= 3) {
+										for (int x = 2 ; x < args.length; x++) {
+											if (reason != "") reason = reason + " " + args[x];
+											else reason = args[x];
+										}
+									}
+									Queue.cancelAuction(id, player, reason);
+								}
+								return true;
+								
+							} catch (NumberFormatException e) {
+								
+
+								String reason = "";
+								for (int x = 1 ; x < args.length; x++) {
+									if (reason != "") reason = reason + " " + args[x];
+									else reason = args[x];
+								}
+								
+								if (Queue.current_auction == null) {
+									Auction.noAuction(player);
+									return true;
+								}
+								
+								if (player.equals(Queue.current_auction.getSeller())) {
+									Queue.current_auction.forceEndAuction(reason);
+									return true;
+									
+								} else if (main.hasPermission(sender, "as.cancel")) {
+									Queue.current_auction.forceEndAuction(reason, player);
+									return true;
+									
+								} else {
+									if (sender instanceof Player) {
+										String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+												.replace("$sender$", cmd.getName())
+												.replace("$player$", ((Player) sender).getDisplayName());
+										
+										main.messenger.sendMessage(send, sender);
+									}
+									return true;
+								}
+								
 							}
-						}
-						
-						if (player.equals(Queue.current_auction.getSeller())) {
-							if (reason != "") Queue.current_auction.forceEndAuction(reason);
-							else Queue.current_auction.forceEndAuction();
-							return true;
-							
-						} else if (main.hasPermission(sender, "as.cancel")) {
-							if (reason != "") Queue.current_auction.forceEndAuction(reason, player);
-							else Queue.current_auction.forceEndAuction("", player);
-							return true;
 							
 						} else {
-							if (sender instanceof Player) {
-								String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
-										.replace("$sender$", cmd.getName())
-										.replace("$player$", ((Player) sender).getDisplayName());
-								
-								sender.sendMessage(Messenger.cc(send));
+						
+							if (Queue.current_auction == null) {
+								Auction.noAuction(player);
+								return true;
 							}
+							
+							if (player.equals(Queue.current_auction.getSeller())) {
+								Queue.current_auction.forceEndAuction();
+								return true;
+								
+							} else if (main.hasPermission(sender, "as.cancel")) {
+								Queue.current_auction.forceEndAuction("", player);
+								return true;
+								
+							} else {
+								if (sender instanceof Player) {
+									String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+											.replace("$sender$", cmd.getName())
+											.replace("$player$", ((Player) sender).getDisplayName());
+									
+									main.messenger.sendMessage(send, sender);
+								}
+								return true;
+							}
+						}
+					} 
+					
+					else if (args[0].equalsIgnoreCase("listQueue") || args[0].equalsIgnoreCase("lq") || args[0].equalsIgnoreCase("queue")) {
+						
+						int page = 1;
+						if (args.length == 2) {
+							try{
+								page = Integer.valueOf(args[1]);
+							} catch (Exception e) {page = 1;}
+						}
+						
+						if (Queue.getQueueLength() >= 2) {
+							
+							int pages = 1;
+							if (Queue.getQueueLength() > 10) {
+								Float div = Float.valueOf(Queue.getQueueLength())/10.0F;
+								Integer i = Integer.valueOf(String.valueOf(div).replaceFirst("\\..*", ""));
+								pages = i < div ? i+1 : i; 
+							}
+							
+							String msg = Config.MESSAGES.AUCTION_QUEUE_HEADER.value()
+									.replace("$amount$", String.valueOf(page))
+									.replace("$total$", String.valueOf(pages));
+							int i = 1;
+							int i2 = 10*(page-1);
+							for (Auction a : Queue.getQueue()) {
+								if (a.equals(Queue.current_auction)) continue;
+								
+								else if (i > i2 && i <= 10 * page) msg = msg + Config.MESSAGES.AUCTION_QUEUE_AUCTION.value()
+										.replace("$id$", String.valueOf(i))
+										.replace("$amount$", String.valueOf(a.getObject().getAmount()))
+										.replace("$item$", Auction.getItemName(a.getObject()))
+										.replace("$seller$", a.getSeller().getDisplayName());
+								i++;
+							}
+							msg = msg + Config.MESSAGES.AUCTION_QUEUE_FOOTER.value()
+									.replace("$amount$", String.valueOf(page))
+									.replace("$total$", String.valueOf(pages));
+							
+							main.messenger.sendMessage(msg, sender);
+							return true;
+						} else {
+							main.messenger.sendMessage(Config.MESSAGES.AUCTION_QUEUE_EMPTY.value(), sender);
 							return true;
 						}
+						
 					}
 					
 					else if (args.length >= 2 && args[0].equalsIgnoreCase("start") 
@@ -157,7 +254,7 @@ public class CommandPlayer implements CommandExecutor{
 									.replace("$format$", start_usage)
 									.replace("$player$", ((Player) sender).getDisplayName());
 							
-							sender.sendMessage(Messenger.cc(send));
+							main.messenger.sendMessage(send, sender);
 						}
 						
 						
@@ -175,14 +272,14 @@ public class CommandPlayer implements CommandExecutor{
 						
 						new Auction(player, price, duration, amount, increment);
 						return true;					
-					}  
+					}
 				}  
 			}
 			String send = Config.MESSAGES.COMMAND_UNKNOWN.value()
 					.replace("$sender$", cmd.getName())
 					.replace("$player$", ((Player) sender).getDisplayName());
 			
-			sender.sendMessage(Messenger.cc(send));
+			main.messenger.sendMessage(send, sender);
 			return true;
 		}
 		if (sender instanceof Player) {
@@ -190,7 +287,7 @@ public class CommandPlayer implements CommandExecutor{
 					.replace("$sender$", cmd.getName())
 					.replace("$player$", ((Player) sender).getDisplayName());
 			
-			sender.sendMessage(Messenger.cc(send));
+			main.messenger.sendMessage(send, sender);
 		}
 		return true;
 	}

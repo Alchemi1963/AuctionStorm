@@ -34,7 +34,7 @@ public class main extends JavaPlugin implements Listener {
 	
 	public static Messenger messenger;
 	
-	public static final int MESSAGES_FILE_VERSION = 20;
+	public static final int MESSAGES_FILE_VERSION = 24;
 	public static final int CONFIG_FILE_VERSION = 20;
 	
 	public static File MESSAGES_FILE;
@@ -93,7 +93,7 @@ public class main extends JavaPlugin implements Listener {
 	public void onDisable() {
 		
 		if (Queue.getQueueLength() != 0) {
-			Queue.clearQueue(true, "server restarting");
+			Queue.clearQueue(true, "a server restart");
 		}
 		
 		messenger.print("&4I don't wanna go...");

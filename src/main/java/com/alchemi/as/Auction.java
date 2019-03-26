@@ -64,7 +64,7 @@ public class Auction {
 		
 		//check values
 		if (main.banned_items.contains(object.getType())) {
-			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_BANNED.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_BANNED.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -72,12 +72,12 @@ public class Auction {
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS), seller);
 			return;
 		}
 		if (!(price > Config.AUCTION.MINIMUM_VALUES_PRICE.asInt() && price < Config.AUCTION.MAXIMUM_VALUES_PRICE.asInt())) {
 			if (Config.AUCTION.MAXIMUM_VALUES_PRICE.asInt() != -1) {
-				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_PRICE.value()
+				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_PRICE.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_PRICE.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -85,10 +85,10 @@ public class Auction {
 						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
-						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()), seller);
 				return;
 			} else if (price < Config.AUCTION.MINIMUM_VALUES_PRICE.asInt()) {
-				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_PRICEINF.value()
+				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_PRICEINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_PRICE.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -96,13 +96,13 @@ public class Auction {
 						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
-						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
 			}
 		}
 		if (!(duration > Config.AUCTION.MINIMUM_VALUES_DURATION.asInt() && duration < Config.AUCTION.MAXIMUM_VALUES_DURATION.asInt())) {
 			if (Config.AUCTION.MAXIMUM_VALUES_DURATION.asInt() != -1) {
-				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_DURATION.value()
+				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_DURATION.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_DURATION.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -110,10 +110,10 @@ public class Auction {
 						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
-						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
 			} else if (price < Config.AUCTION.MINIMUM_VALUES_DURATION.asInt()) {
-				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_DURATIONINF.value()
+				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_DURATIONINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_DURATION.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -121,13 +121,13 @@ public class Auction {
 						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
-						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
 			}
 		}
 		if (!(increment > Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt() && increment < Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asInt())) {
 			if (Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asInt() != -1) {
-				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_INCREMENT.value()
+				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_INCREMENT.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_AMOUNT.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -135,10 +135,10 @@ public class Auction {
 						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
-						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
 			} else if (price < Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt()) {
-				seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_INCREMENTINF.value()
+				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_INCREMENTINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_INCREMENT.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -146,12 +146,12 @@ public class Auction {
 						.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
-						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
+						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
 			}
 		}
 		if (amount < Config.AUCTION.MINIMUM_VALUES_AMOUNT.asInt()) {
-			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_AMOUNT.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_AMOUNT.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_AMOUNT.asString())
 					.replace("$item$", Auction.getItemName(object))
@@ -159,7 +159,7 @@ public class Auction {
 					.replace("$price$", Config.AUCTION.MAXIMUM_VALUES_PRICE.asString())
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
-					.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString())));
+					.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 			return;
 		}
 		
@@ -181,7 +181,7 @@ public class Auction {
 		
 		
 		if (getItemName(object).equalsIgnoreCase("air")) {
-			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_ITEM.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_ITEM.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -189,13 +189,13 @@ public class Auction {
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS),seller);
 			
 			return;
 						
 		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !main.hasPermission(seller, "as.creative") && !Config.AUCTION.ALLOWCREATIVE.asBoolean()) {
 			
-			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_CREATIVE.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_CREATIVE.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -203,14 +203,14 @@ public class Auction {
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS),seller);
 			giveItemStack(object, seller);
 			return;
 			
 		} 
 		if (object.getAmount() < this.amount) {
 			
-			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_ENOUGH.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_ENOUGH.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -218,12 +218,12 @@ public class Auction {
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS),seller);
 			giveItemStack(object, seller);
 			return;
 			
 		}
-		if (Queue.getQueueLength() >= 1) seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_QUEUED.value()
+		if (Queue.getQueueLength() >= 1) main.messenger.sendMessage(Config.MESSAGES.AUCTION_QUEUED.value()
 				.replace("$player$", seller.getDisplayName())
 				.replace("$amount$", amountS)
 				.replace("$item$", Auction.getItemName(object))
@@ -231,7 +231,7 @@ public class Auction {
 				.replace("$price$", priceS)
 				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 				.replace("$duration$", durationS)
-				.replace("$incr$", incrementS)));
+				.replace("$incr$", incrementS),seller);
 		
 		Queue.addAuction(this);
 		
@@ -383,7 +383,7 @@ public class Auction {
 	
 	public void bid(int bid, Player bidder, boolean secret) {
 		if (bidder.equals(seller)) {
-			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_OWN_AUCTION.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_BID_OWN_AUCTION.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -391,11 +391,11 @@ public class Auction {
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS),seller);
 			
 			return;
 		} else if (!main.econ.has(bidder, bid)) {
-			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_NO_MONEY.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_BID_NO_MONEY.value()
 					.replace("$player$", bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -403,10 +403,10 @@ public class Auction {
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS), bidder);
 			return;
 		} else if (current_bid+increment > bid && current_bid > 0) {
-			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_LOW.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_BID_LOW.value()
 					.replace("$player$", bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -414,10 +414,10 @@ public class Auction {
 					.replace("$price$", String.valueOf(current_bid + increment))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS), bidder);
 			return;
 		} else if (price > bid) {
-			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_LOW.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_BID_LOW.value()
 					.replace("$player$", bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -425,11 +425,11 @@ public class Auction {
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS), bidder);
 			
 			return;
 		} else if (bid > Config.AUCTION.MAXIMUM_VALUES_BID.asInt() && Config.AUCTION.MAXIMUM_VALUES_BID.asInt() != -1) {
-			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_MAX.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_BID_MAX.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", Config.AUCTION.MAXIMUM_VALUES_BID.asString())
 					.replace("$item$", Auction.getItemName(object))
@@ -437,7 +437,7 @@ public class Auction {
 					.replace("$price$", String.valueOf(current_bid))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS), bidder);
 			return;
 		} 
 		
@@ -450,7 +450,7 @@ public class Auction {
 			
 		}
 		if (bid <= secret_bid) {
-			bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_BID_OUTBID.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_BID_OUTBID.value()
 					.replace("$player$", secret_bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -458,7 +458,7 @@ public class Auction {
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS), bidder);
 			bid = secret_bid;
 			bidder = secret_bidder;
 			
@@ -681,7 +681,7 @@ public class Auction {
 
 			//take money from highest bidder
 			main.econ.withdrawPlayer(highest_bidder, current_bid);
-			highest_bidder.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_END_PAID_TO.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_END_PAID_TO.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -689,11 +689,11 @@ public class Auction {
 					.replace("$price$", String.valueOf(current_bid))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS), highest_bidder);
 			
 			//give money to seller
 			main.econ.depositPlayer(seller, current_bid);
-			seller.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_END_PAID_BY.value()
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_END_PAID_BY.value()
 					.replace("$player$", highest_bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -701,7 +701,7 @@ public class Auction {
 					.replace("$price$", String.valueOf(current_bid))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS)));
+					.replace("$incr$", incrementS), seller);
 
 		} else {
 			
@@ -752,7 +752,7 @@ public class Auction {
 		
 		giveItemStack(object, seller);
 		
-		if (ender == null || main.hasPermission(ender, "as.cancel") || ender == seller) {
+		if ((ender == null || main.hasPermission(ender, "as.cancel") || ender == seller) && Queue.current_auction.equals(this)) {
 		
 			String displayname;
 			if (ender == null) displayname = "the server"; 
@@ -765,7 +765,6 @@ public class Auction {
 					.replace("$name$", Auction.getDisplayName(object))
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
-					.replace("$duration$", String.valueOf(atimer.time))
 					.replace("$incr$", incrementS)
 					.replace("$reason$", reason));
 			else main.messenger.broadcast(Config.MESSAGES.AUCTION_END_FORCED.value()
@@ -775,10 +774,55 @@ public class Auction {
 					.replace("$name$", Auction.getDisplayName(object))
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
-					.replace("$duration$", String.valueOf(atimer.time))
 					.replace("$incr$", incrementS));
 			
-		} else ender.sendMessage(Messenger.cc(Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+		} else if (ender == null) { 
+			
+			String msg = reason == "" ? Config.MESSAGES.AUCTION_END_FORCEDSELLER.value() : Config.MESSAGES.AUCTION_END_FORCEDREASONSELLER.value();
+			
+			main.messenger.sendMessage(msg
+					.replace("$id$", String.valueOf(Queue.getQueue().indexOf(this)))
+					.replace("$player$", seller.getDisplayName())
+					.replace("$sender$", "the server")
+					.replace("$amount$", amountS)
+					.replace("$item$", Auction.getItemName(object))
+					.replace("$name$", Auction.getDisplayName(object))
+					.replace("$price$", priceS)
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+					.replace("$reason$", reason), seller);
+			
+		} else if (main.hasPermission(ender, "as.cancel") || ender == seller) {
+			
+			main.messenger.sendMessage(Config.MESSAGES.AUCTION_END_CANCELLED.value()
+				.replace("$id$", String.valueOf(Queue.getQueue().indexOf(this)))
+				.replace("$player$", seller.getDisplayName())
+				.replace("$sender$", "/as cancel")
+				.replace("$amount$", amountS)
+				.replace("$item$", Auction.getItemName(object))
+				.replace("$name$", Auction.getDisplayName(object))
+				.replace("$price$", priceS)
+				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString()), ender);
+			
+			if (ender != seller) {
+				
+				String msg = reason == "" ? Config.MESSAGES.AUCTION_END_FORCEDSELLER.value() : Config.MESSAGES.AUCTION_END_FORCEDREASONSELLER.value();
+				
+				main.messenger.sendMessage(msg
+						.replace("$id$", String.valueOf(Queue.getQueue().indexOf(this)))
+						.replace("$player$", seller.getDisplayName())
+						.replace("$sender$", "/as cancel")
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", priceS)
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$reason$", reason), seller);
+				
+			}
+			
+		}
+		
+		else main.messenger.sendMessage(Config.MESSAGES.COMMAND_NO_PERMISSION.value()
 				.replace("$player$", ender.getDisplayName())
 				.replace("$sender$", "/as cancel")
 				.replace("$amount$", amountS)
@@ -786,16 +830,15 @@ public class Auction {
 				.replace("$name$", Auction.getDisplayName(object))
 				.replace("$price$", priceS)
 				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
-				.replace("$duration$", String.valueOf(atimer.time))
 				.replace("$incr$", incrementS)
-				.replace("$reason$", reason)));
+				.replace("$reason$", reason), ender);
 		
-		if (!all) Queue.nextAuction();
+		if (!all && Queue.current_auction.equals(this)) Queue.nextAuction();
 		
 	}
 
 	public static void noAuction(Player player) {
-		player.sendMessage(Messenger.cc(Config.MESSAGES.AUCTION_WRONG_NONE.value().replace("$sender$", player.getDisplayName())));
+		main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_NONE.value().replace("$sender$", player.getDisplayName()), player);
 	}
 	
 	public static String getItemName(ItemStack item) {

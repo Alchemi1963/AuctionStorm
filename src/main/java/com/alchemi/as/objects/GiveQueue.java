@@ -11,7 +11,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.alchemi.al.configurations.Messenger;
 import com.alchemi.as.Auction;
 import com.alchemi.as.main;
 
@@ -36,11 +35,11 @@ public class GiveQueue {
 		if (queue.containsKey(p.getName())) {
 			Auction.giveItemStack(queue.get(p.getName()), p);
 			
-			p.sendMessage(Messenger.cc(Config.MESSAGES.COMMAND_GIVEN.value().replace("$sender$", main.instance.pluginname)
+			main.messenger.sendMessage(Config.MESSAGES.COMMAND_GIVEN.value().replace("$sender$", main.instance.pluginname)
 					.replace("$amount$", String.valueOf(queue.get(p.getName()).getAmount()))
 					.replace("$item$", Auction.getItemName(queue.get(p.getName())))
 					.replace("$name$", Auction.getDisplayName(queue.get(p.getName())))
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())));
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString()), p);
 			
 			queue.remove(p.getName());
 			players.remove(p.getName());
