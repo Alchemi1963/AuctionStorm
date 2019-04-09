@@ -842,6 +842,8 @@ public class Auction {
 	}
 	
 	public static String getItemName(ItemStack item) {
+		if (item == null) return "INVALID ITEM";
+		else if (!item.hasItemMeta()) return item.getType().name().toLowerCase().replaceAll("_", " ");
 		return item.getItemMeta().hasLocalizedName() ? item.getItemMeta().getLocalizedName() : item.getType().name().toLowerCase().replaceAll("_", " ");
 	}
 	
