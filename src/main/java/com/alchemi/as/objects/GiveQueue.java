@@ -49,7 +49,8 @@ public class GiveQueue {
 		}
 		
 		queue.remove(player.getName());
-		config.set(player.getName(), null);
+		
+		config.set("Queue." + player.getName(), null);
 		
 		try {
 			config.save();
