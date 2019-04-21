@@ -100,6 +100,8 @@ public class Config {
 		COMMAND_WRONG_FORMAT("AuctionStorm.Command.Wrong-Format"),
 		COMMAND_UNKNOWN("AuctionStorm.Command.Unknown"),
 		COMMAND_GIVEN("AuctionStorm.Command.Given"),
+		COMMAND_SILENCED("AuctionStorm.Command.Silenced"),
+		COMMAND_UNSILENCED("AuctionStorm.Command.Unsilenced"),
 		COMMAND_ADMIN_LOGGING_DISABLED("AuctionStorm.Command.Admin.Logging-Disabled"),
 		COMMAND_ADMIN_NO_LOGS("AuctionStorm.Command.Admin.No-Logs"),
 		COMMAND_ADMIN_LOG_NON_EXISTENT("AuctionStorm.Command.Admin.Log-Non-Existent"),

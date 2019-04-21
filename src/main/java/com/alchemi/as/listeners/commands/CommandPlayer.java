@@ -1,5 +1,7 @@
 package com.alchemi.as.listeners.commands;
 
+import java.util.Arrays;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,6 +14,7 @@ import com.alchemi.as.Auction;
 import com.alchemi.as.Queue;
 import com.alchemi.as.main;
 import com.alchemi.as.objects.Config;
+import com.alchemi.as.objects.Config.MESSAGES;
 
 
 public class CommandPlayer implements CommandExecutor{
@@ -46,6 +49,8 @@ public class CommandPlayer implements CommandExecutor{
 			Player player = (Player) sender;
 						
 			if (args.length > 0) {
+				
+				
 				if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) { //help command
 				
 					main.messenger.sendMessage(help_message, player);
@@ -56,7 +61,7 @@ public class CommandPlayer implements CommandExecutor{
 					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
 							.replace("$sender$", cmd.getName())
 							.replace("$format$", start_usage)
-							.replace("$player$", ((Player) sender).getDisplayName());
+							.replace("$player$", (player).getDisplayName());
 					
 					main.messenger.sendMessage(send, sender);
 					return true;
@@ -81,7 +86,7 @@ public class CommandPlayer implements CommandExecutor{
 								String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
 										.replace("$sender$", cmd.getName())
 										.replace("$format$", bid_usage)
-										.replace("$player$", ((Player) sender).getDisplayName());
+										.replace("$player$", (player).getDisplayName());
 								
 								main.messenger.sendMessage(send, sender);
 								return true;
@@ -93,7 +98,7 @@ public class CommandPlayer implements CommandExecutor{
 							String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
 									.replace("$sender$", cmd.getName())
 									.replace("$format$", bid_usage)
-									.replace("$player$", ((Player) sender).getDisplayName());
+									.replace("$player$", (player).getDisplayName());
 							
 							main.messenger.sendMessage(send, sender);
 							
@@ -106,7 +111,7 @@ public class CommandPlayer implements CommandExecutor{
 						
 						return true;
 					
-					} else if (args[0].equalsIgnoreCase("end") || args[0].equalsIgnoreCase("cancel") || args[0].equalsIgnoreCase("c")) { //cancel command
+					} else if (args[0].equalsIgnoreCase("cancel") || args[0].equalsIgnoreCase("c")) { //cancel command
 						
 						if (args.length > 1) {
 							try {
@@ -130,7 +135,7 @@ public class CommandPlayer implements CommandExecutor{
 								
 							} catch (NumberFormatException e) {
 								
-
+								
 								String reason = "";
 								for (int x = 1 ; x < args.length; x++) {
 									if (reason != "") reason = reason + " " + args[x];
@@ -154,7 +159,7 @@ public class CommandPlayer implements CommandExecutor{
 									if (sender instanceof Player) {
 										String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
 												.replace("$sender$", cmd.getName())
-												.replace("$player$", ((Player) sender).getDisplayName());
+												.replace("$player$", (player).getDisplayName());
 										
 										main.messenger.sendMessage(send, sender);
 									}
@@ -164,7 +169,7 @@ public class CommandPlayer implements CommandExecutor{
 							}
 							
 						} else {
-						
+							
 							if (Queue.current_auction == null) {
 								Auction.noAuction(player);
 								return true;
@@ -182,16 +187,44 @@ public class CommandPlayer implements CommandExecutor{
 								if (sender instanceof Player) {
 									String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
 											.replace("$sender$", cmd.getName())
-											.replace("$player$", ((Player) sender).getDisplayName());
+											.replace("$player$", (player).getDisplayName());
 									
 									main.messenger.sendMessage(send, sender);
 								}
 								return true;
 							}
 						}
-					} 
-					
-					else if (args[0].equalsIgnoreCase("listQueue") || args[0].equalsIgnoreCase("lq") || args[0].equalsIgnoreCase("queue")) {
+						
+					} else if (args[0].equalsIgnoreCase("end") 
+							|| args[0].equalsIgnoreCase("e")) { //end command
+						
+						if (Queue.current_auction == null) {
+							Auction.noAuction(player);
+							return true;
+						}
+						
+						if (player.equals(Queue.current_auction.getSeller())) {
+							Queue.current_auction.endAuction();;
+							return true;
+							
+						} else if (main.hasPermission(sender, "as.end")) {
+							Queue.current_auction.endAuction();
+							return true;
+							
+						} else {
+							if (sender instanceof Player) {
+								String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+										.replace("$sender$", cmd.getName())
+										.replace("$player$", (player).getDisplayName());
+								
+								main.messenger.sendMessage(send, sender);
+							}
+							return true;
+						}
+						
+					} else if (args[0].equalsIgnoreCase("listQueue") 
+							|| args[0].equalsIgnoreCase("lq") 
+							|| args[0].equalsIgnoreCase("queue")) { //listqueue command
 						
 						int page = 1;
 						if (args.length == 2) {
@@ -235,9 +268,21 @@ public class CommandPlayer implements CommandExecutor{
 							return true;
 						}
 						
-					}
+					} else if (Arrays.asList("hide", "hidebroadcasts", "silence").contains(args[0]) 
+							&& main.instance.permsEnabled()
+							&& player.hasPermission("as.togglesilence")) { //silence command
+						
+						if (player.hasPermission("as.silence")) {
+							main.perm.playerRemove(null, player, "as.silence");
+							main.messenger.sendMessage(MESSAGES.COMMAND_UNSILENCED.value(), player);
+						} else {
+							main.perm.playerAdd(null, player, "as.silence");
+							main.messenger.sendMessage(MESSAGES.COMMAND_SILENCED.value(), player);
+						}
+						
+						return true;
 					
-					else if (args.length >= 2 && args[0].equalsIgnoreCase("start") 
+					} else if (args.length >= 2 && args[0].equalsIgnoreCase("start") 
 						|| args.length >= 2 && args[0].equalsIgnoreCase("s")) { //start command
 						int price = Config.AUCTION.START_DEFAULTS_PRICE.asInt();
 						int amount = player.getInventory().getItemInMainHand().getAmount();
@@ -253,7 +298,7 @@ public class CommandPlayer implements CommandExecutor{
 							String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
 									.replace("$sender$", cmd.getName())
 									.replace("$format$", start_usage)
-									.replace("$player$", ((Player) sender).getDisplayName());
+									.replace("$player$", (player).getDisplayName());
 							
 							main.messenger.sendMessage(send, sender);
 						}
@@ -278,7 +323,7 @@ public class CommandPlayer implements CommandExecutor{
 			}
 			String send = Config.MESSAGES.COMMAND_UNKNOWN.value()
 					.replace("$sender$", cmd.getName())
-					.replace("$player$", ((Player) sender).getDisplayName());
+					.replace("$player$", (player).getDisplayName());
 			
 			main.messenger.sendMessage(send, sender);
 			return true;

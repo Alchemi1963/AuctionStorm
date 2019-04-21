@@ -583,7 +583,7 @@ public class Auction {
 			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 			
 			for (Entry<Enchantment, Integer> ench : object.getEnchantments().entrySet()) {
-				msg = msg + Config.MESSAGES.AUCTION_INFO_ENCHANTMENTHEADER.value()
+				msg = msg + Config.MESSAGES.AUCTION_INFO_ENCHANTMENT.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", RomanNumber.toRoman(ench.getValue()))
 						.replace("$item$", Auction.getItemName(object))
@@ -848,11 +848,12 @@ public class Auction {
 	}
 	
 	public static String getDisplayName(ItemStack item) {
-		return item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : "";
+		if (item == null) throw new NullPointerException("ItemStack cannot be null!");
+		return item.hasItemMeta() ? item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : "" : "";
 	}
 	
 	public static void giveItemStack(ItemStack item, OfflinePlayer seller) {
-		if (!seller.isOnline()) {
+		if (!seller.isOnline() || main.instance.isStopping) {
 			main.gq.addPlayer(seller, item);
 			return;
 		}

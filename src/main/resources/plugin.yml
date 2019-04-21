@@ -30,26 +30,37 @@ permissions:
             as.reload: true
             as.return: true
             as.defaults: true
+            as.silence: true
+            as.end: true
             as.cancel: true
-        default: false
+        default: op
     as.base:
         description: Base AuctionStorm permission.
         default: true
+    as.end:
+        description: Permission to end the current auction.
+        default: op
+    as.silence:
+        description: Silence broadcasts
+        default: op
+    as.togglesilence:
+        description: Toggle silencing
+        default: true
     as.creative:
         description: Permission to start an auction in creative.
-        default: false
+        default: op
     as.admin:
         description: Permmision to use the admin command.
-        default: false
+        default: op
     as.reload:
         description: Permission to reload the config files.
-        default: false
+        default: op
     as.defaults:
         description: Permission to reset the config files.
-        default: false
+        default: op
     as.return:
         description: Permission to refund auctions.
-        default: false 
+        default: op 
     as.cancel:
         description: Permission to cancel any and all auctions.
-        default: false
+        default: op

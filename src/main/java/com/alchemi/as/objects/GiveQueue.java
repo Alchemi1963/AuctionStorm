@@ -2,70 +2,79 @@ package com.alchemi.as.objects;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.alchemi.al.configurations.SexyConfiguration;
 import com.alchemi.as.Auction;
 import com.alchemi.as.main;
 
 public class GiveQueue {
 
-	private Map<String, ItemStack> queue = new HashMap<String, ItemStack>();
-	private List<String> players = new ArrayList<String>();
+	private Map<String, List<ItemStack>> queue = new HashMap<String, List<ItemStack>>();
 	
-	private final FileConfiguration config;
+	private final SexyConfiguration config;
 	
-	public GiveQueue(FileConfiguration gq) {
+	@SuppressWarnings("unchecked")
+	public GiveQueue(SexyConfiguration gq) {
 		config = gq;
-		players = gq.getStringList("Queue");
 		
-		for (String p : players) {
-			queue.put(gq.getString("Queue." + p), gq.getItemStack("Queue." + p + ".item"));
+		for (String player : config.getValues(true).keySet()) {
+			
+			if (player.endsWith(".item") || player.equals("Queue")) continue;
+			
+			queue.put(player.replace("Queue.", ""), (List<ItemStack>) gq.getList(player + ".item", new ArrayList<ItemStack>()));
+			
+			if (queue.get(player.replace("Queue.", "")).isEmpty()) queue.put(player.replace("Queue.", ""), Arrays.asList(gq.getItemStack(player + ".item", new ItemStack(Material.AIR))));
+		
 		}
-		
 	}
 	
-	public void give(Player p) {
-		if (queue.containsKey(p.getName())) {
-			Auction.giveItemStack(queue.get(p.getName()), p);
+	public void give(Player player) {
+		for (ItemStack stack : queue.get(player.getName())) {
+			Auction.giveItemStack(stack, player);
 			
 			main.messenger.sendMessage(Config.MESSAGES.COMMAND_GIVEN.value().replace("$sender$", main.instance.pluginname)
-					.replace("$amount$", String.valueOf(queue.get(p.getName()).getAmount()))
-					.replace("$item$", Auction.getItemName(queue.get(p.getName())))
-					.replace("$name$", Auction.getDisplayName(queue.get(p.getName())))
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString()), p);
-			
-			queue.remove(p.getName());
-			players.remove(p.getName());
-			
-			for (String pl : players) {
-				config.set("Queue." + pl, queue.get(pl));
-			}
-			try {
-				main.instance.giveQueue.save();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+					.replace("$amount$", String.valueOf(stack.getAmount()))
+					.replace("$item$", Auction.getItemName(stack))
+					.replace("$name$", Auction.getDisplayName(stack))
+					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString()), player);
+		}
+		
+		queue.remove(player.getName());
+		config.set(player.getName(), null);
+		
+		try {
+			config.save();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	public boolean isPlayerQueued(Player p) {
-		return queue.containsKey(p.getName()) && config.contains(p.getName()) && config.contains(p.getName() + ".item");
+	public boolean isPlayerQueued(OfflinePlayer p) {
+		return queue.containsKey(p.getName()) && config.contains("Queue." + p.getName()) && config.contains("Queue." + p.getName() + ".item");
 	}
 	
-	public void addPlayer(OfflinePlayer seller, ItemStack i) {
-		queue.put(seller.getName(), i);
-		players.add(seller.getName());
-		main.instance.giveQueue.set("Queue." + seller.getName() + ".item", i);
+	public void addPlayer(OfflinePlayer player, ItemStack i) {
+		if (!isPlayerQueued(player)) queue.put(player.getName(), Arrays.asList(i));
+		else {
+			List<ItemStack> stacks = queue.get(player.getName());
+			stacks.add(i);
+			queue.put(player.getName(), stacks);
+		}
+		
+		main.instance.giveQueue.set("Queue." + player.getName() + ".item", queue.get(player.getName()));
 		try {
-			main.instance.giveQueue.save();
+			config.save();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

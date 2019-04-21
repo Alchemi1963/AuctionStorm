@@ -27,14 +27,21 @@ public class BaseTabComplete implements TabCompleter {
 		if (!main.hasPermission(sender, "as.base"))
 			return tabSuggest;
 		
-		if (args.length == 1 && !Arrays.asList(new String[]{"start", "s", "help", "info", "i", "cancel", "bid", "listqueue"}).contains(args[0])) {
+		if (args.length == 1 && !Arrays.asList("start", "s", "help", "info", "i", "cancel", "bid", "listqueue").contains(args[0])) {
 			
 			list.add("start");
 			list.add("help");
 			list.add("info");
 			list.add("listqueue");
 			if (Queue.current_auction != null) list.add("bid");
-			if (Queue.current_auction != null && Queue.current_auction.getSeller().equals((Player) sender) || main.hasPermission(sender, "as.cancel")) list.add("cancel");
+			if (Queue.current_auction != null 
+					&& Queue.current_auction.getSeller().equals((Player) sender) 
+					|| main.hasPermission(sender, "as.cancel")) list.add("cancel");
+			if (Queue.current_auction != null 
+					&& Queue.current_auction.getSeller().equals((Player) sender) 
+					|| sender.hasPermission("as.end")) list.add("end");
+			if (main.instance.permsEnabled() 
+					&& sender.hasPermission("as.togglesilence")) list.add("silence"); 
 			
 		} else if (args.length == 2) {
 			

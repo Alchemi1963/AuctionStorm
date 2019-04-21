@@ -83,6 +83,8 @@ AuctionStorm:
     Wrong-Format: '&cPlease use: &9$format$'
     Unknown: '&cUnknown command. Use &9/as help &cfor more information.'
     Given: '&9You have been given $amount$ $item$.'
+    Silenced: '&9Auction broadcasts are now silenced for you.'
+    Unsilenced: '&9Auction broadcasts are no longer silenced for you.'
     Admin:
         Logging-Disabled: '&cLogging has been disabled by the server admins.'
         No-Logs: '&cThere are currently no logs.'

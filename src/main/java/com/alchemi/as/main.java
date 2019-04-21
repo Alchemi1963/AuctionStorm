@@ -22,19 +22,22 @@ import com.alchemi.as.listeners.events.AdminTabComplete;
 import com.alchemi.as.listeners.events.BaseTabComplete;
 import com.alchemi.as.listeners.events.BidTabComplete;
 import com.alchemi.as.listeners.events.UserLoginHandler;
+import com.alchemi.as.objects.AuctionMessenger;
 import com.alchemi.as.objects.Config;
 import com.alchemi.as.objects.GiveQueue;
 import com.alchemi.as.objects.Logging;
 
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 
 public class main extends JavaPlugin implements Listener {
 	public String pluginname;
 	public static Economy econ;
+	public static Permission perm;
 	
 	public static Messenger messenger;
 	
-	public static final int MESSAGES_FILE_VERSION = 24;
+	public static final int MESSAGES_FILE_VERSION = 25;
 	public static final int CONFIG_FILE_VERSION = 20;
 	
 	public static File MESSAGES_FILE;
@@ -47,6 +50,8 @@ public class main extends JavaPlugin implements Listener {
 	
 	public static List<Material> banned_items = new ArrayList<Material>();
 
+	public boolean isStopping = false;
+	
 	@Override
 	public void onEnable() {
 		instance = this;
@@ -57,7 +62,7 @@ public class main extends JavaPlugin implements Listener {
 		MESSAGES_FILE = new File(getDataFolder(), "messages.yml");
 		CONFIG_FILE = new File(getDataFolder(), "config.yml");
 		
-		messenger = new Messenger(this);
+		messenger = new AuctionMessenger(this);
 		messenger.print("Enabling AuctionStorm...");
 		
 		try {
@@ -79,6 +84,9 @@ public class main extends JavaPlugin implements Listener {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+		if (!setupPermission()) {
+			messenger.print("No Vault dependency found, silence command disabled!");
+		}
 		
 		gq = new GiveQueue(giveQueue);
 		
@@ -91,6 +99,8 @@ public class main extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onDisable() {
+		
+		isStopping = true;
 		
 		if (Queue.getQueueLength() != 0) {
 			Queue.clearQueue(true, "a server restart");
@@ -128,4 +138,19 @@ public class main extends JavaPlugin implements Listener {
         econ = rsp.getProvider();
         return econ != null;
     }
+	
+	private boolean setupPermission() {
+		if (getServer().getPluginManager().getPlugin("Vault") == null) return false;
+		
+		RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+		
+		if (rsp == null) return false;
+		
+		perm = rsp.getProvider();
+		return perm != null;
+	}
+	
+	public boolean permsEnabled() {
+		return perm != null;
+	}
 }
