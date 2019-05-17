@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.alchemi.al.configurations.Messenger;
-import com.alchemi.al.objects.CarbonDating;
+import com.alchemi.al.objects.handling.CarbonDating;
 import com.alchemi.as.Auction;
 import com.alchemi.as.main;
 

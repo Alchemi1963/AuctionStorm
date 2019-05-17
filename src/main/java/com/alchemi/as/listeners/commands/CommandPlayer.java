@@ -10,11 +10,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.alchemi.al.configurations.Messenger;
+import com.alchemi.al.objects.meta.PersistentMeta;
 import com.alchemi.as.Auction;
 import com.alchemi.as.Queue;
 import com.alchemi.as.main;
 import com.alchemi.as.objects.Config;
 import com.alchemi.as.objects.Config.MESSAGES;
+import com.alchemi.as.objects.meta.SilentMeta;
 
 
 public class CommandPlayer implements CommandExecutor{
@@ -272,11 +274,13 @@ public class CommandPlayer implements CommandExecutor{
 							&& main.instance.permsEnabled()
 							&& player.hasPermission("as.togglesilence")) { //silence command
 						
-						if (player.hasPermission("as.silence")) {
-							main.perm.playerRemove(null, player, "as.silence");
+						if (PersistentMeta.hasMeta(player, SilentMeta.class) && PersistentMeta.getMeta(player, SilentMeta.class).asBoolean()) {//player.hasPermission("as.silence")) {
+							//main.perm.playerRemove(null, player, "as.silence");
+							PersistentMeta.setMeta(player, new SilentMeta(false));
 							main.messenger.sendMessage(MESSAGES.COMMAND_UNSILENCED.value(), player);
 						} else {
-							main.perm.playerAdd(null, player, "as.silence");
+							//main.perm.playerAdd(null, player, "as.silence");
+							PersistentMeta.setMeta(player, new SilentMeta(true));
 							main.messenger.sendMessage(MESSAGES.COMMAND_SILENCED.value(), player);
 						}
 						

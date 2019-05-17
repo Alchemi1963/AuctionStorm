@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.alchemi.al.objects.CarbonDating;
+import com.alchemi.al.objects.handling.CarbonDating;
 import com.alchemi.as.Queue;
 import com.alchemi.as.main;
 import com.alchemi.as.objects.Config;
@@ -148,16 +148,18 @@ public class CommandAdmin implements CommandExecutor{
 			}
 			
 			else if (args[0].equalsIgnoreCase("reload")) { //reload command
-				if (!main.hasPermission(sender, "as.reload")) {
-					
-					return true;
-				} else {
+				if (!main.hasPermission(sender, "as.reload")) return true;
+				
+				else {
 					Config.reload();
 					if (Queue.getQueueLength() != 0) {
 							Queue.clearQueue(true, "config reload");
 						}
+				
 				}
 				
+				main.messenger.reloadMessages();
+				main.messenger.getTag();
 				main.messenger.sendMessage("&9Configs have been reloaded!", sender);
 				
 			}

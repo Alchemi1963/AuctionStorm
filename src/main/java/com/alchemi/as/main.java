@@ -38,7 +38,7 @@ public class main extends JavaPlugin implements Listener {
 	public static Messenger messenger;
 	
 	public static final int MESSAGES_FILE_VERSION = 25;
-	public static final int CONFIG_FILE_VERSION = 20;
+	public static final int CONFIG_FILE_VERSION = 22;
 	
 	public static File MESSAGES_FILE;
 	public static File CONFIG_FILE;

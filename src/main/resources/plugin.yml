@@ -30,7 +30,8 @@ permissions:
             as.reload: true
             as.return: true
             as.defaults: true
-            as.silence: true
+            as.togglesilence: true
+            as.silence: false
             as.end: true
             as.cancel: true
         default: op
@@ -39,9 +40,6 @@ permissions:
         default: true
     as.end:
         description: Permission to end the current auction.
-        default: op
-    as.silence:
-        description: Silence broadcasts
         default: op
     as.togglesilence:
         description: Toggle silencing

@@ -30,17 +30,18 @@ public class AuctionTimer implements Runnable{
 		} else if (time == 1) {
 			main.messenger.broadcast("&6Going twice...");
 		
-		} else if (Config.AUCTION.NOTIFY.asIntList().contains(time)) { //custom time notification
+		} else if (Config.AUCTION.NOTIFY.asBoolean() && Config.AUCTION.NOTIFYTIMES.asIntList().contains(time)) { //custom time notification
 			
 			main.messenger.broadcast(Config.MESSAGES.AUCTION_TIME_NOTIFY.value().replace("$amount$", String.valueOf(time)));
 			
 			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
 				main.messenger.broadcast(Config.MESSAGES.AUCTION_INFO_GET.value());
 			} else {
-				main.messenger.broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
+				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) main.messenger.broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
+				else ((AuctionMessenger)main.messenger).broadcastITEM(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getObject());
 			}
 		} 
-		else if (time == Queue.current_auction.getDuration()/2) { //half-time notification
+		else if (Config.AUCTION.NOTIFY.asBoolean() && time == Queue.current_auction.getDuration()/2) { //half-time notification
 			
 			main.messenger.broadcast(Config.MESSAGES.AUCTION_TIME_HALFTIME.value().replace("$amount$", String.valueOf(time))); 
 			
@@ -48,7 +49,8 @@ public class AuctionTimer implements Runnable{
 			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
 				main.messenger.broadcast(Config.MESSAGES.AUCTION_INFO_GET.value());
 			} else {
-				main.messenger.broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
+				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) main.messenger.broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
+				else ((AuctionMessenger)main.messenger).broadcastITEM(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getObject());
 			}
 		}
 		

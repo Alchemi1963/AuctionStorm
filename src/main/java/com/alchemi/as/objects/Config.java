@@ -135,9 +135,11 @@ public class Config {
 		SOUND_PAID("Auction.Sound.Paid"),
 		SOUND_FAILED("Auction.Sound.Failed"),
 		NOTIFY("Auction.Notify"),
+		NOTIFYTIMES("Auction.NotifyTimes"),
 		ALLOWCREATIVE("Auction.AllowCreative"),
 		LOGAUCTIONS("Auction.LogAuctions"),
 		HOVERITEM("Auction.HoverItem"),
+		HOVERITEMMINECRAFTTOOLTIP("Auction.HoverItemMinecraftToolTip"),
 		DISPLAYLORE("Auction.displayLore"),
 		ANTISNIPE_TRESHOLD("Auction.AntiSnipe-Treshold"),
 		ANTISNIPE_TIME_ADDED("Auction.AntiSnipe-Time-Added"),
@@ -292,8 +294,7 @@ public class Config {
 	public static void enable() throws FileNotFoundException, IOException, InvalidConfigurationException {
 		config = SexyConfiguration.loadConfiguration(main.CONFIG_FILE);
 		messages = SexyConfiguration.loadConfiguration(main.MESSAGES_FILE);
-		
-		
+
 		for (SexyConfiguration file : new SexyConfiguration[] {messages, config}) {
 			
 			int version;
@@ -332,12 +333,10 @@ public class Config {
 			value.get();
 		}
 		
-		if (!((List<String>) AUCTION.BANNED_ITEMS.asStringList()).isEmpty()) {
-			for (String mat : AUCTION.BANNED_ITEMS.asStringList()) {
+		for (String mat : AUCTION.BANNED_ITEMS.asStringList()) {
+			
+			main.banned_items.add(Material.getMaterial(mat));
 				
-				main.banned_items.add(Material.getMaterial(mat));
-				
-			}
 		}
 	}
 	
@@ -358,12 +357,8 @@ public class Config {
 		}
 		
 		main.banned_items.clear();
-		if (!((List<?>) config.get("Auction.Banned-Items", new ArrayList<String>())).isEmpty()) {
-			for (String mat : config.getStringList("Auction.Banned-Items")) {
-				
+		for (String mat : config.getStringList("Auction.Banned-Items")) {
 				main.banned_items.add(Material.getMaterial(mat));
-				
-			}
 		}
 	}
 	

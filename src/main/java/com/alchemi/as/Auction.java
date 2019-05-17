@@ -14,9 +14,10 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.alchemi.al.Library;
 import com.alchemi.al.configurations.Messenger;
-import com.alchemi.al.objects.CarbonDating;
+import com.alchemi.al.objects.handling.CarbonDating;
 import com.alchemi.as.listeners.commands.CommandPlayer;
 import com.alchemi.as.objects.AuctionLog;
+import com.alchemi.as.objects.AuctionMessenger;
 import com.alchemi.as.objects.AuctionTimer;
 import com.alchemi.as.objects.Config;
 import com.alchemi.as.objects.RomanNumber;
@@ -75,7 +76,7 @@ public class Auction {
 					.replace("$incr$", incrementS), seller);
 			return;
 		}
-		if (!(price > Config.AUCTION.MINIMUM_VALUES_PRICE.asInt() && price < Config.AUCTION.MAXIMUM_VALUES_PRICE.asInt())) {
+		if (!(price >= Config.AUCTION.MINIMUM_VALUES_PRICE.asInt() && price <= Config.AUCTION.MAXIMUM_VALUES_PRICE.asInt())) {
 			if (Config.AUCTION.MAXIMUM_VALUES_PRICE.asInt() != -1) {
 				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_PRICE.value()
 						.replace("$player$", seller.getDisplayName())
@@ -87,7 +88,7 @@ public class Auction {
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
 						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()), seller);
 				return;
-			} else if (price < Config.AUCTION.MINIMUM_VALUES_PRICE.asInt()) {
+			} else if (price <= Config.AUCTION.MINIMUM_VALUES_PRICE.asInt()) {
 				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_PRICEINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_PRICE.asString())
@@ -100,7 +101,7 @@ public class Auction {
 				return;
 			}
 		}
-		if (!(duration > Config.AUCTION.MINIMUM_VALUES_DURATION.asInt() && duration < Config.AUCTION.MAXIMUM_VALUES_DURATION.asInt())) {
+		if (!(duration >= Config.AUCTION.MINIMUM_VALUES_DURATION.asInt() && duration <= Config.AUCTION.MAXIMUM_VALUES_DURATION.asInt())) {
 			if (Config.AUCTION.MAXIMUM_VALUES_DURATION.asInt() != -1) {
 				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_DURATION.value()
 						.replace("$player$", seller.getDisplayName())
@@ -112,7 +113,7 @@ public class Auction {
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
 						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
-			} else if (price < Config.AUCTION.MINIMUM_VALUES_DURATION.asInt()) {
+			} else if (price <= Config.AUCTION.MINIMUM_VALUES_DURATION.asInt()) {
 				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_DURATIONINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_DURATION.asString())
@@ -125,7 +126,7 @@ public class Auction {
 				return;
 			}
 		}
-		if (!(increment > Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt() && increment < Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asInt())) {
+		if (!(increment >= Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt() && increment <= Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asInt())) {
 			if (Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asInt() != -1) {
 				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_INCREMENT.value()
 						.replace("$player$", seller.getDisplayName())
@@ -137,7 +138,7 @@ public class Auction {
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
 						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
-			} else if (price < Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt()) {
+			} else if (price <= Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt()) {
 				main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_INCREMENTINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_INCREMENT.asString())
@@ -150,7 +151,7 @@ public class Auction {
 				return;
 			}
 		}
-		if (amount < Config.AUCTION.MINIMUM_VALUES_AMOUNT.asInt()) {
+		if (amount <= Config.AUCTION.MINIMUM_VALUES_AMOUNT.asInt()) {
 			main.messenger.sendMessage(Config.MESSAGES.AUCTION_WRONG_AMOUNT.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_AMOUNT.asString())
@@ -325,15 +326,27 @@ public class Auction {
 						.replace("$duration$", durationS)
 						.replace("$incr$", incrementS));
 			} else {
-				main.messenger.broadcastHover(Config.MESSAGES.AUCTION_STARTNAMED.value()
-						.replace("$player$", seller.getDisplayName())
-						.replace("$amount$", amountS)
-						.replace("$item$", Auction.getItemName(object))
-						.replace("$name$", Auction.getDisplayName(object))
-						.replace("$price$", priceS)
-						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
-						.replace("$duration$", durationS)
-						.replace("$incr$", incrementS), getInfo(false));
+				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) {
+					main.messenger.broadcastHover(Config.MESSAGES.AUCTION_STARTNAMED.value()
+							.replace("$player$", seller.getDisplayName())
+							.replace("$amount$", amountS)
+							.replace("$item$", Auction.getItemName(object))
+							.replace("$name$", Auction.getDisplayName(object))
+							.replace("$price$", priceS)
+							.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+							.replace("$duration$", durationS)
+							.replace("$incr$", incrementS), getInfo(false));
+				} else {
+					((AuctionMessenger)main.messenger).broadcastITEM(Config.MESSAGES.AUCTION_STARTNAMED.value()
+							.replace("$player$", seller.getDisplayName())
+							.replace("$amount$", amountS)
+							.replace("$item$", Auction.getItemName(object))
+							.replace("$name$", Auction.getDisplayName(object))
+							.replace("$price$", priceS)
+							.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+							.replace("$duration$", durationS)
+							.replace("$incr$", incrementS), object);
+				}
 			}
 		} else {
 			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
@@ -346,29 +359,52 @@ public class Auction {
 						.replace("$duration$", durationS)
 						.replace("$incr$", incrementS));
 			} else {
-				main.messenger.broadcastHover(Config.MESSAGES.AUCTION_START.value()
-						.replace("$player$", seller.getDisplayName())
-						.replace("$amount$", amountS)
-						.replace("$item$", Auction.getItemName(object))
-						.replace("$price$", priceS)
-						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
-						.replace("$duration$", durationS)
-						.replace("$incr$", incrementS), getInfo(false));
+				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) {
+					main.messenger.broadcastHover(Config.MESSAGES.AUCTION_START.value()
+							.replace("$player$", seller.getDisplayName())
+							.replace("$amount$", amountS)
+							.replace("$item$", Auction.getItemName(object))
+							.replace("$price$", priceS)
+							.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+							.replace("$duration$", durationS)
+							.replace("$incr$", incrementS), getInfo(false));
+				} else {
+					((AuctionMessenger)main.messenger).broadcastITEM(Config.MESSAGES.AUCTION_START.value()
+							.replace("$player$", seller.getDisplayName())
+							.replace("$amount$", amountS)
+							.replace("$item$", Auction.getItemName(object))
+							.replace("$price$", priceS)
+							.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+							.replace("$duration$", durationS)
+							.replace("$incr$", incrementS), object);
+				}
 			}
 		}
 		
 		if (!Config.AUCTION.HOVERITEM.asBoolean()) {
 			main.messenger.broadcast(Config.MESSAGES.AUCTION_INFO_GET.value());
 		} else {
-			main.messenger.broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value()
-					.replace("$player$", seller.getDisplayName())
-					.replace("$amount$", amountS)
-					.replace("$item$", Auction.getItemName(object))
-					.replace("$name$", Auction.getDisplayName(object))
-					.replace("$price$", priceS)
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
-					.replace("$duration$", durationS)
-					.replace("$incr$", incrementS), getInfo(false));
+			if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) {
+				main.messenger.broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", priceS)
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", durationS)
+						.replace("$incr$", incrementS), getInfo(false));
+			} else {
+				((AuctionMessenger)main.messenger).broadcastITEM(Config.MESSAGES.AUCTION_INFO_GET.value()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", priceS)
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", durationS)
+						.replace("$incr$", incrementS), object);
+			}
 		}
 		
 	}
