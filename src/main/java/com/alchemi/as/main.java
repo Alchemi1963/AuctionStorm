@@ -11,10 +11,11 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.alchemi.al.configurations.Messenger;
 import com.alchemi.al.configurations.SexyConfiguration;
+import com.alchemi.al.objects.base.PluginBase;
+import com.alchemi.al.objects.handling.UpdateChecker;
 import com.alchemi.as.listeners.commands.CommandAdmin;
 import com.alchemi.as.listeners.commands.CommandBid;
 import com.alchemi.as.listeners.commands.CommandPlayer;
@@ -30,49 +31,42 @@ import com.alchemi.as.objects.Logging;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
-public class main extends JavaPlugin implements Listener {
+public class main extends PluginBase implements Listener {
 	public String pluginname;
-	public static Economy econ;
-	public static Permission perm;
+	public Economy econ;
+	private Permission perm;
 	
-	public static Messenger messenger;
+	public Config config;
 	
-	public static final int MESSAGES_FILE_VERSION = 25;
-	public static final int CONFIG_FILE_VERSION = 22;
-	
-	public static File MESSAGES_FILE;
-	public static File CONFIG_FILE;
-	
-	public static main instance;
+	private static main instance;
 	public static Logging logger;
 	public static GiveQueue gq;
 	public SexyConfiguration giveQueue;
 	
+	public UpdateChecker uc;
+	
 	public static List<Material> banned_items = new ArrayList<Material>();
 
-	public boolean isStopping = false;
-	
 	@Override
 	public void onEnable() {
 		instance = this;
 		pluginname = getDescription().getName();
-
-		//start files
 		
-		MESSAGES_FILE = new File(getDataFolder(), "messages.yml");
-		CONFIG_FILE = new File(getDataFolder(), "config.yml");
+		SPIGOT_ID = 62778;
 		
-		messenger = new AuctionMessenger(this);
+		setMessenger(new AuctionMessenger(this));
 		messenger.print("Enabling AuctionStorm...");
 		
 		try {
-			Config.enable();
+			config = new Config();
 			messenger.print("Configs enabled.");
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 			getServer().getPluginManager().disablePlugin(this);
 			Messenger.printStatic("Configs enabling errored, disabling plugin.", "&4[DodgeChallenger]");
 		}
+		
+		if (Config.ConfigEnum.CONFIG.getConfig().getBoolean("update-checker", true)) uc = new UpdateChecker(this);
 		
 		if (!new File(getDataFolder(), "giveQueue.yml").exists()) saveResource("giveQueue.yml", false);
 		giveQueue = SexyConfiguration.loadConfiguration(new File(getDataFolder(), "giveQueue.yml"));
@@ -99,8 +93,6 @@ public class main extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onDisable() {
-		
-		isStopping = true;
 		
 		if (Queue.getQueueLength() != 0) {
 			Queue.clearQueue(true, "a server restart");
@@ -152,5 +144,14 @@ public class main extends JavaPlugin implements Listener {
 	
 	public boolean permsEnabled() {
 		return perm != null;
+	}
+	
+	public static main getInstance() {
+		return instance;
+	}
+	
+	@Override
+	public Messenger getMessenger() {
+		return messenger;
 	}
 }

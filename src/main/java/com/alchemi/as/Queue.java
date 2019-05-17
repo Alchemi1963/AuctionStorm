@@ -54,7 +54,7 @@ public class Queue {
 	public static void printQueue() { 
 		
 		for (Auction a : queue) {
-			main.messenger.broadcast(Auction.getItemName(a.getObject()));
+			main.getInstance().getMessenger().broadcast(Auction.getItemName(a.getObject()));
 		}
 		
 	}
@@ -82,7 +82,7 @@ public class Queue {
 	
 	public static void nextAuction() {
 		
-		try { main.instance.getServer().getScheduler().cancelTask(current_auction.task_id); }
+		try { main.getInstance().getServer().getScheduler().cancelTask(current_auction.task_id); }
 		catch (Exception e) { e.printStackTrace(); }
 			
 		current_auction = null;
@@ -90,7 +90,7 @@ public class Queue {
 		if (queue.size() > 1) {
 		
 			current_auction = queue.get(1);
-			main.instance.getServer().getScheduler().runTaskLater(main.instance, new Runnable() {
+			main.getInstance().getServer().getScheduler().runTaskLater(main.getInstance(), new Runnable() {
 				
 				@Override
 				public void run() {

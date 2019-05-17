@@ -41,7 +41,7 @@ public class GiveQueue {
 		for (ItemStack stack : queue.get(player.getName())) {
 			Auction.giveItemStack(stack, player);
 			
-			main.messenger.sendMessage(Config.MESSAGES.COMMAND_GIVEN.value().replace("$sender$", main.instance.pluginname)
+			main.getInstance().getMessenger().sendMessage(Config.MESSAGES.COMMAND_GIVEN.value().replace("$sender$", main.getInstance().pluginname)
 					.replace("$amount$", String.valueOf(stack.getAmount()))
 					.replace("$item$", Auction.getItemName(stack))
 					.replace("$name$", Auction.getDisplayName(stack))
@@ -71,7 +71,7 @@ public class GiveQueue {
 			queue.put(player.getName(), stacks);
 		}
 		
-		main.instance.giveQueue.set("Queue." + player.getName() + ".item", queue.get(player.getName()));
+		main.getInstance().giveQueue.set("Queue." + player.getName() + ".item", queue.get(player.getName()));
 		try {
 			config.save();
 		} catch (IOException e) {

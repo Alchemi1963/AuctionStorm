@@ -45,6 +45,14 @@ Auction:
   #Default: 30
   AntiSnipe-Time-Added: 30
   
+  #Taxes:
+  #the bid tax is the amount of money taken from a player for every bid.
+  #The bid tax defaults to 0.
+  #the sell tax is the percentage of the selling price taken from the seller.
+  #this must be between 0 and 1, where 1 is 100%. The sell tax defaults to 0.05 (5%) 
+  BidTax: 0
+  SellTax: 0.05
+  
   #Seconds to wait before starting next auction in queue.
   #Default: 2
   Start-Delay: 2

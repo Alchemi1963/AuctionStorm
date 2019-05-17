@@ -1,10 +1,12 @@
 package com.alchemi.as.objects;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -12,35 +14,49 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
 
 import com.alchemi.al.configurations.SexyConfiguration;
+import com.alchemi.al.objects.base.ConfigBase;
 import com.alchemi.as.main;
 
-public class Config {
+public class Config extends ConfigBase {
 
-	public static SexyConfiguration config;
-	public static SexyConfiguration messages;
-
-	private interface ConfigInterface {
+	public Config() throws FileNotFoundException, IOException, InvalidConfigurationException {
+		super(main.getInstance());
 		
-		Object value();
-		
-		void get();
-		
-		boolean asBoolean();
-		
-		String asString();
-		
-		Sound asSound();
-		
-		List<String> asStringList();
-		
-		int asInt();
-		
-		ItemStack asItemStack();
-		
-		Material asMaterial();
 	}
 	
-	public static enum MESSAGES{
+	public static enum ConfigEnum implements IConfigEnum {
+		
+		CONFIG(new File(main.getInstance().getDataFolder(), "config.yml"), 23), 
+		MESSAGES(new File(main.getInstance().getDataFolder(), "messages.yml"), 25);
+		
+		final File file;
+		final int version;
+		SexyConfiguration config;
+
+		private ConfigEnum(File file, int version) {
+			this.file = file;
+			this.version = version;
+			this.config = SexyConfiguration.loadConfiguration(file);
+		}
+		
+		@Override
+		public SexyConfiguration getConfig() {
+			return config;
+		}
+		
+		@Override
+		public File getFile() {
+			return file;
+		}
+		
+		@Override
+		public int getVersion() {
+			return version;
+		}
+		
+	}
+	
+	public static enum MESSAGES implements IMessage{
 		
 		AUCTION_START("AuctionStorm.Auction.Start"),
 		AUCTION_STARTNAMED("AuctionStorm.Auction.StartNamed"),
@@ -119,16 +135,26 @@ public class Config {
 		}
 		
 		public void get() { 
-			value = messages.getString(key);
+			value = ConfigEnum.MESSAGES.getConfig().getString(key);
 			
 		}
 		
 		public String value() {
 			return value;
 		}
+
+		@Override
+		public String key() {
+			return key;
+		}
+
+		@Override
+		public SexyConfiguration getConfig() {
+			return ConfigEnum.MESSAGES.getConfig();
+		}
 	}
 	
-	public static enum AUCTION implements ConfigInterface {
+	public static enum AUCTION implements IConfig {
 		
 		SOUND_PLAY("Auction.Sound.Play"),
 		SOUND_PAY("Auction.Sound.Pay"),
@@ -143,6 +169,8 @@ public class Config {
 		DISPLAYLORE("Auction.displayLore"),
 		ANTISNIPE_TRESHOLD("Auction.AntiSnipe-Treshold"),
 		ANTISNIPE_TIME_ADDED("Auction.AntiSnipe-Time-Added"),
+		BIDTAX("Auction.BidTax"),
+		SELLTAX("Auction.SellTax"),
 		START_DELAY("Auction.Start-Delay"),
 		START_DEFAULTS_PRICE("Auction.Start-Defaults.Price"),
 		START_DEFAULTS_INCREMENT("Auction.Start-Defaults.Increment"),
@@ -167,7 +195,7 @@ public class Config {
 				
 		@Override
 		public void get() {
-			value = config.get(key);
+			value = ConfigEnum.CONFIG.getConfig().get(key);
 		}
 		
 		@Override
@@ -202,6 +230,10 @@ public class Config {
 		@Override
 		public int asInt() {
 			return Integer.valueOf(asString());
+		}
+		
+		public double asDouble() {
+			return Double.valueOf(asString());
 		}
 		
 		@Override
@@ -222,9 +254,19 @@ public class Config {
 				return (List<Integer>) value;
 			} catch (ClassCastException e) { return null; }
 		}
+
+		@Override
+		public String key() {
+			return key;
+		}
+
+		@Override
+		public SexyConfiguration getConfig() {
+			return ConfigEnum.CONFIG.getConfig();
+		}
 	}
 	
-	public static enum VAULT implements ConfigInterface {
+	public static enum VAULT implements IConfig {
 		
 		VALUTA_SINGULAR("Vault.valutaSingular"),
 		VALUTA_PLURAL("Vault.valutaPlural");
@@ -237,11 +279,9 @@ public class Config {
 			get();
 		}
 		
-		
-		
 		@Override
 		public void get() {
-			value = config.get(key);
+			value = ConfigEnum.CONFIG.getConfig().get(key);
 		}
 
 		@Override
@@ -289,96 +329,46 @@ public class Config {
 		public Material asMaterial() {
 			return Material.valueOf(asString());
 		}
-	}
-	
-	public static void enable() throws FileNotFoundException, IOException, InvalidConfigurationException {
-		config = SexyConfiguration.loadConfiguration(main.CONFIG_FILE);
-		messages = SexyConfiguration.loadConfiguration(main.MESSAGES_FILE);
+		
+		@Override
+		public String key() {
+			return key;
+		}
 
-		for (SexyConfiguration file : new SexyConfiguration[] {messages, config}) {
-			
-			int version;
-			if (file.equals(config)) {
-				version = main.CONFIG_FILE_VERSION;
-			} else if (file.equals(messages)) {
-				version = main.MESSAGES_FILE_VERSION;
-			} else version = 0;
-			
-			if(!file.getFile().exists()) {
-				main.instance.saveResource(file.getFile().getName(), false);
-			}
-			config.setComment("broadcastFormat", "# The formatting of the broadcast text.");
-			
-			if(!file.isSet("File-Version-Do-Not-Edit") 
-					|| !file.get("File-Version-Do-Not-Edit").equals(version)) {
-				main.messenger.print("Your $file$ is outdated! Updating...".replace("$file$", file.getFile().getName()));
-				file.load(new InputStreamReader(main.instance.getResource(file.getFile().getName())));
-				file.update(SexyConfiguration.loadConfiguration(new InputStreamReader(main.instance.getResource(file.getFile().getName()))));
-				file.set("File-Version-Do-Not-Edit", version);
-				file.save();
-				main.messenger.print("File successfully updated!");
-			}
-		}
-		
-		
-		for (AUCTION value : AUCTION.values()) {
-			value.get();
-		}
-		
-		for (VAULT value : VAULT.values()) {
-			value.get();
-		}
-		
-		for (MESSAGES value : MESSAGES.values()) {
-			value.get();
-		}
-		
-		for (String mat : AUCTION.BANNED_ITEMS.asStringList()) {
-			
-			main.banned_items.add(Material.getMaterial(mat));
-				
+		@Override
+		public SexyConfiguration getConfig() {
+			return ConfigEnum.CONFIG.getConfig();
 		}
 	}
 	
-	public static void reload() {
-		config = SexyConfiguration.loadConfiguration(config.getFile());
-		messages = SexyConfiguration.loadConfiguration(messages.getFile());
-		
-		for (AUCTION value : AUCTION.values()) {
-			value.get();
-		}
-		
-		for (VAULT value : VAULT.values()) {
-			value.get();
-		}
-		
-		for (MESSAGES value : MESSAGES.values()) {
-			value.get();
-		}
+	@Override
+	public void reload() {
+		super.reload();
 		
 		main.banned_items.clear();
-		for (String mat : config.getStringList("Auction.Banned-Items")) {
+		for (String mat : ConfigEnum.CONFIG.getConfig().getStringList("Auction.Banned-Items")) {
 				main.banned_items.add(Material.getMaterial(mat));
 		}
 	}
-	
-	public static void save() {
-		for (AUCTION value : AUCTION.values()) {
-			config.set(value.key, value.value);
-		}
-		
-		for (VAULT value : VAULT.values()) {
-			config.set(value.key, value.value);
-		}
-		
-		for (MESSAGES value : MESSAGES.values()) {
-			messages.set(value.key, value.value);
-		}
-		
-		try {
-			config.save();
-			messages.save();
-		} catch (IOException e) {e.printStackTrace();}
+
+	@Override
+	protected IConfigEnum[] getConfigs() {
+		return ConfigEnum.values();
+	}
+
+	@Override
+	protected Set<IConfig> getEnums() {
+		Set<IConfig> set = new HashSet<IConfig>();
+		set.addAll(Arrays.asList(AUCTION.values()));
+		set.addAll(Arrays.asList(VAULT.values()));
+		return set;
+	}
+
+	@Override
+	protected Set<IMessage> getMessages() {
+		return new HashSet<IMessage>() {{
+			addAll(Arrays.asList(MESSAGES.values()));
+		}};
 	}
 	
 }

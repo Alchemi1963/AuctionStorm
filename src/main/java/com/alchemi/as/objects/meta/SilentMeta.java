@@ -6,7 +6,7 @@ import com.alchemi.as.main;
 public class SilentMeta extends BaseMeta {
 
 	public SilentMeta(boolean silence) {
-		super(main.instance, silence);
+		super(main.getInstance(), silence);
 	}
 
 }

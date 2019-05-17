@@ -17,16 +17,16 @@ public class Logging {
 	
 	public Logging(String fileName) {
 		this.fileName = fileName;
-		this.file = new File(main.instance.getDataFolder(), fileName);
+		this.file = new File(main.getInstance().getDataFolder(), fileName);
 		if (!this.file.exists()) {
-			main.messenger.print(fileName + " does not exist, creating it now...");
+			main.getInstance().getMessenger().print(fileName + " does not exist, creating it now...");
 			
 			try {
 				this.file.createNewFile();
-				main.messenger.print("Log file created as " + fileName);
+				main.getInstance().getMessenger().print("Log file created as " + fileName);
 			} catch (IOException e) {
 				e.printStackTrace();
-				main.messenger.print("Could not create " + fileName);
+				main.getInstance().getMessenger().print("Could not create " + fileName);
 			}
 		}
 		this.logger = YamlConfiguration.loadConfiguration(file);

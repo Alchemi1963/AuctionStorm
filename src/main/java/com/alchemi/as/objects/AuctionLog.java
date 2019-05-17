@@ -49,7 +49,7 @@ public class AuctionLog{
 	}
 	
 	public AuctionLog(String seller, String sellerID, String buyer, String buyerID, int price, ItemStack object, boolean refunded, CarbonDating id) {
-		if (buyer != null) this.buyer = main.instance.getServer().getPlayer(buyer);
+		if (buyer != null) this.buyer = main.getInstance().getServer().getPlayer(buyer);
 		else this.buyer = null;
 		this.price = price;
 		this.object = object;
@@ -63,10 +63,10 @@ public class AuctionLog{
 			this.buyerID = UUID.fromString(buyerID);
 		} catch (IllegalArgumentException ignored) {}
 		
-		if (main.instance.getServer().getPlayer(seller) == null && this.sellerID != null) this.seller = main.instance.getServer().getOfflinePlayer(this.sellerID);
-		else if (main.instance.getServer().getPlayer(seller) != null) this.seller = main.instance.getServer().getPlayer(seller);
+		if (main.getInstance().getServer().getPlayer(seller) == null && this.sellerID != null) this.seller = main.getInstance().getServer().getOfflinePlayer(this.sellerID);
+		else if (main.getInstance().getServer().getPlayer(seller) != null) this.seller = main.getInstance().getServer().getPlayer(seller);
 		else this.seller = null;
-		if (this.buyer == null && this.buyerID != null) this.buyer = main.instance.getServer().getOfflinePlayer(this.buyerID);
+		if (this.buyer == null && this.buyerID != null) this.buyer = main.getInstance().getServer().getOfflinePlayer(this.buyerID);
 		
 		if (this.seller.isOnline()) sellerName = this.seller.getPlayer().getDisplayName();
 		else sellerName = this.seller.getName();
@@ -183,7 +183,7 @@ public class AuctionLog{
 		if (sender instanceof Player) {
 			sender.sendMessage(Messenger.cc(msg));
 		} else {
-			main.messenger.print( "\n" + msg, false);
+			main.getInstance().getMessenger().print( "\n" + msg, false);
 		}
 	}
 
@@ -199,8 +199,8 @@ public class AuctionLog{
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 				
-			if (sender instanceof Player) main.messenger.sendMessage(send, sender);
-			else main.messenger.print(send);
+			if (sender instanceof Player) main.getInstance().getMessenger().sendMessage(send, sender);
+			else main.getInstance().getMessenger().print(send);
 				
 			return;
 		} else if (buyer != null) {
@@ -212,7 +212,7 @@ public class AuctionLog{
 						.replace("$name$", Auction.getDisplayName(object))
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-				main.messenger.sendMessage(send, buyer.getPlayer());
+				main.getInstance().getMessenger().sendMessage(send, buyer.getPlayer());
 			}
 					
 			if (seller.isOnline()) {
@@ -223,10 +223,10 @@ public class AuctionLog{
 						.replace("$name$", Auction.getDisplayName(object))
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-				main.messenger.sendMessage(send, seller.getPlayer());
+				main.getInstance().getMessenger().sendMessage(send, seller.getPlayer());
 			}
-			main.econ.depositPlayer(buyer, price);
-			main.econ.withdrawPlayer(seller, price);
+			main.getInstance().econ.depositPlayer(buyer, price);
+			main.getInstance().econ.withdrawPlayer(seller, price);
 			
 			
 		} else {
@@ -238,8 +238,8 @@ public class AuctionLog{
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			
-		if (sender instanceof Player) main.messenger.sendMessage(send, sender);
-		else main.messenger.print(send);
+		if (sender instanceof Player) main.getInstance().getMessenger().sendMessage(send, sender);
+		else main.getInstance().getMessenger().print(send);
 		}
 		
 		if (seller.isOnline()) {
@@ -250,7 +250,7 @@ public class AuctionLog{
 					.replace("$name$", Auction.getDisplayName(object))
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-			main.messenger.sendMessage(send, seller.getPlayer());
+			main.getInstance().getMessenger().sendMessage(send, seller.getPlayer());
 		}
 		
 		Auction.giveItemStack(object, seller);
@@ -269,8 +269,8 @@ public class AuctionLog{
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			
-		if (sender instanceof Player) main.messenger.sendMessage(send, sender);
-		else main.messenger.print(send);
+		if (sender instanceof Player) main.getInstance().getMessenger().sendMessage(send, sender);
+		else main.getInstance().getMessenger().print(send);
 			return;
 		}
 		
@@ -282,7 +282,7 @@ public class AuctionLog{
 					.replace("$name$", Auction.getDisplayName(object))
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-			main.messenger.sendMessage(send, seller.getPlayer());
+			main.getInstance().getMessenger().sendMessage(send, seller.getPlayer());
 		}
 		Auction.giveItemStack(object, seller);
 		
@@ -300,8 +300,8 @@ public class AuctionLog{
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			
-		if (sender instanceof Player) main.messenger.sendMessage(send, sender);
-		else main.messenger.print(send);
+		if (sender instanceof Player) main.getInstance().getMessenger().sendMessage(send, sender);
+		else main.getInstance().getMessenger().print(send);
 			return;
 		}
 		
@@ -314,7 +314,7 @@ public class AuctionLog{
 						.replace("$name$", Auction.getDisplayName(object))
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-				main.messenger.sendMessage(send, buyer.getPlayer());
+				main.getInstance().getMessenger().sendMessage(send, buyer.getPlayer());
 			}
 			if (seller.isOnline()) {
 				String send = Config.MESSAGES.COMMAND_ADMIN_MONEY_TAKEN.value()
@@ -324,10 +324,10 @@ public class AuctionLog{
 						.replace("$name$", Auction.getDisplayName(object))
 						.replace("$price$", String.valueOf(price))
 						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-				main.messenger.sendMessage(send, seller.getPlayer());
+				main.getInstance().getMessenger().sendMessage(send, seller.getPlayer());
 			}
-			main.econ.depositPlayer(buyer, price);
-			main.econ.withdrawPlayer(seller, price);
+			main.getInstance().econ.depositPlayer(buyer, price);
+			main.getInstance().econ.withdrawPlayer(seller, price);
 			main.logger.setRefunded(this, identifier);
 		} else {
 			String send = Config.MESSAGES.COMMAND_ADMIN_NO_BUYER.value()
@@ -338,8 +338,8 @@ public class AuctionLog{
 					.replace("$price$", String.valueOf(price))
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			
-		if (sender instanceof Player) main.messenger.sendMessage(send, sender);
-		else main.messenger.print(send);
+		if (sender instanceof Player) main.getInstance().getMessenger().sendMessage(send, sender);
+		else main.getInstance().getMessenger().print(send);
 		}
 		
 	}

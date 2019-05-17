@@ -40,7 +40,7 @@ public class BaseTabComplete implements TabCompleter {
 			if (Queue.current_auction != null 
 					&& Queue.current_auction.getSeller().equals((Player) sender) 
 					|| sender.hasPermission("as.end")) list.add("end");
-			if (main.instance.permsEnabled() 
+			if (main.getInstance().permsEnabled() 
 					&& sender.hasPermission("as.togglesilence")) list.add("silence"); 
 			
 		} else if (args.length == 2) {

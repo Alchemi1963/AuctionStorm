@@ -13,5 +13,9 @@ public class UserLoginHandler implements Listener {
 		if (main.gq.isPlayerQueued(e.getPlayer())) {
 			main.gq.give(e.getPlayer());
 		}
+		
+		if (e.getPlayer().hasPermission("al.forcecheckupdate") && main.getInstance().uc != null) {
+			main.getInstance().uc.check();
+		}
 	}	
 }

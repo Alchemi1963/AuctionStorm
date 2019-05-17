@@ -55,7 +55,7 @@ public class CommandPlayer implements CommandExecutor{
 				
 				if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) { //help command
 				
-					main.messenger.sendMessage(help_message, player);
+					main.getInstance().getMessenger().sendMessage(help_message, player);
 					return true;
 					
 				} else if (args[0].equalsIgnoreCase("start") && args.length < 2 || args[0].equalsIgnoreCase("s")  && args.length < 2) { 
@@ -65,7 +65,7 @@ public class CommandPlayer implements CommandExecutor{
 							.replace("$format$", start_usage)
 							.replace("$player$", (player).getDisplayName());
 					
-					main.messenger.sendMessage(send, sender);
+					main.getInstance().getMessenger().sendMessage(send, sender);
 					return true;
 					
 				} else if (args.length >= 1) { 
@@ -90,7 +90,7 @@ public class CommandPlayer implements CommandExecutor{
 										.replace("$format$", bid_usage)
 										.replace("$player$", (player).getDisplayName());
 								
-								main.messenger.sendMessage(send, sender);
+								main.getInstance().getMessenger().sendMessage(send, sender);
 								return true;
 							}
 							
@@ -102,7 +102,7 @@ public class CommandPlayer implements CommandExecutor{
 									.replace("$format$", bid_usage)
 									.replace("$player$", (player).getDisplayName());
 							
-							main.messenger.sendMessage(send, sender);
+							main.getInstance().getMessenger().sendMessage(send, sender);
 							
 						}
 						return true;
@@ -119,7 +119,7 @@ public class CommandPlayer implements CommandExecutor{
 							try {
 								int id = Integer.valueOf(args[1]);
 								if (id >= Queue.getQueueLength() ) {
-									main.messenger.sendMessage(Config.MESSAGES.AUCTION_QUEUE_NOTAUCTION.value().replace("$id$", args[1]), sender);
+									main.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_QUEUE_NOTAUCTION.value().replace("$id$", args[1]), sender);
 									return true;
 								}
 								
@@ -163,7 +163,7 @@ public class CommandPlayer implements CommandExecutor{
 												.replace("$sender$", cmd.getName())
 												.replace("$player$", (player).getDisplayName());
 										
-										main.messenger.sendMessage(send, sender);
+										main.getInstance().getMessenger().sendMessage(send, sender);
 									}
 									return true;
 								}
@@ -191,7 +191,7 @@ public class CommandPlayer implements CommandExecutor{
 											.replace("$sender$", cmd.getName())
 											.replace("$player$", (player).getDisplayName());
 									
-									main.messenger.sendMessage(send, sender);
+									main.getInstance().getMessenger().sendMessage(send, sender);
 								}
 								return true;
 							}
@@ -219,7 +219,7 @@ public class CommandPlayer implements CommandExecutor{
 										.replace("$sender$", cmd.getName())
 										.replace("$player$", (player).getDisplayName());
 								
-								main.messenger.sendMessage(send, sender);
+								main.getInstance().getMessenger().sendMessage(send, sender);
 							}
 							return true;
 						}
@@ -263,25 +263,25 @@ public class CommandPlayer implements CommandExecutor{
 									.replace("$amount$", String.valueOf(page))
 									.replace("$total$", String.valueOf(pages));
 							
-							main.messenger.sendMessage(msg, sender);
+							main.getInstance().getMessenger().sendMessage(msg, sender);
 							return true;
 						} else {
-							main.messenger.sendMessage(Config.MESSAGES.AUCTION_QUEUE_EMPTY.value(), sender);
+							main.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_QUEUE_EMPTY.value(), sender);
 							return true;
 						}
 						
 					} else if (Arrays.asList("hide", "hidebroadcasts", "silence").contains(args[0]) 
-							&& main.instance.permsEnabled()
+							&& main.getInstance().permsEnabled()
 							&& player.hasPermission("as.togglesilence")) { //silence command
 						
 						if (PersistentMeta.hasMeta(player, SilentMeta.class) && PersistentMeta.getMeta(player, SilentMeta.class).asBoolean()) {//player.hasPermission("as.silence")) {
 							//main.perm.playerRemove(null, player, "as.silence");
 							PersistentMeta.setMeta(player, new SilentMeta(false));
-							main.messenger.sendMessage(MESSAGES.COMMAND_UNSILENCED.value(), player);
+							main.getInstance().getMessenger().sendMessage(MESSAGES.COMMAND_UNSILENCED.value(), player);
 						} else {
 							//main.perm.playerAdd(null, player, "as.silence");
 							PersistentMeta.setMeta(player, new SilentMeta(true));
-							main.messenger.sendMessage(MESSAGES.COMMAND_SILENCED.value(), player);
+							main.getInstance().getMessenger().sendMessage(MESSAGES.COMMAND_SILENCED.value(), player);
 						}
 						
 						return true;
@@ -304,7 +304,7 @@ public class CommandPlayer implements CommandExecutor{
 									.replace("$format$", start_usage)
 									.replace("$player$", (player).getDisplayName());
 							
-							main.messenger.sendMessage(send, sender);
+							main.getInstance().getMessenger().sendMessage(send, sender);
 						}
 						
 						
@@ -329,7 +329,7 @@ public class CommandPlayer implements CommandExecutor{
 					.replace("$sender$", cmd.getName())
 					.replace("$player$", (player).getDisplayName());
 			
-			main.messenger.sendMessage(send, sender);
+			main.getInstance().getMessenger().sendMessage(send, sender);
 			return true;
 		}
 		if (sender instanceof Player) {
@@ -337,7 +337,7 @@ public class CommandPlayer implements CommandExecutor{
 					.replace("$sender$", cmd.getName())
 					.replace("$player$", ((Player) sender).getDisplayName());
 			
-			main.messenger.sendMessage(send, sender);
+			main.getInstance().getMessenger().sendMessage(send, sender);
 		}
 		return true;
 	}
