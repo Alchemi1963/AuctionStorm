@@ -89,7 +89,7 @@ public class Auction {
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
 						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()), seller);
 				return;
-			} else if (price <= Config.AUCTION.MINIMUM_VALUES_PRICE.asInt()) {
+			} else if (price < Config.AUCTION.MINIMUM_VALUES_PRICE.asInt()) {
 				main.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_PRICEINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_PRICE.asString())
@@ -114,7 +114,7 @@ public class Auction {
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
 						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
-			} else if (price <= Config.AUCTION.MINIMUM_VALUES_DURATION.asInt()) {
+			} else if (price < Config.AUCTION.MINIMUM_VALUES_DURATION.asInt()) {
 				main.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_DURATIONINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_DURATION.asString())
@@ -139,7 +139,7 @@ public class Auction {
 						.replace("$duration$", Config.AUCTION.MAXIMUM_VALUES_DURATION.asString())
 						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
-			} else if (price <= Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt()) {
+			} else if (price < Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt()) {
 				main.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_INCREMENTINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_INCREMENT.asString())
@@ -152,7 +152,7 @@ public class Auction {
 				return;
 			}
 		}
-		if (amount <= Config.AUCTION.MINIMUM_VALUES_AMOUNT.asInt()) {
+		if (amount < Config.AUCTION.MINIMUM_VALUES_AMOUNT.asInt()) {
 			main.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_AMOUNT.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_AMOUNT.asString())

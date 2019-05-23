@@ -36,7 +36,6 @@ public class AuctionMessenger extends Messenger{
 		}
 		
 		for (Player r : Bukkit.getOnlinePlayers()) {
-//			if (r.hasPermission("as.silence")) continue;
 			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
 			
 			if (useTag) r.sendMessage(cc(tag + " " + msg));
@@ -87,7 +86,6 @@ public class AuctionMessenger extends Messenger{
 		
 		
 		for (Player r : Library.instance.getServer().getOnlinePlayers()) {
-//			if (r.hasPermission("as.silence")) continue;
 			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
 			
 			r.spigot().sendMessage(mainComponent);
