@@ -1,10 +1,10 @@
-package com.alchemi.as.listeners.events;
+package me.alchemi.as.listeners.events;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.alchemi.as.main;
+import me.alchemi.as.main;
 
 public class UserLoginHandler implements Listener {
 

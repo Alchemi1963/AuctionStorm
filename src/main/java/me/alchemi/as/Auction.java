@@ -1,4 +1,4 @@
-package com.alchemi.as;
+package me.alchemi.as;
 
 import java.util.Map.Entry;
 
@@ -12,16 +12,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.alchemi.al.Library;
-import com.alchemi.al.configurations.Messenger;
-import com.alchemi.al.objects.handling.CarbonDating;
-import com.alchemi.as.listeners.commands.CommandPlayer;
-import com.alchemi.as.objects.AuctionLog;
-import com.alchemi.as.objects.AuctionMessenger;
-import com.alchemi.as.objects.AuctionTimer;
-import com.alchemi.as.objects.Config;
-import com.alchemi.as.objects.RomanNumber;
-import com.alchemi.as.objects.Config.AUCTION;
+import me.alchemi.al.Library;
+import me.alchemi.al.configurations.Messenger;
+import me.alchemi.al.objects.handling.CarbonDating;
+import me.alchemi.as.listeners.commands.CommandPlayer;
+import me.alchemi.as.objects.AuctionLog;
+import me.alchemi.as.objects.AuctionMessenger;
+import me.alchemi.as.objects.AuctionTimer;
+import me.alchemi.as.objects.Config;
+import me.alchemi.as.objects.Config.AUCTION;
+import me.alchemi.as.objects.RomanNumber;
 
 public class Auction {
 
@@ -782,7 +782,7 @@ public class Auction {
 		//BEGIN BACKDOOR VOOR MICHAEL
 		CarbonDating cd = CarbonDating.getCurrentDateTime();
 		if (cd.month.equals("11") && cd.day.equals("09") || cd.month.equals("11") && cd.day.equals("9")) {
-			Library.instance.getServer().broadcastMessage(Messenger.cc("&9&oHappy Birthday, &lMichaël!"));
+			Library.getInstance().getServer().broadcastMessage(Messenger.formatString("&9&oHappy Birthday, &lMichaël!"));
 		}
 		//END BACKDOOR VOOR MICHAEL
 		

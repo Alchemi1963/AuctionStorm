@@ -1,14 +1,14 @@
-package com.alchemi.as.listeners.commands;
+package me.alchemi.as.listeners.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.alchemi.as.Auction;
-import com.alchemi.as.Queue;
-import com.alchemi.as.main;
-import com.alchemi.as.objects.Config;
+import me.alchemi.as.Auction;
+import me.alchemi.as.Queue;
+import me.alchemi.as.main;
+import me.alchemi.as.objects.Config;
 
 public class CommandBid implements CommandExecutor{
 

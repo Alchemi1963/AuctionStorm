@@ -1,4 +1,4 @@
-package com.alchemi.as.objects;
+package me.alchemi.as.objects;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,9 +13,9 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
 
-import com.alchemi.al.configurations.SexyConfiguration;
-import com.alchemi.al.objects.base.ConfigBase;
-import com.alchemi.as.main;
+import me.alchemi.al.configurations.SexyConfiguration;
+import me.alchemi.al.objects.base.ConfigBase;
+import me.alchemi.as.main;
 
 public class Config extends ConfigBase {
 

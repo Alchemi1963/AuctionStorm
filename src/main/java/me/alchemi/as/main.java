@@ -1,4 +1,4 @@
-package com.alchemi.as;
+package me.alchemi.as;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,22 +12,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import com.alchemi.al.configurations.Messenger;
-import com.alchemi.al.configurations.SexyConfiguration;
-import com.alchemi.al.objects.base.PluginBase;
-import com.alchemi.al.objects.handling.UpdateChecker;
-import com.alchemi.as.listeners.commands.CommandAdmin;
-import com.alchemi.as.listeners.commands.CommandBid;
-import com.alchemi.as.listeners.commands.CommandPlayer;
-import com.alchemi.as.listeners.events.AdminTabComplete;
-import com.alchemi.as.listeners.events.BaseTabComplete;
-import com.alchemi.as.listeners.events.BidTabComplete;
-import com.alchemi.as.listeners.events.UserLoginHandler;
-import com.alchemi.as.objects.AuctionMessenger;
-import com.alchemi.as.objects.Config;
-import com.alchemi.as.objects.GiveQueue;
-import com.alchemi.as.objects.Logging;
-
+import me.alchemi.al.configurations.Messenger;
+import me.alchemi.al.configurations.SexyConfiguration;
+import me.alchemi.al.objects.base.PluginBase;
+import me.alchemi.al.objects.handling.UpdateChecker;
+import me.alchemi.as.listeners.commands.CommandAdmin;
+import me.alchemi.as.listeners.commands.CommandBid;
+import me.alchemi.as.listeners.commands.CommandPlayer;
+import me.alchemi.as.listeners.events.AdminTabComplete;
+import me.alchemi.as.listeners.events.BaseTabComplete;
+import me.alchemi.as.listeners.events.BidTabComplete;
+import me.alchemi.as.listeners.events.UserLoginHandler;
+import me.alchemi.as.objects.AuctionMessenger;
+import me.alchemi.as.objects.Config;
+import me.alchemi.as.objects.GiveQueue;
+import me.alchemi.as.objects.Logging;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 

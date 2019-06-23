@@ -1,4 +1,4 @@
-package com.alchemi.as.objects;
+package me.alchemi.as.objects;
 
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -9,10 +9,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.alchemi.al.configurations.Messenger;
-import com.alchemi.al.objects.handling.CarbonDating;
-import com.alchemi.as.Auction;
-import com.alchemi.as.main;
+import me.alchemi.al.configurations.Messenger;
+import me.alchemi.al.objects.handling.CarbonDating;
+import me.alchemi.as.Auction;
+import me.alchemi.as.main;
 
 public class AuctionLog{
 
@@ -181,7 +181,7 @@ public class AuctionLog{
 		msg = msg + Config.MESSAGES.AUCTION_INFO_FOOTER.value().substring(0, Config.MESSAGES.AUCTION_INFO_FOOTER.value().length() - 1);
 		
 		if (sender instanceof Player) {
-			sender.sendMessage(Messenger.cc(msg));
+			sender.sendMessage(Messenger.formatString(msg));
 		} else {
 			main.getInstance().getMessenger().print( "\n" + msg, false);
 		}

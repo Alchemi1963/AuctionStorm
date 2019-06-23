@@ -1,4 +1,4 @@
-package com.alchemi.as.listeners.commands;
+package me.alchemi.as.listeners.commands;
 
 import java.util.Arrays;
 
@@ -9,14 +9,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.alchemi.al.configurations.Messenger;
-import com.alchemi.al.objects.meta.PersistentMeta;
-import com.alchemi.as.Auction;
-import com.alchemi.as.Queue;
-import com.alchemi.as.main;
-import com.alchemi.as.objects.Config;
-import com.alchemi.as.objects.Config.MESSAGES;
-import com.alchemi.as.objects.meta.SilentMeta;
+import me.alchemi.al.configurations.Messenger;
+import me.alchemi.al.objects.meta.PersistentMeta;
+import me.alchemi.as.Auction;
+import me.alchemi.as.Queue;
+import me.alchemi.as.main;
+import me.alchemi.as.objects.Config;
+import me.alchemi.as.objects.Config.MESSAGES;
+import me.alchemi.as.objects.meta.SilentMeta;
 
 
 public class CommandPlayer implements CommandExecutor{
@@ -108,7 +108,7 @@ public class CommandPlayer implements CommandExecutor{
 						return true;
 					
 					} else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("i")) { //info command
-						if (Queue.current_auction != null) player.sendMessage(Messenger.cc(Queue.current_auction.getInfo(true)));
+						if (Queue.current_auction != null) player.sendMessage(Messenger.formatString(Queue.current_auction.getInfo(true)));
 						else Auction.noAuction(player);
 						
 						return true;

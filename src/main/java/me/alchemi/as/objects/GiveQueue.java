@@ -1,4 +1,4 @@
-package com.alchemi.as.objects;
+package me.alchemi.as.objects;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.alchemi.al.configurations.SexyConfiguration;
-import com.alchemi.as.Auction;
-import com.alchemi.as.main;
+import me.alchemi.al.configurations.SexyConfiguration;
+import me.alchemi.as.Auction;
+import me.alchemi.as.main;
 
 public class GiveQueue {
 

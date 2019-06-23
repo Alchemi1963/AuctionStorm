@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.alchemi</groupId>
+  <groupId>me.alchemi</groupId>
   <artifactId>AuctionStorm</artifactId>
   <name>AuctionStorm</name>
-  <version>1.7.2</version>
+  <version>1.7.3</version>
   <build>
     <finalName>${project.name}</finalName>
     <sourceDirectory>src/main/java</sourceDirectory>
@@ -54,10 +54,10 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.alchemi</groupId>
+      <groupId>me.alchemi</groupId>
       <artifactId>AlchemicLibrary</artifactId>
       <version>LATEST</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

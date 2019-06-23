@@ -1,4 +1,4 @@
-package com.alchemi.as.objects;
+package me.alchemi.as.objects;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,8 +6,8 @@ import java.io.IOException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
-import com.alchemi.al.objects.handling.CarbonDating;
-import com.alchemi.as.main;
+import me.alchemi.al.objects.handling.CarbonDating;
+import me.alchemi.as.main;
 
 public class Logging {
 

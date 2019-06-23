@@ -1,10 +1,10 @@
-package com.alchemi.as;
+package me.alchemi.as;
 
 import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
 
-import com.alchemi.as.objects.Config;
+import me.alchemi.as.objects.Config;
 
 public class Queue {
 

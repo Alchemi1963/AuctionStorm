@@ -1,4 +1,4 @@
-package com.alchemi.as.listeners.events;
+package me.alchemi.as.listeners.events;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import com.alchemi.as.main;
-import com.alchemi.as.Queue;
+import me.alchemi.as.Queue;
+import me.alchemi.as.main;
 
 public class BaseTabComplete implements TabCompleter {
     

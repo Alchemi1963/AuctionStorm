@@ -1,7 +1,7 @@
-package com.alchemi.as.objects.meta;
+package me.alchemi.as.objects.meta;
 
-import com.alchemi.al.objects.meta.BaseMeta;
-import com.alchemi.as.main;
+import me.alchemi.al.objects.meta.BaseMeta;
+import me.alchemi.as.main;
 
 public class SilentMeta extends BaseMeta {
 

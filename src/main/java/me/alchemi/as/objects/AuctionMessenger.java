@@ -1,16 +1,15 @@
-package com.alchemi.as.objects;
+package me.alchemi.as.objects;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.alchemi.al.Library;
-import com.alchemi.al.configurations.Messenger;
-import com.alchemi.al.objects.handling.nmsutils.ItemStacks;
-import com.alchemi.al.objects.meta.PersistentMeta;
-import com.alchemi.as.main;
-import com.alchemi.as.objects.meta.SilentMeta;
-
+import me.alchemi.al.Library;
+import me.alchemi.al.configurations.Messenger;
+import me.alchemi.al.objects.handling.nmsutils.ItemStacks;
+import me.alchemi.al.objects.meta.PersistentMeta;
+import me.alchemi.as.main;
+import me.alchemi.as.objects.meta.SilentMeta;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -38,8 +37,8 @@ public class AuctionMessenger extends Messenger{
 		for (Player r : Bukkit.getOnlinePlayers()) {
 			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
 			
-			if (useTag) r.sendMessage(cc(tag + " " + msg));
-			else r.sendMessage(cc(msg));
+			if (useTag) r.sendMessage(formatString(tag + " " + msg));
+			else r.sendMessage(formatString(msg));
 		}
 	}
 	
@@ -53,7 +52,7 @@ public class AuctionMessenger extends Messenger{
 			}
 			return;
 		}
-		for (Player r : Library.instance.getServer().getOnlinePlayers()) {
+		for (Player r : Library.getInstance().getServer().getOnlinePlayers()) {
 //			if (r.hasPermission("as.silence")) continue;
 			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
 			
@@ -77,15 +76,15 @@ public class AuctionMessenger extends Messenger{
 		
 		TextComponent mainComponent;
 		if (tag.endsWith(" ")) {
-			mainComponent = new TextComponent(cc(tag + mainText));
+			mainComponent = new TextComponent(formatString(tag + mainText));
 		} else {
-			mainComponent = new TextComponent(cc(tag + " " + mainText));
+			mainComponent = new TextComponent(formatString(tag + " " + mainText));
 		}
 		 
 		mainComponent.setHoverEvent(ev);
 		
 		
-		for (Player r : Library.instance.getServer().getOnlinePlayers()) {
+		for (Player r : Library.getInstance().getServer().getOnlinePlayers()) {
 			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
 			
 			r.spigot().sendMessage(mainComponent);

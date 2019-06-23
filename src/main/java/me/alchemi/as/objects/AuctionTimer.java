@@ -1,9 +1,9 @@
-package com.alchemi.as.objects;
+package me.alchemi.as.objects;
 
 import org.bukkit.Bukkit;
 
-import com.alchemi.as.Queue;
-import com.alchemi.as.main;
+import me.alchemi.as.Queue;
+import me.alchemi.as.main;
 
 public class AuctionTimer implements Runnable{
 
