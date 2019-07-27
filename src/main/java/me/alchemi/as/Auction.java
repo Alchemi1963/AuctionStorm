@@ -3,7 +3,6 @@ package me.alchemi.as;
 import java.util.Map.Entry;
 
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -13,6 +12,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import me.alchemi.al.Library;
+import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.al.configurations.Messenger;
 import me.alchemi.al.objects.handling.CarbonDating;
 import me.alchemi.as.listeners.commands.CommandPlayer;
@@ -63,9 +63,9 @@ public class Auction {
 		incrementS = String.valueOf(increment);
 		
 		object = seller.getInventory().getItemInMainHand();
-		
+				
 		//check values
-		if (main.banned_items.contains(object.getType())) {
+		if (main.banned_items.contains(MaterialWrapper.getFromItemStack(object))) {
 			main.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_BANNED.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
@@ -178,7 +178,7 @@ public class Auction {
 			object = getFromInventory(object, amount);
 			
 		} else {
-			seller.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+			seller.getInventory().setItemInMainHand(new ItemStack(MaterialWrapper.AIR.getMaterial()));
 		}
 		
 		
@@ -243,7 +243,7 @@ public class Auction {
 		int size = amount2 - seller.getInventory().getItemInMainHand().getAmount();
 		int invsize = CommandPlayer.scanInventory(seller.getInventory(), object2);
 		object2.setAmount(amount2);
-		seller.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+		seller.getInventory().setItemInMainHand(new ItemStack(MaterialWrapper.AIR.getMaterial()));
 		for (ItemStack s : seller.getInventory()) {
 			
 			if (size <= 0) {
@@ -596,13 +596,13 @@ public class Auction {
 		if (object.getItemMeta() instanceof Damageable && ((Damageable)object.getItemMeta()).hasDamage()) {
 			msg = msg + Config.MESSAGES.AUCTION_INFO_DURABILITY.value()
 					.replace("$player$", seller.getDisplayName())
-					.replace("$amount$", String.valueOf(object.getType().getMaxDurability() - ((Damageable)object.getItemMeta()).getDamage()))
+					.replace("$amount$", String.valueOf(MaterialWrapper.getFromItemStack(object).getMaxDurability() - ((Damageable)object.getItemMeta()).getDamage()))
 					.replace("$item$", Auction.getItemName(object))
 					.replace("$name$", Auction.getDisplayName(object))
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$incr$", incrementS)
-					.replace("$durability$", String.valueOf(object.getType().getMaxDurability()));
+					.replace("$durability$", String.valueOf(MaterialWrapper.getFromItemStack(object).getMaxDurability()));
 			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 					
 		}
@@ -880,9 +880,9 @@ public class Auction {
 	}
 	
 	public static String getItemName(ItemStack item) {
-		if (item == null) return "INVALID ITEM";
-		else if (!item.hasItemMeta()) return item.getType().name().toLowerCase().replaceAll("_", " ");
-		return item.getItemMeta().hasLocalizedName() ? item.getItemMeta().getLocalizedName() : item.getType().name().toLowerCase().replaceAll("_", " ");
+		if (item == null) throw new NullPointerException("ItemStack cannot be null!");
+		else if (!item.hasItemMeta()) return MaterialWrapper.getFromItemStack(item).getKey().getKey().toLowerCase().replace("_", " ");
+		return item.getItemMeta().hasLocalizedName() ? item.getItemMeta().getLocalizedName() : MaterialWrapper.getFromItemStack(item).getKey().getKey().toLowerCase().replaceAll("_", " ");
 	}
 	
 	public static String getDisplayName(ItemStack item) {

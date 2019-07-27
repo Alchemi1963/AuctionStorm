@@ -6,7 +6,6 @@ import org.bukkit.inventory.ItemStack;
 
 import me.alchemi.al.Library;
 import me.alchemi.al.configurations.Messenger;
-import me.alchemi.al.objects.handling.nmsutils.ItemStacks;
 import me.alchemi.al.objects.meta.PersistentMeta;
 import me.alchemi.as.main;
 import me.alchemi.as.objects.meta.SilentMeta;
@@ -71,7 +70,7 @@ public class AuctionMessenger extends Messenger{
 			return;
 		}
 		
-		BaseComponent[] comps = new BaseComponent[] {new TextComponent(ItemStacks.itemStackToJSON(item))};
+		BaseComponent[] comps = new BaseComponent[] {new TextComponent(Library.getInstance().NMSHandler.itemStackToJSON(item))};
 		HoverEvent ev = new HoverEvent( HoverEvent.Action.SHOW_ITEM, comps);
 		
 		TextComponent mainComponent;

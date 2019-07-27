@@ -13,6 +13,7 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
 
+import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.al.configurations.SexyConfiguration;
 import me.alchemi.al.objects.base.ConfigBase;
 import me.alchemi.as.main;
@@ -245,7 +246,7 @@ public class Config extends ConfigBase {
 		
 		@Override
 		public Material asMaterial() {
-			return Material.valueOf(asString());
+			return MaterialWrapper.getWrapper(asString());
 		}
 		
 		@SuppressWarnings("unchecked")
@@ -263,6 +264,12 @@ public class Config extends ConfigBase {
 		@Override
 		public SexyConfiguration getConfig() {
 			return ConfigEnum.CONFIG.getConfig();
+		}
+
+		@Override
+		public List<Float> asFloatList() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 	
@@ -327,7 +334,7 @@ public class Config extends ConfigBase {
 
 		@Override
 		public Material asMaterial() {
-			return Material.valueOf(asString());
+			return MaterialWrapper.getWrapper(asString());
 		}
 		
 		@Override
@@ -339,6 +346,24 @@ public class Config extends ConfigBase {
 		public SexyConfiguration getConfig() {
 			return ConfigEnum.CONFIG.getConfig();
 		}
+
+		@Override
+		public double asDouble() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public List<Float> asFloatList() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public List<Integer> asIntList() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 	
 	@Override
@@ -347,7 +372,7 @@ public class Config extends ConfigBase {
 		
 		main.banned_items.clear();
 		for (String mat : ConfigEnum.CONFIG.getConfig().getStringList("Auction.Banned-Items")) {
-				main.banned_items.add(Material.getMaterial(mat));
+				main.banned_items.add(MaterialWrapper.getWrapper(mat));
 		}
 	}
 
