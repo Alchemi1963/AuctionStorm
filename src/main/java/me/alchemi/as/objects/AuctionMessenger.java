@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import me.alchemi.al.Library;
 import me.alchemi.al.configurations.Messenger;
 import me.alchemi.al.objects.meta.PersistentMeta;
-import me.alchemi.as.main;
+import me.alchemi.as.Storm;
 import me.alchemi.as.objects.meta.SilentMeta;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -15,7 +15,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class AuctionMessenger extends Messenger{
 
-	public AuctionMessenger(main plug) {
+	public AuctionMessenger(Storm plug) {
 		super(plug);
 	}
 	

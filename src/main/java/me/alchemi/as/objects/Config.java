@@ -16,19 +16,19 @@ import org.bukkit.inventory.ItemStack;
 import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.al.configurations.SexyConfiguration;
 import me.alchemi.al.objects.base.ConfigBase;
-import me.alchemi.as.main;
+import me.alchemi.as.Storm;
 
 public class Config extends ConfigBase {
 
 	public Config() throws FileNotFoundException, IOException, InvalidConfigurationException {
-		super(main.getInstance());
+		super(Storm.getInstance());
 		
 	}
 	
 	public static enum ConfigEnum implements IConfigEnum {
 		
-		CONFIG(new File(main.getInstance().getDataFolder(), "config.yml"), 23), 
-		MESSAGES(new File(main.getInstance().getDataFolder(), "messages.yml"), 25);
+		CONFIG(new File(Storm.getInstance().getDataFolder(), "config.yml"), 23), 
+		MESSAGES(new File(Storm.getInstance().getDataFolder(), "messages.yml"), 25);
 		
 		final File file;
 		final int version;
@@ -370,9 +370,9 @@ public class Config extends ConfigBase {
 	public void reload() {
 		super.reload();
 		
-		main.banned_items.clear();
+		Storm.banned_items.clear();
 		for (String mat : ConfigEnum.CONFIG.getConfig().getStringList("Auction.Banned-Items")) {
-				main.banned_items.add(MaterialWrapper.getWrapper(mat));
+				Storm.banned_items.add(MaterialWrapper.getWrapper(mat));
 		}
 	}
 

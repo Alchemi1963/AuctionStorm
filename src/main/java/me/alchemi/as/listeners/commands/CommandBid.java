@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import me.alchemi.as.Auction;
 import me.alchemi.as.Queue;
-import me.alchemi.as.main;
+import me.alchemi.as.Storm;
 import me.alchemi.as.objects.Config;
 
 public class CommandBid implements CommandExecutor{
@@ -15,7 +15,7 @@ public class CommandBid implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		if (main.hasPermission(sender, "as.base") && sender instanceof Player && cmd.getName().equals("bid")) {
+		if (Storm.hasPermission(sender, "as.base") && sender instanceof Player && cmd.getName().equals("bid")) {
 			
 			if (Queue.current_auction == null) {
 				Auction.noAuction((Player) sender);
@@ -32,7 +32,7 @@ public class CommandBid implements CommandExecutor{
 				else {
 					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
 					
-					main.getInstance().getMessenger().sendMessage(send, sender);
+					Storm.getInstance().getMessenger().sendMessage(send, sender);
 				}
 				
 				if (args.length == 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), (Player) sender, true);
@@ -40,7 +40,7 @@ public class CommandBid implements CommandExecutor{
 				
 				String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
 				
-				main.getInstance().getMessenger().sendMessage(send, sender);
+				Storm.getInstance().getMessenger().sendMessage(send, sender);
 				
 			}
 			
@@ -49,7 +49,7 @@ public class CommandBid implements CommandExecutor{
 		if (sender instanceof Player) {
 			String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value().replace("$sender$", cmd.getName()).replace("$player$", ((Player) sender).getDisplayName());
 			
-			main.getInstance().getMessenger().sendMessage(send, sender);
+			Storm.getInstance().getMessenger().sendMessage(send, sender);
 		}
 		return true;
 	}

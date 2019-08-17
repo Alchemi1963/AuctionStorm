@@ -7,7 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import me.alchemi.al.objects.handling.CarbonDating;
-import me.alchemi.as.main;
+import me.alchemi.as.Storm;
 
 public class Logging {
 
@@ -17,16 +17,16 @@ public class Logging {
 	
 	public Logging(String fileName) {
 		this.fileName = fileName;
-		this.file = new File(main.getInstance().getDataFolder(), fileName);
+		this.file = new File(Storm.getInstance().getDataFolder(), fileName);
 		if (!this.file.exists()) {
-			main.getInstance().getMessenger().print(fileName + " does not exist, creating it now...");
+			Storm.getInstance().getMessenger().print(fileName + " does not exist, creating it now...");
 			
 			try {
 				this.file.createNewFile();
-				main.getInstance().getMessenger().print("Log file created as " + fileName);
+				Storm.getInstance().getMessenger().print("Log file created as " + fileName);
 			} catch (IOException e) {
 				e.printStackTrace();
-				main.getInstance().getMessenger().print("Could not create " + fileName);
+				Storm.getInstance().getMessenger().print("Could not create " + fileName);
 			}
 		}
 		this.logger = YamlConfiguration.loadConfiguration(file);

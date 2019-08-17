@@ -11,7 +11,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import me.alchemi.as.Queue;
-import me.alchemi.as.main;
+import me.alchemi.as.Storm;
 
 public class BaseTabComplete implements TabCompleter {
     
@@ -24,7 +24,7 @@ public class BaseTabComplete implements TabCompleter {
 		if (!(sender instanceof Player))
 			return tabSuggest;
 
-		if (!main.hasPermission(sender, "as.base"))
+		if (!Storm.hasPermission(sender, "as.base"))
 			return tabSuggest;
 		
 		if (args.length == 1 && !Arrays.asList("start", "s", "help", "info", "i", "cancel", "bid", "listqueue").contains(args[0])) {
@@ -36,11 +36,11 @@ public class BaseTabComplete implements TabCompleter {
 			if (Queue.current_auction != null) list.add("bid");
 			if (Queue.current_auction != null 
 					&& Queue.current_auction.getSeller().equals((Player) sender) 
-					|| main.hasPermission(sender, "as.cancel")) list.add("cancel");
+					|| Storm.hasPermission(sender, "as.cancel")) list.add("cancel");
 			if (Queue.current_auction != null 
 					&& Queue.current_auction.getSeller().equals((Player) sender) 
 					|| sender.hasPermission("as.end")) list.add("end");
-			if (main.getInstance().permsEnabled() 
+			if (Storm.getInstance().permsEnabled() 
 					&& sender.hasPermission("as.togglesilence")) list.add("silence"); 
 			
 		} else if (args.length == 2) {

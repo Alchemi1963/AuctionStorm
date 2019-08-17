@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import me.alchemi.as.main;
+import me.alchemi.as.Storm;
 
 public class AdminTabComplete implements TabCompleter {
     
@@ -26,7 +26,7 @@ public class AdminTabComplete implements TabCompleter {
 		if (!(sender instanceof Player))
 			return tabSuggest;
 
-		if (!main.hasPermission(sender, "as.admin"))
+		if (!Storm.hasPermission(sender, "as.admin"))
 			return tabSuggest;
 		
 		System.out.println(Arrays.asList(args));
@@ -34,17 +34,17 @@ public class AdminTabComplete implements TabCompleter {
 		
 		if (args.length == 1 && !Arrays.asList(new String[] {"reload", "return", "info"}).contains(args[0])) {
 			
-			if (main.hasPermission(sender, "as.reload")) list.add("reload");
-			if (main.hasPermission(sender, "as.defaults")) list.add("defaults");
-			if (main.hasPermission(sender, "as.return")) list.add("return");
+			if (Storm.hasPermission(sender, "as.reload")) list.add("reload");
+			if (Storm.hasPermission(sender, "as.defaults")) list.add("defaults");
+			if (Storm.hasPermission(sender, "as.return")) list.add("return");
 			list.add("info");
 			
 		} else if (args.length == 2) {
-			if (args[0].equalsIgnoreCase("return") && main.hasPermission(sender, "as.return")
+			if (args[0].equalsIgnoreCase("return") && Storm.hasPermission(sender, "as.return")
 					|| args[0].equalsIgnoreCase("info")) {
 				
 				for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
-					if (main.logger.logger.contains(op.getName())) {
+					if (Storm.logger.logger.contains(op.getName())) {
 						list.add(op.getName());
 					}
 				}
@@ -55,21 +55,21 @@ public class AdminTabComplete implements TabCompleter {
 			
 		} else if (args.length == 3) {
 			
-			if (args[0].equalsIgnoreCase("return") && main.hasPermission(sender, "as.return")) {
+			if (args[0].equalsIgnoreCase("return") && Storm.hasPermission(sender, "as.return")) {
 				list.add("all");
 				list.add("item");
 				list.add("money");
 			} else if (args[0].equalsIgnoreCase("info")) {
-				if (main.logger.logger.contains(args[1])) {
-					Set<String> set = main.logger.logger.getConfigurationSection(args[1]).getValues(false).keySet();
+				if (Storm.logger.logger.contains(args[1])) {
+					Set<String> set = Storm.logger.logger.getConfigurationSection(args[1]).getValues(false).keySet();
 					set.remove("UUID");
 					list.addAll(set);
 				}
 			}
 		} else if (args.length == 4) {
-			if (args[0].equalsIgnoreCase("return") && main.hasPermission(sender, "as.return")) {
-				if (main.logger.logger.contains(args[1])) {
-					Set<String> set = main.logger.logger.getConfigurationSection(args[1]).getValues(false).keySet();
+			if (args[0].equalsIgnoreCase("return") && Storm.hasPermission(sender, "as.return")) {
+				if (Storm.logger.logger.contains(args[1])) {
+					Set<String> set = Storm.logger.logger.getConfigurationSection(args[1]).getValues(false).keySet();
 					set.remove("UUID");
 					list.addAll(set);
 				}

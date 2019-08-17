@@ -4,18 +4,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import me.alchemi.as.main;
+import me.alchemi.as.Storm;
 
 public class UserLoginHandler implements Listener {
 
 	@EventHandler
 	public static void PlayerJoin(PlayerJoinEvent e) {
-		if (main.gq.isPlayerQueued(e.getPlayer())) {
-			main.gq.give(e.getPlayer());
+		if (Storm.gq.isPlayerQueued(e.getPlayer())) {
+			Storm.gq.give(e.getPlayer());
 		}
 		
-		if (e.getPlayer().hasPermission("al.forcecheckupdate") && main.getInstance().uc != null) {
-			main.getInstance().uc.check();
+		if (e.getPlayer().hasPermission("al.forcecheckupdate") && Storm.getInstance().uc != null) {
+			Storm.getInstance().uc.check();
 		}
 	}	
 }

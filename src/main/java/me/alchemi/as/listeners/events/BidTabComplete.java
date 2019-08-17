@@ -10,7 +10,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import me.alchemi.as.Queue;
-import me.alchemi.as.main;
+import me.alchemi.as.Storm;
 
 public class BidTabComplete implements TabCompleter {
     
@@ -23,7 +23,7 @@ public class BidTabComplete implements TabCompleter {
 		if (!(sender instanceof Player))
 			return tabSuggest;
 
-		if (!main.hasPermission(sender, "as.base"))
+		if (!Storm.hasPermission(sender, "as.base"))
 			return tabSuggest;
 		
 		if (Queue.current_auction == null) {

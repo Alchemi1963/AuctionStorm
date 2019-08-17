@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -30,14 +33,14 @@ import me.alchemi.as.objects.Logging;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
-public class main extends PluginBase implements Listener {
+public class Storm extends PluginBase implements Listener {
 	public String pluginname;
 	public Economy econ;
 	private Permission perm;
 	
 	public Config config;
 	
-	private static main instance;
+	private static Storm instance;
 	public static Logging logger;
 	public static GiveQueue gq;
 	public SexyConfiguration giveQueue;
@@ -48,6 +51,15 @@ public class main extends PluginBase implements Listener {
 
 	@Override
 	public void onEnable() {
+		
+		for (String s : getDescription().getDepend()) {
+			if (Bukkit.getPluginManager().getPlugin(s) == null 
+					|| !Bukkit.getPluginManager().isPluginEnabled(s)) {
+				Bukkit.getLogger().log(Level.SEVERE, ChatColor.translateAlternateColorCodes('&', "&4&lDependency %depend% not found, disabling plugin...".replace("%depend%", s)));
+				getServer().getPluginManager().disablePlugin(this);
+			}
+		}
+		
 		instance = this;
 		pluginname = getDescription().getName();
 		
@@ -145,7 +157,7 @@ public class main extends PluginBase implements Listener {
 		return perm != null;
 	}
 	
-	public static main getInstance() {
+	public static Storm getInstance() {
 		return instance;
 	}
 	
