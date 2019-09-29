@@ -65,7 +65,7 @@ public class Auction {
 		object = seller.getInventory().getItemInMainHand();
 				
 		//check values
-		if (Storm.banned_items.contains(MaterialWrapper.getFromItemStack(object))) {
+		if (Storm.banned_items.contains(MaterialWrapper.getWrapper(object))) {
 			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_BANNED.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
@@ -596,13 +596,13 @@ public class Auction {
 		if (object.getItemMeta() instanceof Damageable && ((Damageable)object.getItemMeta()).hasDamage()) {
 			msg = msg + Config.MESSAGES.AUCTION_INFO_DURABILITY.value()
 					.replace("$player$", seller.getDisplayName())
-					.replace("$amount$", String.valueOf(MaterialWrapper.getFromItemStack(object).getMaxDurability() - ((Damageable)object.getItemMeta()).getDamage()))
+					.replace("$amount$", String.valueOf(MaterialWrapper.getWrapper(object).getMaxDurability() - ((Damageable)object.getItemMeta()).getDamage()))
 					.replace("$item$", Auction.getItemName(object))
 					.replace("$name$", Auction.getDisplayName(object))
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$incr$", incrementS)
-					.replace("$durability$", String.valueOf(MaterialWrapper.getFromItemStack(object).getMaxDurability()));
+					.replace("$durability$", String.valueOf(MaterialWrapper.getWrapper(object).getMaxDurability()));
 			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 					
 		}
@@ -881,8 +881,8 @@ public class Auction {
 	
 	public static String getItemName(ItemStack item) {
 		if (item == null) throw new NullPointerException("ItemStack cannot be null!");
-		else if (!item.hasItemMeta()) return MaterialWrapper.getFromItemStack(item).getKey().getKey().toLowerCase().replace("_", " ");
-		return item.getItemMeta().hasLocalizedName() ? item.getItemMeta().getLocalizedName() : MaterialWrapper.getFromItemStack(item).getKey().getKey().toLowerCase().replaceAll("_", " ");
+		else if (!item.hasItemMeta()) return MaterialWrapper.getWrapper(item).getKey().getKey().toLowerCase().replace("_", " ");
+		return item.getItemMeta().hasLocalizedName() ? item.getItemMeta().getLocalizedName() : MaterialWrapper.getWrapper(item).getKey().getKey().toLowerCase().replaceAll("_", " ");
 	}
 	
 	public static String getDisplayName(ItemStack item) {

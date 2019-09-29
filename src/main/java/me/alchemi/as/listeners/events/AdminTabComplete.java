@@ -29,9 +29,6 @@ public class AdminTabComplete implements TabCompleter {
 		if (!Storm.hasPermission(sender, "as.admin"))
 			return tabSuggest;
 		
-		System.out.println(Arrays.asList(args));
-		System.out.println(args[0].equalsIgnoreCase("reload"));
-		
 		if (args.length == 1 && !Arrays.asList(new String[] {"reload", "return", "info"}).contains(args[0])) {
 			
 			if (Storm.hasPermission(sender, "as.reload")) list.add("reload");

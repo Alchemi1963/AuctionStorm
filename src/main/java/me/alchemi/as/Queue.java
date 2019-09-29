@@ -32,7 +32,6 @@ public class Queue {
 		if (returnItems) {
 			
 			for (Auction a : queue) {
-				System.out.println(a.getInfo(false));
 				a.forceEndAuction(reason, ender, true);
 			}
 			
