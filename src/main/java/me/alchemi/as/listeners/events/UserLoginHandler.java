@@ -13,9 +13,5 @@ public class UserLoginHandler implements Listener {
 		if (Storm.gq.isPlayerQueued(e.getPlayer())) {
 			Storm.gq.give(e.getPlayer());
 		}
-		
-		if (e.getPlayer().hasPermission("al.forcecheckupdate") && Storm.getInstance().uc != null) {
-			Storm.getInstance().uc.check();
-		}
 	}	
 }
