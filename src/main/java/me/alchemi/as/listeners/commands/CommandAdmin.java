@@ -65,7 +65,7 @@ public class CommandAdmin implements CommandExecutor{
 				
 				if (args.length == 4) datetime = new CarbonDating(args[3]);
 				else if (args.length == 8){
-					datetime = new CarbonDating(args[3], args[4], args[5], args[6], args[7]);
+					datetime = new CarbonDating(args[3], args[4], args[5], args[6], args[7], "0");
 				}
 				
 				if (datetime == null || datetime.getCarbonDate() == null) {
@@ -132,7 +132,7 @@ public class CommandAdmin implements CommandExecutor{
 				
 				if (args.length == 3) datetime = new CarbonDating(args[2]);
 				else if (args.length == 7){
-					datetime = new CarbonDating(args[2], args[3], args[4], args[5], args[6]);
+					datetime = new CarbonDating(args[2], args[3], args[4], args[5], args[6], "0");
 				}
 				
 				if (datetime == null || datetime.getCarbonDate() == null) {
