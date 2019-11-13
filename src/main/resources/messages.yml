@@ -17,20 +17,33 @@ AuctionStorm:
   Tag: '&7[&6&lAuctionStorm&r&7]'
 
   Auction:
-    Start: "$player$ &6has started an auction\n&6It is $amount$ $item$ for $price$ $valuta$."
-    StartNamed: "$player$ &6has started an auction!\n&6It is $amount$ $item$ named $name$&6 for $price$ $valuta$."
+    Start: >-
+     "$player$ &6has started an auction\n&6It is $amount$ $item$ for $price$
+      $valuta$."
+    StartNamed: >-
+     "$player$ &6has started an auction!\n&6It is $amount$ $item$ named
+      $name$&6 for $price$ $valuta$."
     Queued: '&9Your auction has been queued.'
     Wrong:
-        None: '&6There is currently no auction, you can use &9/as start &6to start one.'
+        None: >-
+         '&6There is currently no auction, you can use &9/as start &6to start
+          one.'
         Item: '&4You need to hold an item to start an auction.'
         Creative: '&4You have no permission to start an auction in creative.'
         Enough: '&4You don''t have $amount$ of $item$.'
-        Price: '&cYou need to specify a price between $amount$ $valuta$ and $price$ $valuta$.'
-        PriceInf: '&cYou need to specify a price greater than $amount$ $valuta$.'
-        Duration: '&cYou need to specify a duration between $amount$ and $duration$.'
-        DurationInf: '&cYou need to specify a duration greater than $amount$.'
-        Increment: '&cYou need to specify an increment between $amount$ and $incr$.'
-        IncrementInf: '&cYou need to specify an increment greater than $amount$.'
+        Price: >-
+         '&cYou need to specify a price between $amount$ $valuta$ and $price$
+          $valuta$.'
+        PriceInf: >-
+         '&cYou need to specify a price greater than $amount$ $valuta$.'
+        Duration: >-
+         '&cYou need to specify a duration between $amount$ and $duration$.'
+        DurationInf: >-
+         '&cYou need to specify a duration greater than $amount$.'
+        Increment: >-
+         '&cYou need to specify an increment between $amount$ and $incr$.'
+        IncrementInf: >-
+         '&cYou need to specify an increment greater than $amount$.'
         Amount: '&cYou need to specify an amount greater that $amount$.'
         Banned: '&cThis item cannot be auctioned.'
     Bid:
@@ -51,9 +64,14 @@ AuctionStorm:
         Paid-To: 'You have paid $player$ $price$ $valuta$.'
         Cancelled: '&9You cancelled your auction with number $id$.'
         Forced: 'The current auction has been cancelled by $sender$.'
-        ForcedSeller: 'Your auction with number $id$ has been cancelled by $sender$.'
-        ForcedReason: 'The current auction has been cancelled by $sender$ because of $reason$.'
-        ForcedReasonSeller: 'Your auction with number $id$ has been cancelled by $sender$ because of $reason$.'
+        ForcedSeller: >-
+         'Your auction with number $id$ has been cancelled by $sender$.'
+        ForcedReason: >-
+         'The current auction has been cancelled by $sender$ because of
+          $reason$.'
+        ForcedReasonSeller: >-
+         'Your auction with number $id$ has been cancelled by $sender$
+          because of $reason$.'
     Info:
         Get: '&9Use &6/auc info&9 to get more info about it.'
         Header: '&l&9=====Current Auction====='
@@ -79,7 +97,9 @@ AuctionStorm:
         NotAuction: '&9There is no auction with number $id$.'
     
   Command:
-    No-Permission: '&c&oYou don''t have permission to use &9$sender$&c.&r&c If you believe this is an error, &nplease contact an administrator.'
+    No-Permission: >-
+     '&c&oYou don''t have permission to use &9$sender$&c.&r&c If you believe
+      this is an error, &nplease contact an administrator.'
     Wrong-Format: '&cPlease use: &9$format$'
     Unknown: '&cUnknown command. Use &9/as help &cfor more information.'
     Given: '&9You have been given $amount$ $item$.'
@@ -91,6 +111,7 @@ AuctionStorm:
         Log-Non-Existent: '&cThis log doesn''t exists.'
         Items-Returned: '&9Your items have been returned.'
         Money-Returned: '&9You have recieved a refund.'
-        Money-Taken: '&4$player$ has gotten a refund for your auction of $item$.'
+        Money-Taken: >-
+         '&4$player$ has gotten a refund for your auction of $item$.'
         Already-Refunded: '&cThis auction has already been refunded.'
         No-Buyer: '&cThis auction had no buyer.'

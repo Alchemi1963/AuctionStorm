@@ -13,8 +13,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import me.alchemi.al.Library;
 import me.alchemi.al.api.MaterialWrapper;
-import me.alchemi.al.configurations.Messenger;
-import me.alchemi.al.objects.handling.CarbonDating;
 import me.alchemi.as.listeners.commands.CommandPlayer;
 import me.alchemi.as.objects.AuctionLog;
 import me.alchemi.as.objects.AuctionMessenger;
@@ -779,13 +777,6 @@ public class Auction {
 	
 	public void forceEndAuction(String reason, Player ender, boolean all) {
 
-		//BEGIN BACKDOOR VOOR MICHAEL
-		CarbonDating cd = CarbonDating.getCurrentDateTime();
-		if (cd.month.equals("11") && cd.day.equals("09") || cd.month.equals("11") && cd.day.equals("9")) {
-			Library.getInstance().getServer().broadcastMessage(Messenger.formatString("&9&oHappy Birthday, &lMichaël!"));
-		}
-		//END BACKDOOR VOOR MICHAEL
-		
 		timer.cancelTask(task_id);
 		
 		giveItemStack(object, seller);
