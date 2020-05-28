@@ -17,9 +17,10 @@ AuctionStorm:
   Tag: '&7[&6&lAuctionStorm&r&7]'
 
   Auction:
-    Start: >
+    Start: >-
      $player$ &6has started an auction
-     &6It is $amount$ $item$ for $price$ $valuta$.
+     &6It is $amount$ $item$ for $price$
+     $valuta$.
     StartNamed: >-
      $player$ &6has started an auction!
      &6It is $amount$ $item$ named

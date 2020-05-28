@@ -32,25 +32,25 @@ public class AuctionTimer implements Runnable{
 		
 		} else if (Config.AUCTION.NOTIFY.asBoolean() && Config.AUCTION.NOTIFYTIMES.asIntList().contains(time)) { //custom time notification
 			
-			Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_TIME_NOTIFY.value().replace("$amount$", String.valueOf(time)));
+			Storm.getInstance().getMessenger().broadcast(Messages.AUCTION_TIME_NOTIFY.value().replace("$amount$", String.valueOf(time)));
 			
 			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
-				Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_INFO_GET.value());
+				Storm.getInstance().getMessenger().broadcast(Messages.AUCTION_INFO_GET.value());
 			} else {
-				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) Storm.getInstance().getMessenger().broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
-				else ((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getObject());
+				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) Storm.getInstance().getMessenger().broadcastHover(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
+				else ((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getObject());
 			}
 		} 
 		else if (Config.AUCTION.NOTIFY.asBoolean() && time == Queue.current_auction.getDuration()/2) { //half-time notification
 			
-			Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_TIME_HALFTIME.value().replace("$amount$", String.valueOf(time))); 
+			Storm.getInstance().getMessenger().broadcast(Messages.AUCTION_TIME_HALFTIME.value().replace("$amount$", String.valueOf(time))); 
 			
 			
 			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
-				Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_INFO_GET.value());
+				Storm.getInstance().getMessenger().broadcast(Messages.AUCTION_INFO_GET.value());
 			} else {
-				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) Storm.getInstance().getMessenger().broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
-				else ((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Config.MESSAGES.AUCTION_INFO_GET.value(), Queue.current_auction.getObject());
+				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) Storm.getInstance().getMessenger().broadcastHover(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
+				else ((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getObject());
 			}
 		}
 		

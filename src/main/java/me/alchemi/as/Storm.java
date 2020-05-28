@@ -30,6 +30,7 @@ import me.alchemi.as.objects.AuctionMessenger;
 import me.alchemi.as.objects.Config;
 import me.alchemi.as.objects.GiveQueue;
 import me.alchemi.as.objects.Logging;
+import me.alchemi.as.objects.Messages;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -66,6 +67,8 @@ public class Storm extends PluginBase implements Listener {
 		SPIGOT_ID = 62778;
 		
 		setMessenger(new AuctionMessenger(this));
+		messenger.setMessages(Messages.values());
+		
 		messenger.print("Enabling AuctionStorm...");
 		
 		try {
@@ -74,18 +77,18 @@ public class Storm extends PluginBase implements Listener {
 		} catch (IOException | InvalidConfigurationException e) {
 			e.printStackTrace();
 			getServer().getPluginManager().disablePlugin(this);
-			Messenger.printStatic("Configs enabling errored, disabling plugin.", "&4[DodgeChallenger]");
+			Messenger.printS("Configs enabling errored, disabling plugin.", "&4[AuctionStorm]");
 		}
 		
 		if (Config.ConfigEnum.CONFIG.getConfig().getBoolean("update-checker", true)) uc = new UpdateChecker(this);
 		
-		if (!new File(getDataFolder(), "giveQueue.yml").exists()) saveResource("giveQueue.yml", false);
-		giveQueue = SexyConfiguration.loadConfiguration(new File(getDataFolder(), "giveQueue.yml"));
+		if (!new File(getDataFolder(), "queue.yml").exists()) saveResource("queue.yml", false);
+		giveQueue = SexyConfiguration.loadConfiguration(new File(getDataFolder(), "queue.yml"));
 		
 		if (Config.AUCTION.LOGAUCTIONS.asBoolean()) logger = new Logging("log.yml");
 		
 		if (!setupEconomy() ) {
-			messenger.print("[%s] - Disabled due to no Vault dependency found!");
+			messenger.print("Disabled due to no Vault dependency found!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }

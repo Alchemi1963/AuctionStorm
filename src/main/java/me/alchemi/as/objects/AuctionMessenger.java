@@ -28,7 +28,7 @@ public class AuctionMessenger extends Messenger{
 	public void broadcast(String msg, boolean useTag) {
 		if (msg.contains("\n")) {
 			for (String msg2 : msg.split("\n")) {
-				broadcast(msg2, useTag);
+				broadcast(msg2.trim(), useTag);
 			}
 			return;
 		}
@@ -36,7 +36,13 @@ public class AuctionMessenger extends Messenger{
 		for (Player r : Bukkit.getOnlinePlayers()) {
 			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
 			
-			if (useTag) r.sendMessage(formatString(tag + " " + msg));
+			if (useTag) {
+				if (tag.endsWith(" ") || msg.startsWith(" ")) {
+					r.sendMessage(formatString(tag + msg));
+				} else {
+					r.sendMessage(formatString(tag + " " + msg));
+				}
+			}
 			else r.sendMessage(formatString(msg));
 		}
 	}
@@ -44,37 +50,38 @@ public class AuctionMessenger extends Messenger{
 	@Override
 	public void broadcastHover(String mainText, String hoverText) {
 		mainText = colourMessage(mainText);
-		
 		if (mainText.contains("\n")) {
 			for (String msg : mainText.split("\n")) {
-				broadcastHover(msg, hoverText);
+				broadcastHover(msg.trim(), hoverText);
 			}
 			return;
 		}
 		for (Player r : Library.getInstance().getServer().getOnlinePlayers()) {
-//			if (r.hasPermission("as.silence")) continue;
+
 			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
-			
-			sendHoverMsg(r, tag + " " + mainText, hoverText);
+			if (tag.endsWith(" ") || mainText.startsWith(" ")) {
+				sendMessageHover(r, tag + " " + mainText, hoverText);
+			} else {
+				sendMessageHover(r, tag + " " + mainText, hoverText);
+			}
 			
 		}
 	}
 	
 	public void broadcastITEM(String mainText, ItemStack item) {
 		mainText = colourMessage(mainText);
-		
 		if (mainText.contains("\n")) {
 			for (String msg : mainText.split("\n")) {
-				broadcastITEM(msg, item);
+				broadcastITEM(msg.trim(), item);
 			}
 			return;
 		}
 		
-		BaseComponent[] comps = new BaseComponent[] {new TextComponent(Library.getInstance().NMSHandler.itemStackToJSON(item))};
+		BaseComponent[] comps = new BaseComponent[] {new TextComponent(Library.itemStackToJson(item))};
 		HoverEvent ev = new HoverEvent( HoverEvent.Action.SHOW_ITEM, comps);
 		
 		TextComponent mainComponent;
-		if (tag.endsWith(" ")) {
+		if (tag.endsWith(" ") || mainText.startsWith(" ")) {
 			mainComponent = new TextComponent(formatString(tag + mainText));
 		} else {
 			mainComponent = new TextComponent(formatString(tag + " " + mainText));

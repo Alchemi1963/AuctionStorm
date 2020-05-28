@@ -9,6 +9,7 @@ import me.alchemi.al.objects.handling.CarbonDating;
 import me.alchemi.as.Queue;
 import me.alchemi.as.Storm;
 import me.alchemi.as.objects.Config;
+import me.alchemi.as.objects.Messages;
 
 public class CommandAdmin implements CommandExecutor{
 	
@@ -25,7 +26,7 @@ public class CommandAdmin implements CommandExecutor{
 			
 			
 			if (args.length == 0) {
-				String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", admin_usage);
+				String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", admin_usage);
 				if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 				else send = send.replace("$player$", Storm.getInstance().pluginname);
 				
@@ -37,7 +38,7 @@ public class CommandAdmin implements CommandExecutor{
 			if (args[0].equalsIgnoreCase("return")) { //return command
 				
 				if (!Storm.hasPermission(sender, "as.return")) {
-					String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value().replace("$sender$", cmd.getName());
+					String send = Messages.COMMAND_NO_PERMISSION.value().replace("$sender$", cmd.getName());
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", Storm.getInstance().pluginname);
 					
@@ -45,7 +46,7 @@ public class CommandAdmin implements CommandExecutor{
 					return true;
 				
 				} else if (!Config.AUCTION.LOGAUCTIONS.asBoolean()) {
-					String send = Config.MESSAGES.COMMAND_ADMIN_LOGGING_DISABLED.value().replace("$sender$", cmd.getName());
+					String send = Messages.COMMAND_ADMIN_LOGGING_DISABLED.value().replace("$sender$", cmd.getName());
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", Storm.getInstance().pluginname);
 					
@@ -55,7 +56,7 @@ public class CommandAdmin implements CommandExecutor{
 				}
 				
 				if (args.length < 4) {
-					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", return_usage);
+					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", return_usage);
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", Storm.getInstance().pluginname);
 					
@@ -69,7 +70,7 @@ public class CommandAdmin implements CommandExecutor{
 				}
 				
 				if (datetime == null || datetime.getCarbonDate() == null) {
-					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", return_usage);
+					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", return_usage);
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", Storm.getInstance().pluginname);
 					
@@ -87,7 +88,7 @@ public class CommandAdmin implements CommandExecutor{
 					Storm.logger.readLog(args[2], datetime).returnMoneyToBuyer(sender);
 				} 
 				else {
-					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", return_usage);
+					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", return_usage);
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", Storm.getInstance().pluginname);
 					
@@ -98,7 +99,7 @@ public class CommandAdmin implements CommandExecutor{
 			
 			else if (args[0].equalsIgnoreCase("info")) { //info command
 				if (!Config.AUCTION.LOGAUCTIONS.asBoolean()) {
-					String send = Config.MESSAGES.COMMAND_ADMIN_LOGGING_DISABLED.value().replace("$sender$", cmd.getName());
+					String send = Messages.COMMAND_ADMIN_LOGGING_DISABLED.value().replace("$sender$", cmd.getName());
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", Storm.getInstance().pluginname);
 					
@@ -112,7 +113,7 @@ public class CommandAdmin implements CommandExecutor{
 						return true;
 					}
 					else {
-						String send = Config.MESSAGES.COMMAND_ADMIN_NO_LOGS.value().replace("$sender$", cmd.getName()).replace("$format$", info_usage);
+						String send = Messages.COMMAND_ADMIN_NO_LOGS.value().replace("$sender$", cmd.getName()).replace("$format$", info_usage);
 						if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 						else send = send.replace("$player$", Storm.getInstance().pluginname);
 						
@@ -122,7 +123,7 @@ public class CommandAdmin implements CommandExecutor{
 				}
 				
 				if (args.length < 3) {
-					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", info_usage);
+					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", info_usage);
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", Storm.getInstance().pluginname);
 					
@@ -136,7 +137,7 @@ public class CommandAdmin implements CommandExecutor{
 				}
 				
 				if (datetime == null || datetime.getCarbonDate() == null) {
-					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", info_usage);
+					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", info_usage);
 					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
 					else send = send.replace("$player$", Storm.getInstance().pluginname);
 					

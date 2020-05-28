@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import me.alchemi.as.Auction;
 import me.alchemi.as.Queue;
 import me.alchemi.as.Storm;
-import me.alchemi.as.objects.Config;
+import me.alchemi.as.objects.Messages;
 
 public class CommandBid implements CommandExecutor{
 
@@ -30,7 +30,7 @@ public class CommandBid implements CommandExecutor{
 			try {
 				if (args.length >= 1 && args[0] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), (Player) sender);
 				else {
-					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
+					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 				}
@@ -38,7 +38,7 @@ public class CommandBid implements CommandExecutor{
 				if (args.length == 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), (Player) sender, true);
 			} catch(NumberFormatException e) {
 				
-				String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
+				String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
 				
 				Storm.getInstance().getMessenger().sendMessage(send, sender);
 				
@@ -47,7 +47,7 @@ public class CommandBid implements CommandExecutor{
 			return true;
 		}
 		if (sender instanceof Player) {
-			String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value().replace("$sender$", cmd.getName()).replace("$player$", ((Player) sender).getDisplayName());
+			String send = Messages.COMMAND_NO_PERMISSION.value().replace("$sender$", cmd.getName()).replace("$player$", ((Player) sender).getDisplayName());
 			
 			Storm.getInstance().getMessenger().sendMessage(send, sender);
 		}

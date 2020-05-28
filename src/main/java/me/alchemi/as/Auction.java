@@ -3,6 +3,7 @@ package me.alchemi.as;
 import java.util.Map.Entry;
 
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -12,13 +13,13 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import me.alchemi.al.Library;
-import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.as.listeners.commands.CommandPlayer;
 import me.alchemi.as.objects.AuctionLog;
 import me.alchemi.as.objects.AuctionMessenger;
 import me.alchemi.as.objects.AuctionTimer;
 import me.alchemi.as.objects.Config;
 import me.alchemi.as.objects.Config.AUCTION;
+import me.alchemi.as.objects.Messages;
 import me.alchemi.as.objects.RomanNumber;
 
 public class Auction {
@@ -63,8 +64,8 @@ public class Auction {
 		object = seller.getInventory().getItemInMainHand();
 				
 		//check values
-		if (Storm.banned_items.contains(MaterialWrapper.getWrapper(object))) {
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_BANNED.value()
+		if (Storm.banned_items.contains(object.getType())) {
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_BANNED.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -77,7 +78,7 @@ public class Auction {
 		}
 		if (!(price >= Config.AUCTION.MINIMUM_VALUES_PRICE.asInt() && price <= Config.AUCTION.MAXIMUM_VALUES_PRICE.asInt())) {
 			if (Config.AUCTION.MAXIMUM_VALUES_PRICE.asInt() != -1) {
-				Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_PRICE.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_PRICE.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_PRICE.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -88,7 +89,7 @@ public class Auction {
 						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()), seller);
 				return;
 			} else if (price < Config.AUCTION.MINIMUM_VALUES_PRICE.asInt()) {
-				Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_PRICEINF.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_PRICEINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_PRICE.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -102,7 +103,7 @@ public class Auction {
 		}
 		if (!(duration >= Config.AUCTION.MINIMUM_VALUES_DURATION.asInt() && duration <= Config.AUCTION.MAXIMUM_VALUES_DURATION.asInt())) {
 			if (Config.AUCTION.MAXIMUM_VALUES_DURATION.asInt() != -1) {
-				Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_DURATION.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_DURATION.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_DURATION.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -113,7 +114,7 @@ public class Auction {
 						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
 			} else if (price < Config.AUCTION.MINIMUM_VALUES_DURATION.asInt()) {
-				Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_DURATIONINF.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_DURATIONINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_DURATION.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -127,7 +128,7 @@ public class Auction {
 		}
 		if (!(increment >= Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt() && increment <= Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asInt())) {
 			if (Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asInt() != -1) {
-				Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_INCREMENT.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_INCREMENT.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_AMOUNT.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -138,7 +139,7 @@ public class Auction {
 						.replace("$incr$", Config.AUCTION.MAXIMUM_VALUES_INCREMENT.asString()),seller);
 				return;
 			} else if (price < Config.AUCTION.MINIMUM_VALUES_INCREMENT.asInt()) {
-				Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_INCREMENTINF.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_INCREMENTINF.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_INCREMENT.asString())
 						.replace("$item$", Auction.getItemName(object))
@@ -151,7 +152,7 @@ public class Auction {
 			}
 		}
 		if (amount < Config.AUCTION.MINIMUM_VALUES_AMOUNT.asInt()) {
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_AMOUNT.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_AMOUNT.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", Config.AUCTION.MINIMUM_VALUES_AMOUNT.asString())
 					.replace("$item$", Auction.getItemName(object))
@@ -176,12 +177,12 @@ public class Auction {
 			object = getFromInventory(object, amount);
 			
 		} else {
-			seller.getInventory().setItemInMainHand(new ItemStack(MaterialWrapper.AIR.getMaterial()));
+			seller.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 		}
 		
 		
 		if (getItemName(object).equalsIgnoreCase("air")) {
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_ITEM.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_ITEM.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -195,7 +196,7 @@ public class Auction {
 						
 		} else if (seller.getGameMode().equals(GameMode.CREATIVE) && !Storm.hasPermission(seller, "as.creative") && !Config.AUCTION.ALLOWCREATIVE.asBoolean()) {
 			
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_CREATIVE.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_CREATIVE.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -210,7 +211,7 @@ public class Auction {
 		} 
 		if (object.getAmount() < this.amount) {
 			
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_ENOUGH.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_ENOUGH.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -223,7 +224,7 @@ public class Auction {
 			return;
 			
 		}
-		if (Queue.getQueueLength() >= 1) Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_QUEUED.value()
+		if (Queue.getQueueLength() >= 1) ((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_QUEUED.value()
 				.replace("$player$", seller.getDisplayName())
 				.replace("$amount$", amountS)
 				.replace("$item$", Auction.getItemName(object))
@@ -241,7 +242,7 @@ public class Auction {
 		int size = amount2 - seller.getInventory().getItemInMainHand().getAmount();
 		int invsize = CommandPlayer.scanInventory(seller.getInventory(), object2);
 		object2.setAmount(amount2);
-		seller.getInventory().setItemInMainHand(new ItemStack(MaterialWrapper.AIR.getMaterial()));
+		seller.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
 		for (ItemStack s : seller.getInventory()) {
 			
 			if (size <= 0) {
@@ -315,7 +316,7 @@ public class Auction {
 		if (getDisplayName(object) != "") {
 			
 			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
-				Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_STARTNAMED.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_STARTNAMED.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", amountS)
 						.replace("$item$", Auction.getItemName(object))
@@ -326,7 +327,7 @@ public class Auction {
 						.replace("$incr$", incrementS));
 			} else {
 				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) {
-					Storm.getInstance().getMessenger().broadcastHover(Config.MESSAGES.AUCTION_STARTNAMED.value()
+					((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastHover(Messages.AUCTION_STARTNAMED.value()
 							.replace("$player$", seller.getDisplayName())
 							.replace("$amount$", amountS)
 							.replace("$item$", Auction.getItemName(object))
@@ -336,7 +337,7 @@ public class Auction {
 							.replace("$duration$", durationS)
 							.replace("$incr$", incrementS), getInfo(false));
 				} else {
-					((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Config.MESSAGES.AUCTION_STARTNAMED.value()
+					((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Messages.AUCTION_STARTNAMED.value()
 							.replace("$player$", seller.getDisplayName())
 							.replace("$amount$", amountS)
 							.replace("$item$", Auction.getItemName(object))
@@ -349,7 +350,7 @@ public class Auction {
 			}
 		} else {
 			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
-				Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_START.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_START.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", amountS)
 						.replace("$item$", Auction.getItemName(object))
@@ -359,7 +360,7 @@ public class Auction {
 						.replace("$incr$", incrementS));
 			} else {
 				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) {
-					Storm.getInstance().getMessenger().broadcastHover(Config.MESSAGES.AUCTION_START.value()
+					((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastHover(Messages.AUCTION_START.value()
 							.replace("$player$", seller.getDisplayName())
 							.replace("$amount$", amountS)
 							.replace("$item$", Auction.getItemName(object))
@@ -368,7 +369,7 @@ public class Auction {
 							.replace("$duration$", durationS)
 							.replace("$incr$", incrementS), getInfo(false));
 				} else {
-					((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Config.MESSAGES.AUCTION_START.value()
+					((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Messages.AUCTION_START.value()
 							.replace("$player$", seller.getDisplayName())
 							.replace("$amount$", amountS)
 							.replace("$item$", Auction.getItemName(object))
@@ -381,10 +382,10 @@ public class Auction {
 		}
 		
 		if (!Config.AUCTION.HOVERITEM.asBoolean()) {
-			Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_INFO_GET.value());
+			((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_INFO_GET.value());
 		} else {
 			if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) {
-				Storm.getInstance().getMessenger().broadcastHover(Config.MESSAGES.AUCTION_INFO_GET.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastHover(Messages.AUCTION_INFO_GET.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", amountS)
 						.replace("$item$", Auction.getItemName(object))
@@ -394,7 +395,7 @@ public class Auction {
 						.replace("$duration$", durationS)
 						.replace("$incr$", incrementS), getInfo(false));
 			} else {
-				((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Config.MESSAGES.AUCTION_INFO_GET.value()
+				((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Messages.AUCTION_INFO_GET.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", amountS)
 						.replace("$item$", Auction.getItemName(object))
@@ -418,7 +419,7 @@ public class Auction {
 	
 	public void bid(int bid, Player bidder, boolean secret) {
 		if (bidder.equals(seller)) {
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_BID_OWN_AUCTION.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_BID_OWN_AUCTION.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -430,7 +431,7 @@ public class Auction {
 			
 			return;
 		} else if (!Storm.getInstance().econ.has(bidder, bid + Math.abs(AUCTION.BIDTAX.asInt()))) {
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_BID_NO_MONEY.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_BID_NO_MONEY.value()
 					.replace("$player$", bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -441,7 +442,7 @@ public class Auction {
 					.replace("$incr$", incrementS), bidder);
 			return;
 		} else if (current_bid+increment > bid && current_bid > 0) {
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_BID_LOW.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_BID_LOW.value()
 					.replace("$player$", bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -452,7 +453,7 @@ public class Auction {
 					.replace("$incr$", incrementS), bidder);
 			return;
 		} else if (price > bid) {
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_BID_LOW.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_BID_LOW.value()
 					.replace("$player$", bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -464,7 +465,7 @@ public class Auction {
 			
 			return;
 		} else if (bid > Config.AUCTION.MAXIMUM_VALUES_BID.asInt() && Config.AUCTION.MAXIMUM_VALUES_BID.asInt() != -1) {
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_BID_MAX.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_BID_MAX.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", Config.AUCTION.MAXIMUM_VALUES_BID.asString())
 					.replace("$item$", Auction.getItemName(object))
@@ -485,7 +486,7 @@ public class Auction {
 			
 		}
 		if (bid <= secret_bid) {
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_BID_OUTBID.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_BID_OUTBID.value()
 					.replace("$player$", secret_bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -504,7 +505,7 @@ public class Auction {
 		current_bid = bid;
 		highest_bidder = bidder;
 		
-		Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_BID_BID.value()
+		((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_BID_BID.value()
 				.replace("$player$", bidder.getDisplayName())
 				.replace("$amount$", amountS)
 				.replace("$item$", Auction.getItemName(object))
@@ -516,7 +517,7 @@ public class Auction {
 		
 		if (atimer.time < Config.AUCTION.ANTISNIPE_TRESHOLD.asInt()) {
 			atimer.time += Config.AUCTION.ANTISNIPE_TIME_ADDED.asInt();
-			Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_TIME_ADDED.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_TIME_ADDED.value()
 					.replace("$player$", bidder.getDisplayName())
 					.replace("$amount$", Config.AUCTION.ANTISNIPE_TIME_ADDED.asString())
 					.replace("$item$", Auction.getItemName(object))
@@ -533,11 +534,11 @@ public class Auction {
 	public String getInfo(boolean headers) {
 		
 		String msg = "";
-		if (headers) msg = Config.MESSAGES.AUCTION_INFO_HEADER.value();
+		if (headers) msg = Messages.AUCTION_INFO_HEADER.value();
 		
 		if (getDisplayName(object) != "") {
 			
-			msg = msg + Config.MESSAGES.AUCTION_INFO_ITEMNAMED.value()
+			msg = msg + Messages.AUCTION_INFO_ITEMNAMED.value()
 				.replace("$player$", seller.getDisplayName())
 				.replace("$amount$", amountS)
 				.replace("$item$", Auction.getItemName(object))
@@ -550,7 +551,7 @@ public class Auction {
 		}
 		else {
 			
-			msg = msg + Config.MESSAGES.AUCTION_INFO_ITEM.value()
+			msg = msg + Messages.AUCTION_INFO_ITEM.value()
 				.replace("$player$", seller.getDisplayName())
 				.replace("$amount$", amountS)
 				.replace("$item$", Auction.getItemName(object))
@@ -562,7 +563,7 @@ public class Auction {
 			
 		}
 		if(Config.AUCTION.DISPLAYLORE.asBoolean() && object.hasItemMeta() && object.getItemMeta().hasLore()) {
-			msg = msg + Config.MESSAGES.AUCTION_INFO_LORE.value()
+			msg = msg + Messages.AUCTION_INFO_LORE.value()
 			.replace("$player$", seller.getDisplayName())
 			.replace("$amount$", amountS)
 			.replace("$item$", Auction.getItemName(object))
@@ -579,7 +580,7 @@ public class Auction {
 			
 		}
 		
-		msg = msg + Config.MESSAGES.AUCTION_INFO_AMOUNT.value()
+		msg = msg + Messages.AUCTION_INFO_AMOUNT.value()
 		.replace("$player$", seller.getDisplayName())
 		.replace("$amount$", amountS)
 		.replace("$item$", Auction.getItemName(object))
@@ -592,22 +593,22 @@ public class Auction {
 		
 		//show durability if present
 		if (object.getItemMeta() instanceof Damageable && ((Damageable)object.getItemMeta()).hasDamage()) {
-			msg = msg + Config.MESSAGES.AUCTION_INFO_DURABILITY.value()
+			msg = msg + Messages.AUCTION_INFO_DURABILITY.value()
 					.replace("$player$", seller.getDisplayName())
-					.replace("$amount$", String.valueOf(MaterialWrapper.getWrapper(object).getMaxDurability() - ((Damageable)object.getItemMeta()).getDamage()))
+					.replace("$amount$", String.valueOf(object.getType().getMaxDurability() - ((Damageable)object.getItemMeta()).getDamage()))
 					.replace("$item$", Auction.getItemName(object))
 					.replace("$name$", Auction.getDisplayName(object))
 					.replace("$price$", priceS)
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$incr$", incrementS)
-					.replace("$durability$", String.valueOf(MaterialWrapper.getWrapper(object).getMaxDurability()));
+					.replace("$durability$", String.valueOf(object.getType().getMaxDurability()));
 			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 					
 		}
 		
 		//show enchantments if present
 		if (!object.getEnchantments().isEmpty()) {
-			msg = msg + Config.MESSAGES.AUCTION_INFO_ENCHANTMENTHEADER.value()
+			msg = msg + Messages.AUCTION_INFO_ENCHANTMENTHEADER.value()
 			.replace("$player$", seller.getDisplayName())
 			.replace("$amount$", amountS)
 			.replace("$item$", Auction.getItemName(object))
@@ -619,7 +620,7 @@ public class Auction {
 			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 			
 			for (Entry<Enchantment, Integer> ench : object.getEnchantments().entrySet()) {
-				msg = msg + Config.MESSAGES.AUCTION_INFO_ENCHANTMENT.value()
+				msg = msg + Messages.AUCTION_INFO_ENCHANTMENT.value()
 						.replace("$player$", seller.getDisplayName())
 						.replace("$amount$", RomanNumber.toRoman(ench.getValue()))
 						.replace("$item$", Auction.getItemName(object))
@@ -632,7 +633,7 @@ public class Auction {
 			}
 		}
 		
-		msg = msg + Config.MESSAGES.AUCTION_INFO_STARTINGBID.value()
+		msg = msg + Messages.AUCTION_INFO_STARTINGBID.value()
 		.replace("$player$", seller.getDisplayName())
 		.replace("$amount$", amountS)
 		.replace("$item$", Auction.getItemName(object))
@@ -644,7 +645,7 @@ public class Auction {
 		if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 		
 		if (highest_bidder != null && headers) {
-			msg = msg + Config.MESSAGES.AUCTION_INFO_BIDDER.value()
+			msg = msg + Messages.AUCTION_INFO_BIDDER.value()
 				.replace("$player$", highest_bidder.getDisplayName())
 				.replace("$amount$", amountS)
 				.replace("$item$", Auction.getItemName(object))
@@ -657,7 +658,7 @@ public class Auction {
 		}
 		
 		if (current_bid > 0 && headers) { 
-			msg = msg + Config.MESSAGES.AUCTION_INFO_CURRENTBID.value()
+			msg = msg + Messages.AUCTION_INFO_CURRENTBID.value()
 				.replace("$player$", highest_bidder.getDisplayName())
 				.replace("$amount$", amountS)
 				.replace("$item$", Auction.getItemName(object))
@@ -669,7 +670,7 @@ public class Auction {
 				if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 		}
 		if (headers) {
-			msg = msg + Config.MESSAGES.AUCTION_INFO_TIME.value()
+			msg = msg + Messages.AUCTION_INFO_TIME.value()
 			.replace("$player$", seller.getDisplayName())
 			.replace("$amount$", amountS)
 			.replace("$item$", Auction.getItemName(object))
@@ -680,7 +681,7 @@ public class Auction {
 			
 			if (atimer != null) msg = msg.replace("$duration$", String.valueOf(atimer.time));
 		
-			msg = msg + Config.MESSAGES.AUCTION_INFO_FOOTER.value();
+			msg = msg + Messages.AUCTION_INFO_FOOTER.value();
 		}
 		
 		return msg;
@@ -693,7 +694,7 @@ public class Auction {
 				log.setPrice(current_bid);
 				Storm.logger.updateAuctionLog(log);
 			}
-			Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_END_END.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_END_END.value()
 					.replace("$player$", highest_bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -717,7 +718,7 @@ public class Auction {
 
 			//take money from highest bidder
 			Storm.getInstance().econ.withdrawPlayer(highest_bidder, current_bid);
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_END_PAID_TO.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_END_PAID_TO.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -729,7 +730,7 @@ public class Auction {
 			
 			//give money to seller
 			Storm.getInstance().econ.depositPlayer(seller, current_bid * (1-AUCTION.SELLTAX.asDouble()));
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_END_PAID_BY.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_END_PAID_BY.value()
 					.replace("$player$", highest_bidder.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -752,7 +753,7 @@ public class Auction {
 			}
 			
 			giveItemStack(object, seller);
-			Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_END_NO_BIDS.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_END_NO_BIDS.value()
 					.replace("$player$", seller.getDisplayName())
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -787,7 +788,7 @@ public class Auction {
 			if (ender == null) displayname = "the server"; 
 			else displayname = ender.getDisplayName();
 			
-			if (reason != "") Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_END_FORCEDREASON.value()
+			if (reason != "") ((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_END_FORCEDREASON.value()
 					.replace("$sender$", displayname)
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -796,7 +797,7 @@ public class Auction {
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
 					.replace("$incr$", incrementS)
 					.replace("$reason$", reason));
-			else Storm.getInstance().getMessenger().broadcast(Config.MESSAGES.AUCTION_END_FORCED.value()
+			else ((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_END_FORCED.value()
 					.replace("$sender$", displayname)
 					.replace("$amount$", amountS)
 					.replace("$item$", Auction.getItemName(object))
@@ -807,9 +808,9 @@ public class Auction {
 			
 		} else if (ender == null) { 
 			
-			String msg = reason == "" ? Config.MESSAGES.AUCTION_END_FORCEDSELLER.value() : Config.MESSAGES.AUCTION_END_FORCEDREASONSELLER.value();
+			String msg = reason == "" ? Messages.AUCTION_END_FORCEDSELLER.value() : Messages.AUCTION_END_FORCEDREASONSELLER.value();
 			
-			Storm.getInstance().getMessenger().sendMessage(msg
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(msg
 					.replace("$id$", String.valueOf(Queue.getQueue().indexOf(this)))
 					.replace("$player$", seller.getDisplayName())
 					.replace("$sender$", "the server")
@@ -822,7 +823,7 @@ public class Auction {
 			
 		} else if (Storm.hasPermission(ender, "as.cancel") || ender == seller) {
 			
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_END_CANCELLED.value()
+			((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_END_CANCELLED.value()
 				.replace("$id$", String.valueOf(Queue.getQueue().indexOf(this)))
 				.replace("$player$", seller.getDisplayName())
 				.replace("$sender$", "/as cancel")
@@ -834,9 +835,9 @@ public class Auction {
 			
 			if (ender != seller) {
 				
-				String msg = reason == "" ? Config.MESSAGES.AUCTION_END_FORCEDSELLER.value() : Config.MESSAGES.AUCTION_END_FORCEDREASONSELLER.value();
+				String msg = reason == "" ? Messages.AUCTION_END_FORCEDSELLER.value() : Messages.AUCTION_END_FORCEDREASONSELLER.value();
 				
-				Storm.getInstance().getMessenger().sendMessage(msg
+				((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(msg
 						.replace("$id$", String.valueOf(Queue.getQueue().indexOf(this)))
 						.replace("$player$", seller.getDisplayName())
 						.replace("$sender$", "/as cancel")
@@ -851,7 +852,7 @@ public class Auction {
 			
 		}
 		
-		else Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+		else ((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.COMMAND_NO_PERMISSION.value()
 				.replace("$player$", ender.getDisplayName())
 				.replace("$sender$", "/as cancel")
 				.replace("$amount$", amountS)
@@ -867,13 +868,13 @@ public class Auction {
 	}
 
 	public static void noAuction(Player player) {
-		Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_WRONG_NONE.value().replace("$sender$", player.getDisplayName()), player);
+		((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_WRONG_NONE.value().replace("$sender$", player.getDisplayName()), player);
 	}
 	
 	public static String getItemName(ItemStack item) {
 		if (item == null) throw new NullPointerException("ItemStack cannot be null!");
-		else if (!item.hasItemMeta()) return MaterialWrapper.getWrapper(item).getKey().getKey().toLowerCase().replace("_", " ");
-		return item.getItemMeta().hasLocalizedName() ? item.getItemMeta().getLocalizedName() : MaterialWrapper.getWrapper(item).getKey().getKey().toLowerCase().replaceAll("_", " ");
+		else if (!item.hasItemMeta()) return item.getType().getKey().getKey().toLowerCase().replace("_", " ");
+		return item.getItemMeta().hasLocalizedName() ? item.getItemMeta().getLocalizedName() : item.getType().getKey().getKey().toLowerCase().replaceAll("_", " ");
 	}
 	
 	public static String getDisplayName(ItemStack item) {

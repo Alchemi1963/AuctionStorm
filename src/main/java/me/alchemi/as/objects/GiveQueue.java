@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.al.configurations.SexyConfiguration;
 import me.alchemi.as.Auction;
 import me.alchemi.as.Storm;
@@ -32,8 +32,7 @@ public class GiveQueue {
 			
 			queue.put(player.replace("Queue.", ""), (List<ItemStack>) gq.getList(player + ".item", new ArrayList<ItemStack>()));
 			
-			if (queue.get(player.replace("Queue.", "")).isEmpty()) queue.put(player.replace("Queue.", ""), Arrays.asList(gq.getItemStack(player + ".item", new ItemStack(MaterialWrapper.AIR.getMaterial()))));
-		
+			if (queue.get(player.replace("Queue.", "")).isEmpty()) queue.put(player.replace("Queue.", ""), Arrays.asList(gq.getItemStack(player + ".item", new ItemStack(Material.AIR))));
 		}
 	}
 	
@@ -41,7 +40,7 @@ public class GiveQueue {
 		for (ItemStack stack : queue.get(player.getName())) {
 			Auction.giveItemStack(stack, player);
 			
-			Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.COMMAND_GIVEN.value().replace("$sender$", Storm.getInstance().pluginname)
+			Storm.getInstance().getMessenger().sendMessage(Messages.COMMAND_GIVEN.value().replace("$sender$", Storm.getInstance().pluginname)
 					.replace("$amount$", String.valueOf(stack.getAmount()))
 					.replace("$item$", Auction.getItemName(stack))
 					.replace("$name$", Auction.getDisplayName(stack))

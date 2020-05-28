@@ -1,0 +1,79 @@
+#Check for updates on start and admin login?
+update-checker: true
+
+Vault:
+  valutaSingular: credit
+  valutaPlural: credits
+    
+Auction:
+  Sound: 
+  
+    #Enable sounds on auction ending.
+    #Default: true
+    Play: true
+    
+    #Default: ENTITY_PLAYER_LEVELUP
+    Pay: ENTITY_PLAYER_LEVELUP
+    Paid: ENTITY_PLAYER_LEVELUP
+    Failed: ENTITY_PLAYER_LEVELUP
+    
+  #Wether or not the players should be notified.
+  #Default: true
+  Notify: true
+  
+  #Notify the players on these intervals (120 seconds remaining)
+  #Default: 120, 60 & 30
+  NotifyTimes: 
+    - 120
+    - 60
+    - 30
+    
+  #Allow the creation of auctions in creative by default
+  #Default: false
+  AllowCreative: false
+  LogAuctions: true
+  HoverItem: true
+  
+  #If the plugin should use the minecraft item tooltip instead of the custom
+  # one.
+  HoverItemMinecraftToolTip: false
+  displayLore: true
+  
+  #Amount of seconds before anti-snipe kicks in
+  #Default: 5
+  AntiSnipe-Treshold: 5
+  #Seconds added when someone bids when anti-snipe is active
+  #Default: 30
+  AntiSnipe-Time-Added: 30
+  
+  #Taxes:
+  #the bid tax is the amount of money taken from a player for every bid.
+  #The bid tax defaults to 0.
+  #the sell tax is the percentage of the selling price taken from the seller.
+  #this must be between 0 and 1, where 1 is 100%. The sell tax defaults to
+  # 0.05 (5%) 
+  BidTax: 0
+  SellTax: 0.05
+  
+  #Seconds to wait before starting next auction in queue.
+  #Default: 2
+  Start-Delay: 2
+  Start-Defaults:
+    Price: 0
+    Increment: 10
+    Duration: 60
+  Maximum-Values:
+    Bid: -1
+    Price: -1
+    Increment: -1
+    Duration: 240
+  
+  #Keep minimal values above 0!
+  Minimum-Values: 
+    Price: 0
+    Amount: 0
+    Increment: 0
+    Duration: 30
+  #List of items banned from auctioning
+  #Default: []
+  Banned-Items: []

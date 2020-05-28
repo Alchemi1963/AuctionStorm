@@ -1,0 +1,85 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+	id 'eclipse'
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/')
+    }
+
+    maven {
+        url = uri('https://nexus.hc.to/content/repositories/pub_releases/')
+    }
+
+    maven {
+        url = uri('https://repo.maven.apache.org/maven2')
+    }
+}
+
+dependencies {
+	implementation 'org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT'
+    implementation 'net.milkbowl.vault:VaultAPI:1.7'
+    
+	implementation project(":AlchemicLibrary")
+}
+
+group = 'me.alchemi'
+version = '2.0.1'
+description = 'AuctionStorm'
+sourceCompatibility = '1.8'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+
+task copy(type: Copy) {
+	dependsOn 'jar'
+	group = 'Build'
+	description = 'Install project to Test-Server.'
+	
+	from jar.archivePath
+	into '../Test-Server/plugins/'
+	rename '(.*)-(.*).jar', '$1.jar'
+	
+	doLast{
+		project.logger.lifecycle 'Installing jar file from ' + jar.archivePath
+	}
+}
+
+processResources {
+	filter  { line -> line.replaceAll('\\$\\{project.version\\}', project.version)}
+}
+
+task export {
+	dependsOn 'jar'
+	dependsOn 'publishToMavenLocal'
+	finalizedBy 'incrementVersion'
+
+	doLast{
+		project.logger.lifecycle 'Exporting to jar file.'
+	}
+}
+
+task incrementVersion {
+	doFirst{
+		String minor=version.substring(version.lastIndexOf('.')+1)
+		int m=minor.toInteger()+1
+		String major=version.substring(0,version.length()-1)
+		String s=buildFile.getText().replaceFirst('version = \'' + project.version + '\'','version = \''+major+m+'\'')
+		buildFile.setText(s)
+
+		project.logger.lifecycle 'New version ' + major + m
+	}
+}
+
+eclipse {
+	autoBuildTasks copy
+	project.natures 'org.eclipse.buildship.core.gradleprojectnature'
+}

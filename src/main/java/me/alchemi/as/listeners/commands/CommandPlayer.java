@@ -15,7 +15,7 @@ import me.alchemi.as.Auction;
 import me.alchemi.as.Queue;
 import me.alchemi.as.Storm;
 import me.alchemi.as.objects.Config;
-import me.alchemi.as.objects.Config.MESSAGES;
+import me.alchemi.as.objects.Messages;
 import me.alchemi.as.objects.meta.SilentMeta;
 
 
@@ -60,7 +60,7 @@ public class CommandPlayer implements CommandExecutor{
 					
 				} else if (args[0].equalsIgnoreCase("start") && args.length < 2 || args[0].equalsIgnoreCase("s")  && args.length < 2) { 
 					
-					String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
+					String send = Messages.COMMAND_WRONG_FORMAT.value()
 							.replace("$sender$", cmd.getName())
 							.replace("$format$", start_usage)
 							.replace("$player$", (player).getDisplayName());
@@ -85,7 +85,7 @@ public class CommandPlayer implements CommandExecutor{
 						try {
 							if (args.length >= 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), player);
 							else {
-								String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
+								String send = Messages.COMMAND_WRONG_FORMAT.value()
 										.replace("$sender$", cmd.getName())
 										.replace("$format$", bid_usage)
 										.replace("$player$", (player).getDisplayName());
@@ -97,7 +97,7 @@ public class CommandPlayer implements CommandExecutor{
 							if (args.length == 3 && args[2] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), player, true);
 						
 						} catch(NumberFormatException e) {
-							String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
+							String send = Messages.COMMAND_WRONG_FORMAT.value()
 									.replace("$sender$", cmd.getName())
 									.replace("$format$", bid_usage)
 									.replace("$player$", (player).getDisplayName());
@@ -119,7 +119,7 @@ public class CommandPlayer implements CommandExecutor{
 							try {
 								int id = Integer.valueOf(args[1]);
 								if (id >= Queue.getQueueLength() ) {
-									Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_QUEUE_NOTAUCTION.value().replace("$id$", args[1]), sender);
+									Storm.getInstance().getMessenger().sendMessage(Messages.AUCTION_QUEUE_NOTAUCTION.value().replace("$id$", args[1]), sender);
 									return true;
 								}
 								
@@ -159,7 +159,7 @@ public class CommandPlayer implements CommandExecutor{
 									
 								} else {
 									if (sender instanceof Player) {
-										String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+										String send = Messages.COMMAND_NO_PERMISSION.value()
 												.replace("$sender$", cmd.getName())
 												.replace("$player$", (player).getDisplayName());
 										
@@ -187,7 +187,7 @@ public class CommandPlayer implements CommandExecutor{
 								
 							} else {
 								if (sender instanceof Player) {
-									String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+									String send = Messages.COMMAND_NO_PERMISSION.value()
 											.replace("$sender$", cmd.getName())
 											.replace("$player$", (player).getDisplayName());
 									
@@ -215,7 +215,7 @@ public class CommandPlayer implements CommandExecutor{
 							
 						} else {
 							if (sender instanceof Player) {
-								String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+								String send = Messages.COMMAND_NO_PERMISSION.value()
 										.replace("$sender$", cmd.getName())
 										.replace("$player$", (player).getDisplayName());
 								
@@ -244,7 +244,7 @@ public class CommandPlayer implements CommandExecutor{
 								pages = i < div ? i+1 : i; 
 							}
 							
-							String msg = Config.MESSAGES.AUCTION_QUEUE_HEADER.value()
+							String msg = Messages.AUCTION_QUEUE_HEADER.value()
 									.replace("$amount$", String.valueOf(page))
 									.replace("$total$", String.valueOf(pages));
 							int i = 1;
@@ -252,21 +252,21 @@ public class CommandPlayer implements CommandExecutor{
 							for (Auction a : Queue.getQueue()) {
 								if (a.equals(Queue.current_auction)) continue;
 								
-								else if (i > i2 && i <= 10 * page) msg = msg + Config.MESSAGES.AUCTION_QUEUE_AUCTION.value()
+								else if (i > i2 && i <= 10 * page) msg = msg + Messages.AUCTION_QUEUE_AUCTION.value()
 										.replace("$id$", String.valueOf(i))
 										.replace("$amount$", String.valueOf(a.getObject().getAmount()))
 										.replace("$item$", Auction.getItemName(a.getObject()))
 										.replace("$seller$", a.getSeller().getDisplayName());
 								i++;
 							}
-							msg = msg + Config.MESSAGES.AUCTION_QUEUE_FOOTER.value()
+							msg = msg + Messages.AUCTION_QUEUE_FOOTER.value()
 									.replace("$amount$", String.valueOf(page))
 									.replace("$total$", String.valueOf(pages));
 							
 							Storm.getInstance().getMessenger().sendMessage(msg, sender);
 							return true;
 						} else {
-							Storm.getInstance().getMessenger().sendMessage(Config.MESSAGES.AUCTION_QUEUE_EMPTY.value(), sender);
+							Storm.getInstance().getMessenger().sendMessage(Messages.AUCTION_QUEUE_EMPTY.value(), sender);
 							return true;
 						}
 						
@@ -277,11 +277,11 @@ public class CommandPlayer implements CommandExecutor{
 						if (PersistentMeta.hasMeta(player, SilentMeta.class) && PersistentMeta.getMeta(player, SilentMeta.class).asBoolean()) {//player.hasPermission("as.silence")) {
 							//main.perm.playerRemove(null, player, "as.silence");
 							PersistentMeta.setMeta(player, new SilentMeta(false));
-							Storm.getInstance().getMessenger().sendMessage(MESSAGES.COMMAND_UNSILENCED.value(), player);
+							Storm.getInstance().getMessenger().sendMessage(Messages.COMMAND_UNSILENCED.value(), player);
 						} else {
 							//main.perm.playerAdd(null, player, "as.silence");
 							PersistentMeta.setMeta(player, new SilentMeta(true));
-							Storm.getInstance().getMessenger().sendMessage(MESSAGES.COMMAND_SILENCED.value(), player);
+							Storm.getInstance().getMessenger().sendMessage(Messages.COMMAND_SILENCED.value(), player);
 						}
 						
 						return true;
@@ -299,7 +299,7 @@ public class CommandPlayer implements CommandExecutor{
 							if (args.length == 5) duration = Integer.valueOf(args[4]);
 						
 						} catch(NumberFormatException e) {
-							String send = Config.MESSAGES.COMMAND_WRONG_FORMAT.value()
+							String send = Messages.COMMAND_WRONG_FORMAT.value()
 									.replace("$sender$", cmd.getName())
 									.replace("$format$", start_usage)
 									.replace("$player$", (player).getDisplayName());
@@ -325,7 +325,7 @@ public class CommandPlayer implements CommandExecutor{
 					}
 				}  
 			}
-			String send = Config.MESSAGES.COMMAND_UNKNOWN.value()
+			String send = Messages.COMMAND_UNKNOWN.value()
 					.replace("$sender$", cmd.getName())
 					.replace("$player$", (player).getDisplayName());
 			
@@ -333,7 +333,7 @@ public class CommandPlayer implements CommandExecutor{
 			return true;
 		}
 		if (sender instanceof Player) {
-			String send = Config.MESSAGES.COMMAND_NO_PERMISSION.value()
+			String send = Messages.COMMAND_NO_PERMISSION.value()
 					.replace("$sender$", cmd.getName())
 					.replace("$player$", ((Player) sender).getDisplayName());
 			

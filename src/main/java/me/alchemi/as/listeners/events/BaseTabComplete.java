@@ -47,16 +47,8 @@ public class BaseTabComplete implements TabCompleter {
 			
 			if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")) {
 				
-				list.add("1");
-				list.add("2");
-				list.add("3");
-				list.add("4");
-				list.add("5");
-				list.add("6");
-				list.add("7");
-				list.add("8");
-				list.add("9");
-				list.add("10");
+				list.add("all");
+				list.add("hand");
 				
 			} else if (args[0].equalsIgnoreCase("bid") && Queue.current_auction != null) {
 				list.add(String.valueOf(Queue.current_auction.getCurrent_bid() + Queue.current_auction.getIncrement()));
@@ -72,11 +64,6 @@ public class BaseTabComplete implements TabCompleter {
 			
 			if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")) {
 				
-				list.add("1");
-				list.add("2");
-				list.add("3");
-				list.add("4");
-				list.add("5");
 				list.add("all");
 				list.add("hand");
 				
@@ -88,16 +75,8 @@ public class BaseTabComplete implements TabCompleter {
 			
 			if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")) {
 				
-				list.add("1");
-				list.add("2");
-				list.add("3");
-				list.add("4");
-				list.add("5");
-				list.add("6");
-				list.add("7");
-				list.add("8");
-				list.add("9");
-				list.add("10");
+				list.add("all");
+				list.add("hand");
 				
 			}
 			

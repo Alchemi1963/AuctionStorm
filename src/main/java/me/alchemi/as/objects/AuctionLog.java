@@ -121,23 +121,23 @@ public class AuctionLog{
 		String amountS = String.valueOf(object.getAmount());
 		String priceS = String.valueOf(price);
 
-		String msg = Config.MESSAGES.AUCTION_INFO_LOGHEADER.value().replace("$name$", identifier.getCarbonDate());
+		String msg = Messages.AUCTION_INFO_LOGHEADER.value().replace("$name$", identifier.getCarbonDate());
 		
-		if (Auction.getDisplayName(object) != null) msg = msg + Config.MESSAGES.AUCTION_INFO_ITEMNAMED.value()
+		if (Auction.getDisplayName(object) != null) msg = msg + Messages.AUCTION_INFO_ITEMNAMED.value()
 			.replace("$player$", sellerName)
 			.replace("$amount$", amountS)
 			.replace("$item$", Auction.getItemName(object))
 			.replace("$name$", Auction.getDisplayName(object))
 			.replace("$price$", priceS)
 			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-		else msg = msg + Config.MESSAGES.AUCTION_INFO_ITEM.value()
+		else msg = msg + Messages.AUCTION_INFO_ITEM.value()
 			.replace("$player$", sellerName)
 			.replace("$amount$", amountS)
 			.replace("$item$", Auction.getItemName(object))
 			.replace("$name$", Auction.getDisplayName(object))
 			.replace("$price$", priceS)
 			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-		msg = msg + Config.MESSAGES.AUCTION_INFO_AMOUNT.value()
+		msg = msg + Messages.AUCTION_INFO_AMOUNT.value()
 				.replace("$player$", sellerName)
 				.replace("$amount$", amountS)
 				.replace("$item$", Auction.getItemName(object))
@@ -147,7 +147,7 @@ public class AuctionLog{
 		
 		//show enchantments if present
 		if (!object.getEnchantments().isEmpty()) {
-			msg = msg + Config.MESSAGES.AUCTION_INFO_ENCHANTMENTHEADER.value()
+			msg = msg + Messages.AUCTION_INFO_ENCHANTMENTHEADER.value()
 				.replace("$player$", sellerName)
 				.replace("$amount$", amountS)
 				.replace("$item$", Auction.getItemName(object))
@@ -155,7 +155,7 @@ public class AuctionLog{
 				.replace("$price$", priceS)
 				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			for (Entry<Enchantment, Integer> ench : object.getEnchantments().entrySet()) {
-				msg = msg + Config.MESSAGES.AUCTION_INFO_ENCHANTMENT.value()
+				msg = msg + Messages.AUCTION_INFO_ENCHANTMENT.value()
 					.replace("$player$", sellerName)
 					.replace("$amount$", RomanNumber.toRoman(ench.getValue()))
 					.replace("$item$", Auction.getItemName(object))
@@ -164,21 +164,21 @@ public class AuctionLog{
 					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
 			}
 		}
-		msg = msg + Config.MESSAGES.AUCTION_INFO_PRICE.value()
+		msg = msg + Messages.AUCTION_INFO_PRICE.value()
 			.replace("$player$", sellerName)
 			.replace("$amount$", amountS)
 			.replace("$item$", Auction.getItemName(object))
 			.replace("$name$", Auction.getDisplayName(object))
 			.replace("$price$", priceS)
 			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-		if (buyer != null) msg = msg + Config.MESSAGES.AUCTION_INFO_BIDDER.value()
+		if (buyer != null) msg = msg + Messages.AUCTION_INFO_BIDDER.value()
 			.replace("$player$", buyer.getPlayer().getDisplayName())
 			.replace("$amount$", amountS)
 			.replace("$item$", Auction.getItemName(object))
 			.replace("$name$", Auction.getDisplayName(object))
 			.replace("$price$", priceS)
 			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-		msg = msg + Config.MESSAGES.AUCTION_INFO_FOOTER.value().substring(0, Config.MESSAGES.AUCTION_INFO_FOOTER.value().length() - 1);
+		msg = msg + Messages.AUCTION_INFO_FOOTER.value().substring(0, Messages.AUCTION_INFO_FOOTER.value().length() - 1);
 		
 		if (sender instanceof Player) {
 			sender.sendMessage(Messenger.formatString(msg));
@@ -191,7 +191,7 @@ public class AuctionLog{
 	public void returnAll(CommandSender sender) {
 		
 		if (refunded) {
-			String send = Config.MESSAGES.COMMAND_ADMIN_ALREADY_REFUNDED.value()
+			String send = Messages.COMMAND_ADMIN_ALREADY_REFUNDED.value()
 						.replace("$player$", sellerName)
 						.replace("$amount$", String.valueOf(object.getAmount()))
 						.replace("$item$", Auction.getItemName(object))
@@ -205,7 +205,7 @@ public class AuctionLog{
 			return;
 		} else if (buyer != null) {
 			if (buyer.isOnline()) {
-				String send = Config.MESSAGES.COMMAND_ADMIN_MONEY_RETURNED.value()
+				String send = Messages.COMMAND_ADMIN_MONEY_RETURNED.value()
 						.replace("$player$", sellerName)
 						.replace("$amount$", String.valueOf(object.getAmount()))
 						.replace("$item$", Auction.getItemName(object))
@@ -216,7 +216,7 @@ public class AuctionLog{
 			}
 					
 			if (seller.isOnline()) {
-				String send = Config.MESSAGES.COMMAND_ADMIN_MONEY_TAKEN.value()
+				String send = Messages.COMMAND_ADMIN_MONEY_TAKEN.value()
 						.replace("$player$", buyerName)
 						.replace("$amount$", String.valueOf(object.getAmount()))
 						.replace("$item$", Auction.getItemName(object))
@@ -230,7 +230,7 @@ public class AuctionLog{
 			
 			
 		} else {
-			String send = Config.MESSAGES.COMMAND_ADMIN_NO_BUYER.value()
+			String send = Messages.COMMAND_ADMIN_NO_BUYER.value()
 					.replace("$player$", sellerName)
 					.replace("$amount$", String.valueOf(object.getAmount()))
 					.replace("$item$", Auction.getItemName(object))
@@ -243,7 +243,7 @@ public class AuctionLog{
 		}
 		
 		if (seller.isOnline()) {
-			String send = Config.MESSAGES.COMMAND_ADMIN_ITEMS_RETURNED.value()
+			String send = Messages.COMMAND_ADMIN_ITEMS_RETURNED.value()
 					.replace("$player$", sellerName)
 					.replace("$amount$", String.valueOf(object.getAmount()))
 					.replace("$item$", Auction.getItemName(object))
@@ -261,7 +261,7 @@ public class AuctionLog{
 	
 	public void returnItemToSeller(CommandSender sender) {
 		if (refunded) {
-			String send = Config.MESSAGES.COMMAND_ADMIN_ALREADY_REFUNDED.value()
+			String send = Messages.COMMAND_ADMIN_ALREADY_REFUNDED.value()
 					.replace("$player$", sellerName)
 					.replace("$amount$", String.valueOf(object.getAmount()))
 					.replace("$item$", Auction.getItemName(object))
@@ -275,7 +275,7 @@ public class AuctionLog{
 		}
 		
 		if (seller.isOnline()) {
-			String send = Config.MESSAGES.COMMAND_ADMIN_ITEMS_RETURNED.value()
+			String send = Messages.COMMAND_ADMIN_ITEMS_RETURNED.value()
 					.replace("$player$", sellerName)
 					.replace("$amount$", String.valueOf(object.getAmount()))
 					.replace("$item$", Auction.getItemName(object))
@@ -292,7 +292,7 @@ public class AuctionLog{
 	
 	public void returnMoneyToBuyer(CommandSender sender) {
 		if (refunded) {
-			String send = Config.MESSAGES.COMMAND_ADMIN_ALREADY_REFUNDED.value()
+			String send = Messages.COMMAND_ADMIN_ALREADY_REFUNDED.value()
 					.replace("$player$", sellerName)
 					.replace("$amount$", String.valueOf(object.getAmount()))
 					.replace("$item$", Auction.getItemName(object))
@@ -307,7 +307,7 @@ public class AuctionLog{
 		
 		if (buyer != null) {
 			if (buyer.isOnline()) {
-				String send = Config.MESSAGES.COMMAND_ADMIN_MONEY_TAKEN.value()
+				String send = Messages.COMMAND_ADMIN_MONEY_TAKEN.value()
 						.replace("$player$", sellerName)
 						.replace("$amount$", String.valueOf(object.getAmount()))
 						.replace("$item$", Auction.getItemName(object))
@@ -317,7 +317,7 @@ public class AuctionLog{
 				Storm.getInstance().getMessenger().sendMessage(send, buyer.getPlayer());
 			}
 			if (seller.isOnline()) {
-				String send = Config.MESSAGES.COMMAND_ADMIN_MONEY_TAKEN.value()
+				String send = Messages.COMMAND_ADMIN_MONEY_TAKEN.value()
 						.replace("$player$", buyerName)
 						.replace("$amount$", String.valueOf(object.getAmount()))
 						.replace("$item$", Auction.getItemName(object))
@@ -330,7 +330,7 @@ public class AuctionLog{
 			Storm.getInstance().econ.withdrawPlayer(seller, price);
 			Storm.logger.setRefunded(this, identifier);
 		} else {
-			String send = Config.MESSAGES.COMMAND_ADMIN_NO_BUYER.value()
+			String send = Messages.COMMAND_ADMIN_NO_BUYER.value()
 					.replace("$player$", sellerName)
 					.replace("$amount$", String.valueOf(object.getAmount()))
 					.replace("$item$", Auction.getItemName(object))
