@@ -689,6 +689,53 @@ public class Auction {
 	
 	public void endAuction() {		
 		if (highest_bidder != null) {
+			if (Storm.getInstance().econ.getBalance(highest_bidder) < current_bid) {
+				
+				giveItemStack(object, seller);
+				((AuctionMessenger)Storm.getInstance().getMessenger()).broadcast(Messages.AUCTION_END_NO_MONEY.toString()
+						.replace("$player$", highest_bidder.getDisplayName())
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", String.valueOf(current_bid))
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", durationS)
+						.replace("$incr$", incrementS));
+				
+				((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_END_NO_MONEY_BIDDER.toString()
+						.replace("$player$", seller.getDisplayName())
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", String.valueOf(current_bid))
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", durationS)
+						.replace("$incr$", incrementS), highest_bidder);
+				
+				((AuctionMessenger)Storm.getInstance().getMessenger()).sendMessage(Messages.AUCTION_END_NO_MONEY_SELLER.toString()
+						.replace("$player$", highest_bidder.getDisplayName())
+						.replace("$amount$", amountS)
+						.replace("$item$", Auction.getItemName(object))
+						.replace("$name$", Auction.getDisplayName(object))
+						.replace("$price$", String.valueOf(current_bid))
+						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString())
+						.replace("$duration$", durationS)
+						.replace("$incr$", incrementS), seller);
+				
+				if (Config.AUCTION.SOUND_PLAY.asBoolean()) {
+					try {
+						seller.playSound(seller.getLocation(), Config.AUCTION.SOUND_FAILED.asSound(), 1.0F, 1.0F);
+						highest_bidder.playSound(seller.getLocation(), Config.AUCTION.SOUND_FAILED.asSound(), 1.0F, 1.0F);
+					} catch (Exception e) {
+						e.printStackTrace();
+						seller.playSound(seller.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+						highest_bidder.playSound(seller.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+					}
+				}
+				Queue.nextAuction();
+				return;
+			}
+			
 			if (Config.AUCTION.LOGAUCTIONS.asBoolean()) {
 				log.setBuyer(highest_bidder);
 				log.setPrice(current_bid);
@@ -764,10 +811,6 @@ public class Auction {
 					.replace("$incr$", incrementS));
 		}
 		Queue.nextAuction();
-		
-		
-		
-		
 	}
 	
 	public void forceEndAuction() { forceEndAuction(""); }

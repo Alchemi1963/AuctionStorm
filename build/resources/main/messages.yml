@@ -17,10 +17,9 @@ AuctionStorm:
   Tag: '&7[&6&lAuctionStorm&r&7]'
 
   Auction:
-    Start: >-
+    Start: >
      $player$ &6has started an auction
-     &6It is $amount$ $item$ for $price$
-     $valuta$.
+     &6It is $amount$ $item$ for $price$ $valuta$.
     StartNamed: >-
      $player$ &6has started an auction!
      &6It is $amount$ $item$ named
@@ -53,6 +52,9 @@ AuctionStorm:
     End:
         End: '&9Sold! To the lovely $player$ &9for &6$price$ $valuta$.'
         No-Bids: '&9Sold! To no one...'
+        No-Money: '&9This auction was cancelled because the buyer did not have enough money.'
+        No-Money-Bidder: '&4You do not have enough money to buy this item.'
+        No-Money-Seller: '&9$player$ did not have enough money.'
         Paid-By: 'You have been paid $price$ $valuta$ by $player$.'
         Paid-To: 'You have paid $player$ $price$ $valuta$.'
         Cancelled: '&9You cancelled your auction with number $id$.'

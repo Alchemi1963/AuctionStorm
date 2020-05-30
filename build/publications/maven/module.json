@@ -1,0 +1,84 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "me.alchemi",
+    "module": "AuctionStorm",
+    "version": "2.0.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.4.1",
+      "buildId": "fhuplzhw3ffalfimmwntkhanou"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "AuctionStorm-2.0.2.jar",
+          "url": "AuctionStorm-2.0.2.jar",
+          "size": 61208,
+          "sha512": "a312d617508d5faebe3c4935b828b23f41394341213f44b48f15132f40d0dbee8ec6b1ae60a820e87a65e3a06aacb7311bb024baa092a41eb6141632b219a05d",
+          "sha256": "f543eb7a9cf892228596724f38924cd712d743e9d46a6a68c3438f443bb07028",
+          "sha1": "35d1e68dacfdbe10724ae68c5a33edd6b52c218f",
+          "md5": "27829b7aff2899dbef10d196abd6ca1a"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.spigotmc",
+          "module": "spigot-api",
+          "version": {
+            "requires": "1.15.2-R0.1-SNAPSHOT"
+          }
+        },
+        {
+          "group": "net.milkbowl.vault",
+          "module": "VaultAPI",
+          "version": {
+            "requires": "1.7"
+          }
+        },
+        {
+          "group": "me.alchemi",
+          "module": "AlchemicLibrary",
+          "version": {
+            "requires": "3.0.2"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "AuctionStorm-2.0.2.jar",
+          "url": "AuctionStorm-2.0.2.jar",
+          "size": 61208,
+          "sha512": "a312d617508d5faebe3c4935b828b23f41394341213f44b48f15132f40d0dbee8ec6b1ae60a820e87a65e3a06aacb7311bb024baa092a41eb6141632b219a05d",
+          "sha256": "f543eb7a9cf892228596724f38924cd712d743e9d46a6a68c3438f443bb07028",
+          "sha1": "35d1e68dacfdbe10724ae68c5a33edd6b52c218f",
+          "md5": "27829b7aff2899dbef10d196abd6ca1a"
+        }
+      ]
+    }
+  ]
+}
