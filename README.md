@@ -1,6 +1,7 @@
 Description
 
-This is an auction plugin originally made for HollandCraft (ip – playhc.ms).
+This is an auction plugin wich focuses on being more dynamic.
+Almost every value can be configured!
 
 To create an auction just hold the desired item in your hand and use –
 
