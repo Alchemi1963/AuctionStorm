@@ -2,8 +2,8 @@
 update-checker: true
 
 Vault:
-  valutaSingular: credit
-  valutaPlural: credits
+  currencySingular: credit
+  currencyPlural: credits
     
 Auction:
   Sound: 

@@ -54,7 +54,7 @@ public class Config extends ConfigBase {
 		
 	}
 	
-	public static enum AUCTION implements IConfig {
+	public static enum AuctionOptions implements IConfig {
 		
 		SOUND_PLAY("Auction.Sound.Play"),
 		SOUND_PAY("Auction.Sound.Pay"),
@@ -89,7 +89,7 @@ public class Config extends ConfigBase {
 		private Object value;
 		public final String key;
 		
-		AUCTION(String key){
+		AuctionOptions(String key){
 			this.key = key;
 			get();
 		}
@@ -172,15 +172,15 @@ public class Config extends ConfigBase {
 		}
 	}
 	
-	public static enum VAULT implements IConfig {
+	public static enum Vault implements IConfig {
 		
-		VALUTA_SINGULAR("Vault.valutaSingular"),
-		VALUTA_PLURAL("Vault.valutaPlural");
+		CURRENCY_SINGULAR("Vault.currencySingular"),
+		CURRENCY_PLURAL("Vault.currencyPlural");
 		
 		private Object value;
 		public final String key;
 		
-		VAULT(String key){
+		Vault(String key){
 			this.key = key;
 			get();
 		}
@@ -283,8 +283,8 @@ public class Config extends ConfigBase {
 	@Override
 	protected Set<IConfig> getEnums() {
 		Set<IConfig> set = new HashSet<IConfig>();
-		set.addAll(Arrays.asList(AUCTION.values()));
-		set.addAll(Arrays.asList(VAULT.values()));
+		set.addAll(Arrays.asList(AuctionOptions.values()));
+		set.addAll(Arrays.asList(Vault.values()));
 		return set;
 	}
 	

@@ -1,96 +1,98 @@
 #    VARIABLES    #
 #                 #
-#    $player$     #
-#    $sender$     #
-#    $amount$     #
-#     $item$      #
-#     $name$      #
-#    $price$      #
-#    $valuta$     #
-#   $duration$    #
-#     $incr$      #
-#    $reason$     #
-#  $durability$   #
+#    %player%     #
+#    %sender%     #
+#    %amount%     #
+#     %item%      #
+#     %name%      #
+#    %price%      #
+#   %currency%    #
+#   %duration%    #
+#     %incr%      #
+#    %reason%     #
+#  %durability%   #
+#      %id%       #
 #                 #
 
 AuctionStorm:
   Tag: '&7[&6&lAuctionStorm&r&7]'
 
   Auction:
+    StartCooldown: '&cYou cannot start an auction for &f%amount% &9seconds.'
     Start: >
-     $player$ &6has started an auction
-     &6It is $amount$ $item$ for $price$ $valuta$.
-    StartNamed: >-
-     $player$ &6has started an auction!
-     &6It is $amount$ $item$ named
-     $name$&6 for $price$ $valuta$."
+     %player% &6has started an auction
+     &6It is %amount% %item% for %price% %currency%.
+    StartNamed: >
+     %player% &6has started an auction!
+     &6It is %amount% %item% named
+     %name%&6 for %price% %currency%."
     Queued: '&9Your auction has been queued.'
     Wrong:
         None: '&6There is currently no auction, you can use &9/as start &6to start one.'
         Item: '&4You need to hold an item to start an auction.'
         Creative: '&4You have no permission to start an auction in creative.'
-        Enough: '&4You don''t have $amount$ of $item$.'
-        Price: '&cYou need to specify a price between $amount$ $valuta$ and $price$ $valuta$.'
-        PriceInf: '&cYou need to specify a price greater than $amount$ $valuta$.'
-        Duration: '&cYou need to specify a duration between $amount$ and $duration$.'
-        DurationInf: '&cYou need to specify a duration greater than $amount$.'
-        Increment: '&cYou need to specify an increment between $amount$ and $incr$.'
-        IncrementInf: '&cYou need to specify an increment greater than $amount$.'
-        Amount: '&cYou need to specify an amount greater that $amount$.'
+        Enough: '&4You don''t have %amount% of %item%.'
+        Price: '&cYou need to specify a price between %amount% %currency% and %price% %currency%.'
+        PriceInf: '&cYou need to specify a price greater than %amount% %currency%.'
+        Duration: '&cYou need to specify a duration between %amount% and %duration%.'
+        DurationInf: '&cYou need to specify a duration greater than %amount%.'
+        Increment: '&cYou need to specify an increment between %amount% and %incr%.'
+        IncrementInf: '&cYou need to specify an increment greater than %amount%.'
+        Amount: '&cYou need to specify an amount greater that %amount%.'
         Banned: '&cThis item cannot be auctioned.'
     Bid:
         Own-Auction: '&4You cannot bid on your own auction...'
         No-Money: '&4You do not have enough money to make this bid...'
-        Bid: '$player$ &6has bid $price$ $valuta$ on the $item$.'
-        Outbid: '&6You have been automatically outbid by $player$.'
-        Low: '&4Your bid must be higher than $price$.'
-        Max: '&cYou exceeded the maximum bid of $amount$ $valuta$.'
+        Bid: '%player% &6has bid %price% %currency% on the %item%.'
+        Outbid: '&6You have been automatically outbid by %player%.'
+        Low: '&4Your bid must be higher than %price%.'
+        Max: '&cYou exceeded the maximum bid of %amount% %currency%.'
     Time:
-        Added: '&9$amount$ &6seconds have been added.'
+        Added: '&9%amount% &6seconds have been added.'
         Halftime: '&9Half of the time is remaining for the current auction.'
-        Notify: '&9$amount$ seconds remaining on the current auction.'
+        Notify: '&9%amount% seconds remaining on the current auction.'
     End:
-        End: '&9Sold! To the lovely $player$ &9for &6$price$ $valuta$.'
+        End: '&9Sold! To the lovely %player% &9for &6%price% %currency%.'
         No-Bids: '&9Sold! To no one...'
         No-Money: '&9This auction was cancelled because the buyer did not have enough money.'
         No-Money-Bidder: '&4You do not have enough money to buy this item.'
-        No-Money-Seller: '&9$player$ did not have enough money.'
-        Paid-By: 'You have been paid $price$ $valuta$ by $player$.'
-        Paid-To: 'You have paid $player$ $price$ $valuta$.'
-        Cancelled: '&9You cancelled your auction with number $id$.'
-        Forced: 'The current auction has been cancelled by $sender$.'
-        ForcedSeller: 'Your auction with number $id$ has been cancelled by $sender$.'
-        ForcedReason: 'The current auction has been cancelled by $sender$ because of $reason$.'
-        ForcedReasonSeller: 'Your auction with number $id$ has been cancelled by $sender$ because of $reason$.'
+        No-Money-Seller: '&9%player% did not have enough money.'
+        Paid-By: 'You have been paid %price% %currency% by %player%.'
+        Paid-To: 'You have paid %player% %price% %currency%.'
+        Cancelled: '&9You cancelled your auction with number %id%.'
+        Forced: 'The current auction has been cancelled by %sender%.'
+        ForcedSeller: 'Your auction with number %id% has been cancelled by %sender%.'
+        ForcedReason: 'The current auction has been cancelled by %sender% because of %reason%.'
+        ForcedReasonSeller: 'Your auction with number %id% has been cancelled by %sender% because of %reason%.'
     Info:
         Get: '&9Use &6/auc info&9 to get more info about it.'
         Header: '&l&9=====Current Auction====='
-        LogHeader: '&l&9====$name$===='
-        Item: "\n&r&9Item: &6$item$"
-        ItemNamed: "\n&r&9Item: &6$item$ &9named &6$name$"
+        LogHeader: '&l&9====%name%===='
+        Item: "\n&r&9Item: &6%item%"
+        ItemNamed: "\n&r&9Item: &6%item% &9named &6%name%"
         Lore: "\n&9Lore:"
-        Durability: "\n&9Durability: &6$amount$&9/&6$durability$"
+        Durability: "\n&9Durability: &6%amount%&9/&6%durability%"
         EnchantmentHeader: "\n&9Enchantments:"
-        Enchantment: "\n&6- $name$&6 $amount$"
-        Amount: "\n&9Amount: &6$amount$"
-        StartingBid: "\n&9Starting Bid: &6$price$ $valuta$"
-        Price: "\n&9Price: &6$price$ $valuta$"
-        Bidder: "\n&9Highest Bidder: &6$player$"
-        CurrentBid: "\n&9Current Bid: &6$price$ $valuta$"
-        Time: "\n&o&9Time Remaining: &c$duration$ seconds"
+        Enchantment: "\n&6- %name%&6 %amount%"
+        Amount: "\n&9Amount: &6%amount%"
+        StartingBid: "\n&9Starting Bid: &6%price% %currency%"
+        Price: "\n&9Price: &6%price% %currency%"
+        Bidder: "\n&9Highest Bidder: &6%player%"
+        CurrentBid: "\n&9Current Bid: &6%price% %currency%"
+        Time: "\n&o&9Time Remaining: &c%duration% seconds"
         Footer: "\n&l&9========================="
     Queue:
         Header: '&e&l-----Auction Queue-----'
-        Auction: "\n&9&o$id$. &e$amount$&9&ox&e$item$&9 by &f$seller$"
-        Footer: "\n&e&l-------&cPage &d&l$amount$&c/&d&l$total$&e-------"
+        Auction: "\n&9&o%id%. &e%amount%&9&ox&e%item%&9 by &f%seller%"
+        Footer: "\n&e&l-------&cPage &d&l%amount%&c/&d&l%total%&e-------"
         Empty: '&cQueue is empty.'
-        NotAuction: '&9There is no auction with number $id$.'
+        NotAuction: '&9There is no auction with number %id%.'
     
   Command:
-    No-Permission: '&c&oYou don''t have permission to use &9$sender$&c.&r&c If you believe this is an error, &nplease contact an administrator.'
-    Wrong-Format: '&cPlease use: &9$format$'
+    No-Permission: '&c&oYou don''t have permission to use &9%sender%&c.&r&c If you believe this is an error, &nplease contact an administrator.'
+    Wrong-Format: '&cPlease use: &9%format%'
     Unknown: '&cUnknown command. Use &9/as help &cfor more information.'
-    Given: '&9You have been given $amount$ $item$.'
+    Given: '&9You have been given %amount% %item%.'
     Silenced: '&9Auction broadcasts are now silenced for you.'
     Unsilenced: '&9Auction broadcasts are no longer silenced for you.'
     Admin:
@@ -99,6 +101,6 @@ AuctionStorm:
         Log-Non-Existent: '&cThis log doesn''t exists.'
         Items-Returned: '&9Your items have been returned.'
         Money-Returned: '&9You have recieved a refund.'
-        Money-Taken: '&4$player$ has gotten a refund for your auction of $item$.'
+        Money-Taken: '&4%player% has gotten a refund for your auction of %item%.'
         Already-Refunded: '&cThis auction has already been refunded.'
         No-Buyer: '&cThis auction had no buyer.'

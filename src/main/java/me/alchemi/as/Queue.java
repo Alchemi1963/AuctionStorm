@@ -96,7 +96,7 @@ public class Queue {
 					Queue.current_auction.startAuction();
 					
 				}
-			}, Config.AUCTION.START_DELAY.asInt() * 20);
+			}, Config.AuctionOptions.START_DELAY.asInt() * 20);
 			
 			
 		}

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 import me.alchemi.as.Queue;
 import me.alchemi.as.Storm;
+import me.alchemi.as.objects.placeholder.StringParser;
 
 public class AuctionTimer implements Runnable{
 
@@ -30,26 +31,26 @@ public class AuctionTimer implements Runnable{
 		} else if (time == 1) {
 			Storm.getInstance().getMessenger().broadcast("&6Going twice...");
 		
-		} else if (Config.AUCTION.NOTIFY.asBoolean() && Config.AUCTION.NOTIFYTIMES.asIntList().contains(time)) { //custom time notification
+		} else if (Config.AuctionOptions.NOTIFY.asBoolean() && Config.AuctionOptions.NOTIFYTIMES.asIntList().contains(time)) { //custom time notification
 			
-			Storm.getInstance().getMessenger().broadcast(Messages.AUCTION_TIME_NOTIFY.value().replace("$amount$", String.valueOf(time)));
+			Storm.getInstance().getMessenger().broadcast(new StringParser(Messages.AUCTION_TIME_NOTIFY).amount(String.valueOf(time)));
 			
-			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
+			if (!Config.AuctionOptions.HOVERITEM.asBoolean()) {
 				Storm.getInstance().getMessenger().broadcast(Messages.AUCTION_INFO_GET.value());
 			} else {
-				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) Storm.getInstance().getMessenger().broadcastHover(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
+				if (!Config.AuctionOptions.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) Storm.getInstance().getMessenger().broadcastHover(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
 				else ((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getObject());
 			}
 		} 
-		else if (Config.AUCTION.NOTIFY.asBoolean() && time == Queue.current_auction.getDuration()/2) { //half-time notification
+		else if (Config.AuctionOptions.NOTIFY.asBoolean() && time == Queue.current_auction.getDuration()/2) { //half-time notification
 			
-			Storm.getInstance().getMessenger().broadcast(Messages.AUCTION_TIME_HALFTIME.value().replace("$amount$", String.valueOf(time))); 
+			Storm.getInstance().getMessenger().broadcast(new StringParser(Messages.AUCTION_TIME_HALFTIME).amount(String.valueOf(time))); 
 			
 			
-			if (!Config.AUCTION.HOVERITEM.asBoolean()) {
+			if (!Config.AuctionOptions.HOVERITEM.asBoolean()) {
 				Storm.getInstance().getMessenger().broadcast(Messages.AUCTION_INFO_GET.value());
 			} else {
-				if (!Config.AUCTION.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) Storm.getInstance().getMessenger().broadcastHover(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
+				if (!Config.AuctionOptions.HOVERITEMMINECRAFTTOOLTIP.asBoolean()) Storm.getInstance().getMessenger().broadcastHover(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getInfo(false));
 				else ((AuctionMessenger)Storm.getInstance().getMessenger()).broadcastITEM(Messages.AUCTION_INFO_GET.value(), Queue.current_auction.getObject());
 			}
 		}

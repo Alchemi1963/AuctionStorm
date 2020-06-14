@@ -13,12 +13,12 @@ import me.alchemi.al.configurations.Messenger;
 import me.alchemi.al.objects.handling.CarbonDating;
 import me.alchemi.as.Auction;
 import me.alchemi.as.Storm;
+import me.alchemi.as.objects.placeholder.StringParser;
 
 public class AuctionLog{
 
 	private final OfflinePlayer seller;
 	private OfflinePlayer buyer;
-	private String sellerName;
 	private String buyerName;
 	private UUID sellerID = null;
 	private UUID buyerID = null;
@@ -39,9 +39,6 @@ public class AuctionLog{
 		this.object = object;
 		this.refunded = false;
 		this.identifier = CarbonDating.getCurrentDateTime();
-		
-		if (seller.isOnline()) sellerName = seller.getDisplayName();
-		else sellerName = this.seller.getName();
 		
 		if (buyer != null && buyer.isOnline()) buyerName = buyer.getDisplayName();
 		else if (buyer != null) buyerName = this.buyer.getName();
@@ -68,8 +65,8 @@ public class AuctionLog{
 		else this.seller = null;
 		if (this.buyer == null && this.buyerID != null) this.buyer = Storm.getInstance().getServer().getOfflinePlayer(this.buyerID);
 		
-		if (this.seller.isOnline()) sellerName = this.seller.getPlayer().getDisplayName();
-		else sellerName = this.seller.getName();
+		if (this.seller.isOnline()) seller = this.seller.getPlayer().getDisplayName();
+		else seller = this.seller.getName();
 		
 		if (this.buyer != null && this.buyer.isOnline()) buyerName = this.buyer.getPlayer().getDisplayName();
 		else if (this.buyer != null) buyerName = this.buyer.getName();
@@ -118,67 +115,71 @@ public class AuctionLog{
 	
 	
 	public void getInfo(CommandSender sender) {
-		String amountS = String.valueOf(object.getAmount());
-		String priceS = String.valueOf(price);
-
-		String msg = Messages.AUCTION_INFO_LOGHEADER.value().replace("$name$", identifier.getCarbonDate());
+		String msg = new StringParser(Messages.AUCTION_INFO_LOGHEADER).name(identifier.getCarbonDate()).create();
 		
-		if (Auction.getDisplayName(object) != null) msg = msg + Messages.AUCTION_INFO_ITEMNAMED.value()
-			.replace("$player$", sellerName)
-			.replace("$amount$", amountS)
-			.replace("$item$", Auction.getItemName(object))
-			.replace("$name$", Auction.getDisplayName(object))
-			.replace("$price$", priceS)
-			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-		else msg = msg + Messages.AUCTION_INFO_ITEM.value()
-			.replace("$player$", sellerName)
-			.replace("$amount$", amountS)
-			.replace("$item$", Auction.getItemName(object))
-			.replace("$name$", Auction.getDisplayName(object))
-			.replace("$price$", priceS)
-			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-		msg = msg + Messages.AUCTION_INFO_AMOUNT.value()
-				.replace("$player$", sellerName)
-				.replace("$amount$", amountS)
-				.replace("$item$", Auction.getItemName(object))
-				.replace("$name$", Auction.getDisplayName(object))
-				.replace("$price$", priceS)
-				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+		if (object != null) msg = msg + new StringParser(Messages.AUCTION_INFO_ITEMNAMED)
+			.player(seller.getName())
+			.amount(object.getAmount())
+			.item(object)
+			.name(object)
+			.price(price)
+			.currencyPlural()
+			.create();
+		else msg = msg + new StringParser(Messages.AUCTION_INFO_ITEM)
+			.player(seller.getName())
+			.amount(object.getAmount())
+			.item(object)
+			.name(object)
+			.price(price)
+			.currencyPlural()
+			.create();
+		msg = msg + new StringParser(Messages.AUCTION_INFO_AMOUNT)
+				.player(seller.getName())
+				.amount(object.getAmount())
+				.item(object)
+				.name(object)
+				.price(price)
+				.currencyPlural()
+				.create();
 		
 		//show enchantments if present
 		if (!object.getEnchantments().isEmpty()) {
-			msg = msg + Messages.AUCTION_INFO_ENCHANTMENTHEADER.value()
-				.replace("$player$", sellerName)
-				.replace("$amount$", amountS)
-				.replace("$item$", Auction.getItemName(object))
-				.replace("$name$", Auction.getDisplayName(object))
-				.replace("$price$", priceS)
-				.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+			msg = msg + new StringParser(Messages.AUCTION_INFO_ENCHANTMENTHEADER)
+				.player(seller.getName())
+				.amount(object.getAmount())
+				.item(object)
+				.name(object)
+				.price(price)
+				.currencyPlural()
+				.create();
 			for (Entry<Enchantment, Integer> ench : object.getEnchantments().entrySet()) {
-				msg = msg + Messages.AUCTION_INFO_ENCHANTMENT.value()
-					.replace("$player$", sellerName)
-					.replace("$amount$", RomanNumber.toRoman(ench.getValue()))
-					.replace("$item$", Auction.getItemName(object))
-					.replace("$name$", ench.getKey().getKey().getKey())
-					.replace("$price$", priceS)
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+				msg = msg + new StringParser(Messages.AUCTION_INFO_ENCHANTMENT)
+					.player(seller.getName())
+					.amount(RomanNumber.toRoman(ench.getValue()))
+					.item(object)
+					.name(ench.getKey().getKey().getKey())
+					.price(price)
+					.currencyPlural()
+					.create();
 			}
 		}
-		msg = msg + Messages.AUCTION_INFO_PRICE.value()
-			.replace("$player$", sellerName)
-			.replace("$amount$", amountS)
-			.replace("$item$", Auction.getItemName(object))
-			.replace("$name$", Auction.getDisplayName(object))
-			.replace("$price$", priceS)
-			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-		if (buyer != null) msg = msg + Messages.AUCTION_INFO_BIDDER.value()
-			.replace("$player$", buyer.getPlayer().getDisplayName())
-			.replace("$amount$", amountS)
-			.replace("$item$", Auction.getItemName(object))
-			.replace("$name$", Auction.getDisplayName(object))
-			.replace("$price$", priceS)
-			.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
-		msg = msg + Messages.AUCTION_INFO_FOOTER.value().substring(0, Messages.AUCTION_INFO_FOOTER.value().length() - 1);
+		msg = msg + new StringParser(Messages.AUCTION_INFO_PRICE)
+			.player(seller.getName())
+			.amount(object.getAmount())
+			.item(object)
+			.name(object)
+			.price(price)
+			.currencyPlural()
+			.create();
+		if (buyer != null) msg = msg + new StringParser(Messages.AUCTION_INFO_BIDDER)
+			.player(buyer.getPlayer().getName())
+			.amount(object.getAmount())
+			.item(object)
+			.name(object)
+			.price(price)
+			.currencyPlural()
+			.create();
+		msg = msg + Messages.AUCTION_INFO_FOOTER.toString().substring(0, Messages.AUCTION_INFO_FOOTER.toString().length() - 1);
 		
 		if (sender instanceof Player) {
 			sender.sendMessage(Messenger.formatString(msg));
@@ -191,13 +192,14 @@ public class AuctionLog{
 	public void returnAll(CommandSender sender) {
 		
 		if (refunded) {
-			String send = Messages.COMMAND_ADMIN_ALREADY_REFUNDED.value()
-						.replace("$player$", sellerName)
-						.replace("$amount$", String.valueOf(object.getAmount()))
-						.replace("$item$", Auction.getItemName(object))
-						.replace("$name$", Auction.getDisplayName(object))
-						.replace("$price$", String.valueOf(price))
-						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+			String send = new StringParser(Messages.COMMAND_ADMIN_ALREADY_REFUNDED)					
+					.player(seller.getName())
+					.amount(object.getAmount())
+					.item(object)
+					.name(object)
+					.price(price)
+					.currencyPlural()
+					.create();
 				
 			if (sender instanceof Player) Storm.getInstance().getMessenger().sendMessage(send, sender);
 			else Storm.getInstance().getMessenger().print(send);
@@ -205,24 +207,26 @@ public class AuctionLog{
 			return;
 		} else if (buyer != null) {
 			if (buyer.isOnline()) {
-				String send = Messages.COMMAND_ADMIN_MONEY_RETURNED.value()
-						.replace("$player$", sellerName)
-						.replace("$amount$", String.valueOf(object.getAmount()))
-						.replace("$item$", Auction.getItemName(object))
-						.replace("$name$", Auction.getDisplayName(object))
-						.replace("$price$", String.valueOf(price))
-						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+				String send = new StringParser(Messages.COMMAND_ADMIN_MONEY_RETURNED)
+						.player(seller.getName())
+						.amount(object.getAmount())
+						.item(object)
+						.name(object)
+						.price(price)
+						.currencyPlural()
+						.create();
 				Storm.getInstance().getMessenger().sendMessage(send, buyer.getPlayer());
 			}
 					
 			if (seller.isOnline()) {
-				String send = Messages.COMMAND_ADMIN_MONEY_TAKEN.value()
-						.replace("$player$", buyerName)
-						.replace("$amount$", String.valueOf(object.getAmount()))
-						.replace("$item$", Auction.getItemName(object))
-						.replace("$name$", Auction.getDisplayName(object))
-						.replace("$price$", String.valueOf(price))
-						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+				String send = new StringParser(Messages.COMMAND_ADMIN_MONEY_TAKEN)
+						.player(buyerName)
+						.amount(object.getAmount())
+						.item(object)
+						.name(object)
+						.price(price)
+						.currencyPlural()
+						.create();
 				Storm.getInstance().getMessenger().sendMessage(send, seller.getPlayer());
 			}
 			Storm.getInstance().econ.depositPlayer(buyer, price);
@@ -230,26 +234,28 @@ public class AuctionLog{
 			
 			
 		} else {
-			String send = Messages.COMMAND_ADMIN_NO_BUYER.value()
-					.replace("$player$", sellerName)
-					.replace("$amount$", String.valueOf(object.getAmount()))
-					.replace("$item$", Auction.getItemName(object))
-					.replace("$name$", Auction.getDisplayName(object))
-					.replace("$price$", String.valueOf(price))
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+			String send = new StringParser(Messages.COMMAND_ADMIN_NO_BUYER)
+					.player(seller.getName())
+					.amount(object.getAmount())
+					.item(object)
+					.name(object)
+					.price(price)
+					.currencyPlural()
+					.create();
 			
 		if (sender instanceof Player) Storm.getInstance().getMessenger().sendMessage(send, sender);
 		else Storm.getInstance().getMessenger().print(send);
 		}
 		
 		if (seller.isOnline()) {
-			String send = Messages.COMMAND_ADMIN_ITEMS_RETURNED.value()
-					.replace("$player$", sellerName)
-					.replace("$amount$", String.valueOf(object.getAmount()))
-					.replace("$item$", Auction.getItemName(object))
-					.replace("$name$", Auction.getDisplayName(object))
-					.replace("$price$", String.valueOf(price))
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+			String send = new StringParser(Messages.COMMAND_ADMIN_ITEMS_RETURNED)
+					.player(seller.getName())
+					.amount(object.getAmount())
+					.item(object)
+					.name(object)
+					.price(price)
+					.currencyPlural()
+					.create();
 			Storm.getInstance().getMessenger().sendMessage(send, seller.getPlayer());
 		}
 		
@@ -261,13 +267,14 @@ public class AuctionLog{
 	
 	public void returnItemToSeller(CommandSender sender) {
 		if (refunded) {
-			String send = Messages.COMMAND_ADMIN_ALREADY_REFUNDED.value()
-					.replace("$player$", sellerName)
-					.replace("$amount$", String.valueOf(object.getAmount()))
-					.replace("$item$", Auction.getItemName(object))
-					.replace("$name$", Auction.getDisplayName(object))
-					.replace("$price$", String.valueOf(price))
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+			String send = new StringParser(Messages.COMMAND_ADMIN_ALREADY_REFUNDED)
+					.player(seller.getName())
+					.amount(object.getAmount())
+					.item(object)
+					.name(object)
+					.price(price)
+					.currencyPlural()
+					.create();
 			
 		if (sender instanceof Player) Storm.getInstance().getMessenger().sendMessage(send, sender);
 		else Storm.getInstance().getMessenger().print(send);
@@ -275,13 +282,14 @@ public class AuctionLog{
 		}
 		
 		if (seller.isOnline()) {
-			String send = Messages.COMMAND_ADMIN_ITEMS_RETURNED.value()
-					.replace("$player$", sellerName)
-					.replace("$amount$", String.valueOf(object.getAmount()))
-					.replace("$item$", Auction.getItemName(object))
-					.replace("$name$", Auction.getDisplayName(object))
-					.replace("$price$", String.valueOf(price))
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+			String send = new StringParser(Messages.COMMAND_ADMIN_ITEMS_RETURNED)
+					.player(seller.getName())
+					.amount(object.getAmount())
+					.item(object)
+					.name(object)
+					.price(price)
+					.currencyPlural()
+					.create();
 			Storm.getInstance().getMessenger().sendMessage(send, seller.getPlayer());
 		}
 		Auction.giveItemStack(object, seller);
@@ -292,13 +300,14 @@ public class AuctionLog{
 	
 	public void returnMoneyToBuyer(CommandSender sender) {
 		if (refunded) {
-			String send = Messages.COMMAND_ADMIN_ALREADY_REFUNDED.value()
-					.replace("$player$", sellerName)
-					.replace("$amount$", String.valueOf(object.getAmount()))
-					.replace("$item$", Auction.getItemName(object))
-					.replace("$name$", Auction.getDisplayName(object))
-					.replace("$price$", String.valueOf(price))
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+			String send = new StringParser(Messages.COMMAND_ADMIN_ALREADY_REFUNDED)
+					.player(seller.getName())
+					.amount(object.getAmount())
+					.item(object)
+					.name(object)
+					.price(price)
+					.currencyPlural()
+					.create();
 			
 		if (sender instanceof Player) Storm.getInstance().getMessenger().sendMessage(send, sender);
 		else Storm.getInstance().getMessenger().print(send);
@@ -307,36 +316,39 @@ public class AuctionLog{
 		
 		if (buyer != null) {
 			if (buyer.isOnline()) {
-				String send = Messages.COMMAND_ADMIN_MONEY_TAKEN.value()
-						.replace("$player$", sellerName)
-						.replace("$amount$", String.valueOf(object.getAmount()))
-						.replace("$item$", Auction.getItemName(object))
-						.replace("$name$", Auction.getDisplayName(object))
-						.replace("$price$", String.valueOf(price))
-						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+				String send = new StringParser(Messages.COMMAND_ADMIN_MONEY_TAKEN)
+						.player(seller.getName())
+						.amount(object.getAmount())
+						.item(object)
+						.name(object)
+						.price(price)
+						.currencyPlural()
+						.create();
 				Storm.getInstance().getMessenger().sendMessage(send, buyer.getPlayer());
 			}
 			if (seller.isOnline()) {
-				String send = Messages.COMMAND_ADMIN_MONEY_TAKEN.value()
-						.replace("$player$", buyerName)
-						.replace("$amount$", String.valueOf(object.getAmount()))
-						.replace("$item$", Auction.getItemName(object))
-						.replace("$name$", Auction.getDisplayName(object))
-						.replace("$price$", String.valueOf(price))
-						.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+				String send = new StringParser(Messages.COMMAND_ADMIN_MONEY_TAKEN)
+						.player(buyerName)
+						.amount(object.getAmount())
+						.item(object)
+						.name(object)
+						.price(price)
+						.currencyPlural()
+						.create();
 				Storm.getInstance().getMessenger().sendMessage(send, seller.getPlayer());
 			}
 			Storm.getInstance().econ.depositPlayer(buyer, price);
 			Storm.getInstance().econ.withdrawPlayer(seller, price);
 			Storm.logger.setRefunded(this, identifier);
 		} else {
-			String send = Messages.COMMAND_ADMIN_NO_BUYER.value()
-					.replace("$player$", sellerName)
-					.replace("$amount$", String.valueOf(object.getAmount()))
-					.replace("$item$", Auction.getItemName(object))
-					.replace("$name$", Auction.getDisplayName(object))
-					.replace("$price$", String.valueOf(price))
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString());
+			String send = new StringParser(Messages.COMMAND_ADMIN_NO_BUYER)
+					.player(seller.getName())
+					.amount(object.getAmount())
+					.item(object)
+					.name(object)
+					.price(price)
+					.currencyPlural()
+					.create();
 			
 		if (sender instanceof Player) Storm.getInstance().getMessenger().sendMessage(send, sender);
 		else Storm.getInstance().getMessenger().print(send);

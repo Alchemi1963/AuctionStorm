@@ -10,6 +10,7 @@ import me.alchemi.as.Queue;
 import me.alchemi.as.Storm;
 import me.alchemi.as.objects.Config;
 import me.alchemi.as.objects.Messages;
+import me.alchemi.as.objects.placeholder.StringParser;
 
 public class CommandAdmin implements CommandExecutor{
 	
@@ -23,12 +24,10 @@ public class CommandAdmin implements CommandExecutor{
 		if (Storm.hasPermission(sender, "as.admin") && cmd.getName().equals("asadmin")) {
 			CarbonDating datetime = null;
 			
-			
-			
 			if (args.length == 0) {
-				String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", admin_usage);
-				if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-				else send = send.replace("$player$", Storm.getInstance().pluginname);
+				StringParser send = new StringParser(Messages.COMMAND_WRONG_FORMAT).sender(cmd.getName()).format(admin_usage);
+				if (sender instanceof Player) send = send.player((Player) sender);
+				else send = send.player(Storm.getInstance().pluginname);
 				
 				Storm.getInstance().getMessenger().sendMessage(send, sender);
 				
@@ -38,17 +37,17 @@ public class CommandAdmin implements CommandExecutor{
 			if (args[0].equalsIgnoreCase("return")) { //return command
 				
 				if (!Storm.hasPermission(sender, "as.return")) {
-					String send = Messages.COMMAND_NO_PERMISSION.value().replace("$sender$", cmd.getName());
-					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-					else send = send.replace("$player$", Storm.getInstance().pluginname);
+					StringParser send = new StringParser(Messages.COMMAND_NO_PERMISSION).sender(cmd.getName());
+					if (sender instanceof Player) send = send.player(((Player) sender).getDisplayName());
+					else send = send.player(Storm.getInstance().pluginname);
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 					return true;
 				
-				} else if (!Config.AUCTION.LOGAUCTIONS.asBoolean()) {
-					String send = Messages.COMMAND_ADMIN_LOGGING_DISABLED.value().replace("$sender$", cmd.getName());
-					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-					else send = send.replace("$player$", Storm.getInstance().pluginname);
+				} else if (!Config.AuctionOptions.LOGAUCTIONS.asBoolean()) {
+					StringParser send = new StringParser(Messages.COMMAND_ADMIN_LOGGING_DISABLED).sender(cmd.getName());
+					if (sender instanceof Player) send = send.player(((Player) sender).getDisplayName());
+					else send = send.player(Storm.getInstance().pluginname);
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 					
@@ -56,9 +55,9 @@ public class CommandAdmin implements CommandExecutor{
 				}
 				
 				if (args.length < 4) {
-					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", return_usage);
-					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-					else send = send.replace("$player$", Storm.getInstance().pluginname);
+					StringParser send = new StringParser(Messages.COMMAND_WRONG_FORMAT).sender(cmd.getName()).format(return_usage);
+					if (sender instanceof Player) send = send.player(((Player) sender).getDisplayName());
+					else send = send.player(Storm.getInstance().pluginname);
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 					return true;
@@ -70,9 +69,9 @@ public class CommandAdmin implements CommandExecutor{
 				}
 				
 				if (datetime == null || datetime.getCarbonDate() == null) {
-					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", return_usage);
-					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-					else send = send.replace("$player$", Storm.getInstance().pluginname);
+					StringParser send = new StringParser(Messages.COMMAND_WRONG_FORMAT).sender(cmd.getName()).format(return_usage);
+					if (sender instanceof Player) send = send.player(((Player) sender).getDisplayName());
+					else send = send.player(Storm.getInstance().pluginname);
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 					return true;
@@ -88,9 +87,9 @@ public class CommandAdmin implements CommandExecutor{
 					Storm.logger.readLog(args[2], datetime).returnMoneyToBuyer(sender);
 				} 
 				else {
-					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", return_usage);
-					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-					else send = send.replace("$player$", Storm.getInstance().pluginname);
+					StringParser send = new StringParser(Messages.COMMAND_WRONG_FORMAT).sender(cmd.getName()).format(return_usage);
+					if (sender instanceof Player) send = send.player(((Player) sender).getDisplayName());
+					else send = send.player(Storm.getInstance().pluginname);
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 					return true;
@@ -98,10 +97,10 @@ public class CommandAdmin implements CommandExecutor{
 			}
 			
 			else if (args[0].equalsIgnoreCase("info")) { //info command
-				if (!Config.AUCTION.LOGAUCTIONS.asBoolean()) {
-					String send = Messages.COMMAND_ADMIN_LOGGING_DISABLED.value().replace("$sender$", cmd.getName());
-					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-					else send = send.replace("$player$", Storm.getInstance().pluginname);
+				if (!Config.AuctionOptions.LOGAUCTIONS.asBoolean()) {
+					StringParser send = new StringParser(Messages.COMMAND_ADMIN_LOGGING_DISABLED).sender(cmd.getName());
+					if (sender instanceof Player) send = send.player(((Player) sender).getDisplayName());
+					else send = send.player(Storm.getInstance().pluginname);
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 					return true;
@@ -113,9 +112,9 @@ public class CommandAdmin implements CommandExecutor{
 						return true;
 					}
 					else {
-						String send = Messages.COMMAND_ADMIN_NO_LOGS.value().replace("$sender$", cmd.getName()).replace("$format$", info_usage);
-						if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-						else send = send.replace("$player$", Storm.getInstance().pluginname);
+						StringParser send = new StringParser(Messages.COMMAND_ADMIN_NO_LOGS).sender(cmd.getName()).format(info_usage);
+						if (sender instanceof Player) send = send.player(((Player) sender).getDisplayName());
+						else send = send.player(Storm.getInstance().pluginname);
 						
 						Storm.getInstance().getMessenger().sendMessage(send, sender);
 						return true;
@@ -123,9 +122,9 @@ public class CommandAdmin implements CommandExecutor{
 				}
 				
 				if (args.length < 3) {
-					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", info_usage);
-					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-					else send = send.replace("$player$", Storm.getInstance().pluginname);
+					StringParser send = new StringParser(Messages.COMMAND_WRONG_FORMAT).sender(cmd.getName()).format(info_usage);
+					if (sender instanceof Player) send = send.player(((Player) sender).getDisplayName());
+					else send = send.player(Storm.getInstance().pluginname);
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 					return true;
@@ -137,9 +136,9 @@ public class CommandAdmin implements CommandExecutor{
 				}
 				
 				if (datetime == null || datetime.getCarbonDate() == null) {
-					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", info_usage);
-					if (sender instanceof Player) send = send.replace("$player$", ((Player) sender).getDisplayName());
-					else send = send.replace("$player$", Storm.getInstance().pluginname);
+					StringParser send = new StringParser(Messages.COMMAND_WRONG_FORMAT).sender(cmd.getName()).format(info_usage);
+					if (sender instanceof Player) send = send.player(((Player) sender).getDisplayName());
+					else send = send.player(Storm.getInstance().pluginname);
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 					return true;

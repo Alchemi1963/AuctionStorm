@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import me.alchemi.al.configurations.SexyConfiguration;
 import me.alchemi.as.Auction;
 import me.alchemi.as.Storm;
+import me.alchemi.as.objects.placeholder.StringParser;
 
 public class GiveQueue {
 
@@ -40,11 +41,11 @@ public class GiveQueue {
 		for (ItemStack stack : queue.get(player.getName())) {
 			Auction.giveItemStack(stack, player);
 			
-			Storm.getInstance().getMessenger().sendMessage(Messages.COMMAND_GIVEN.value().replace("$sender$", Storm.getInstance().pluginname)
-					.replace("$amount$", String.valueOf(stack.getAmount()))
-					.replace("$item$", Auction.getItemName(stack))
-					.replace("$name$", Auction.getDisplayName(stack))
-					.replace("$valuta$", Config.VAULT.VALUTA_PLURAL.asString()), player);
+			Storm.getInstance().getMessenger().sendMessage(new StringParser(Messages.COMMAND_GIVEN).sender(Storm.getInstance().pluginname)
+					.amount(stack.getAmount())
+					.item(stack)
+					.name(stack)
+					.currencyPlural(), player);
 		}
 		
 		queue.remove(player.getName());

@@ -86,7 +86,7 @@ public class Storm extends PluginBase implements Listener {
 		if (!new File(getDataFolder(), "queue.yml").exists()) saveResource("queue.yml", false);
 		giveQueue = SexyConfiguration.loadConfiguration(new File(getDataFolder(), "queue.yml"));
 		
-		if (Config.AUCTION.LOGAUCTIONS.asBoolean()) logger = new Logging("log.yml");
+		if (Config.AuctionOptions.LOGAUCTIONS.asBoolean()) logger = new Logging("log.yml");
 		
 		if (!setupEconomy() ) {
 			messenger.print("Disabled due to no Vault dependency found!");

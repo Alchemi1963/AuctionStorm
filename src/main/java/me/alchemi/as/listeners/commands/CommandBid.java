@@ -9,6 +9,7 @@ import me.alchemi.as.Auction;
 import me.alchemi.as.Queue;
 import me.alchemi.as.Storm;
 import me.alchemi.as.objects.Messages;
+import me.alchemi.as.objects.placeholder.StringParser;
 
 public class CommandBid implements CommandExecutor{
 
@@ -30,7 +31,7 @@ public class CommandBid implements CommandExecutor{
 			try {
 				if (args.length >= 1 && args[0] != "0") Queue.current_auction.bid(Integer.valueOf(args[0]), (Player) sender);
 				else {
-					String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
+					StringParser send = new StringParser(Messages.COMMAND_WRONG_FORMAT).sender(cmd.getName()).format(CommandPlayer.bid_usage).player(((Player) sender).getDisplayName());
 					
 					Storm.getInstance().getMessenger().sendMessage(send, sender);
 				}
@@ -38,7 +39,7 @@ public class CommandBid implements CommandExecutor{
 				if (args.length == 2 && args[1] != "0") Queue.current_auction.bid(Integer.valueOf(args[1]), (Player) sender, true);
 			} catch(NumberFormatException e) {
 				
-				String send = Messages.COMMAND_WRONG_FORMAT.value().replace("$sender$", cmd.getName()).replace("$format$", CommandPlayer.bid_usage).replace("$player$", ((Player) sender).getDisplayName());
+				StringParser send = new StringParser(Messages.COMMAND_WRONG_FORMAT).sender(cmd.getName()).format(CommandPlayer.bid_usage).player(((Player) sender).getDisplayName());
 				
 				Storm.getInstance().getMessenger().sendMessage(send, sender);
 				
@@ -47,7 +48,7 @@ public class CommandBid implements CommandExecutor{
 			return true;
 		}
 		if (sender instanceof Player) {
-			String send = Messages.COMMAND_NO_PERMISSION.value().replace("$sender$", cmd.getName()).replace("$player$", ((Player) sender).getDisplayName());
+			StringParser send = new StringParser(Messages.COMMAND_NO_PERMISSION).sender(cmd.getName()).player(((Player) sender).getDisplayName());
 			
 			Storm.getInstance().getMessenger().sendMessage(send, sender);
 		}

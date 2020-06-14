@@ -3,7 +3,7 @@ package me.alchemi.as.objects.meta;
 import org.bukkit.metadata.MetadataValueAdapter;
 
 import me.alchemi.as.Storm;
-import me.alchemi.as.objects.Config;
+import me.alchemi.as.objects.Config.AuctionOptions;
 
 public class CooldownMeta extends MetadataValueAdapter {
 
@@ -17,12 +17,16 @@ public class CooldownMeta extends MetadataValueAdapter {
 	}
 
 	public boolean isCooldownOver() {
-		return currentTicks + Config.AUCTION.COOLDOWN.asInt() <= Storm.getInstance().getServer().getWorlds().get(0).getFullTime();
+		return currentTicks + AuctionOptions.COOLDOWN.asInt() <= Storm.getInstance().getServer().getWorlds().get(0).getFullTime();
 	}
 	
 	@Override
 	public Object value() {
 		return currentTicks;
+	}
+	
+	public long remainingTicks() {
+		return Storm.getInstance().getServer().getWorlds().get(0).getFullTime() - (currentTicks + AuctionOptions.COOLDOWN.asInt());
 	}
 
 	@Override
