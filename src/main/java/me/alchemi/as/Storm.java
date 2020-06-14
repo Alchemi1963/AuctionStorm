@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import me.alchemi.al.configurations.Messenger;
@@ -167,5 +168,16 @@ public class Storm extends PluginBase implements Listener {
 	@Override
 	public Messenger getMessenger() {
 		return messenger;
+	}
+	
+	public static <T> T getMetadata(Class<T> metaClass, String metaKey, Player player){
+		
+		if (!player.hasMetadata(metaKey)) return null;
+		for (MetadataValue meta : player.getMetadata(metaKey)) {
+			if (metaClass.isInstance(meta)) {
+				return metaClass.cast(meta);
+			}
+		}
+		return null;		
 	}
 }

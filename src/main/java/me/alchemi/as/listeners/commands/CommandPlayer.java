@@ -16,6 +16,7 @@ import me.alchemi.as.Queue;
 import me.alchemi.as.Storm;
 import me.alchemi.as.objects.Config;
 import me.alchemi.as.objects.Messages;
+import me.alchemi.as.objects.meta.CooldownMeta;
 import me.alchemi.as.objects.meta.SilentMeta;
 
 
@@ -52,8 +53,15 @@ public class CommandPlayer implements CommandExecutor{
 						
 			if (args.length > 0) {
 				
-				
-				if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) { //help command
+				if (args[0].equalsIgnoreCase("start") && Config.AUCTION.COOLDOWN.asInt() > 0 
+						&& !player.hasPermission("as.cooldown.bypass")
+						&& player.hasMetadata(CooldownMeta.key) 
+						&& !Storm.getMetadata(CooldownMeta.class, CooldownMeta.key, player).isCooldownOver()) {
+					
+//					Storm.getInstance().getMessenger()
+					return true;
+					
+				} else if (args[0].equalsIgnoreCase("help") || args[0].equals("?")) { //help command
 				
 					Storm.getInstance().getMessenger().sendMessage(help_message, player);
 					return true;
@@ -288,6 +296,11 @@ public class CommandPlayer implements CommandExecutor{
 					
 					} else if (args.length >= 2 && args[0].equalsIgnoreCase("start") 
 						|| args.length >= 2 && args[0].equalsIgnoreCase("s")) { //start command
+						
+						if (!player.hasPermission("as.cooldown.bypass")) {
+							player.removeMetadata(CooldownMeta.key, Storm.getInstance());
+						}
+						
 						int price = Config.AUCTION.START_DEFAULTS_PRICE.asInt();
 						int amount = player.getInventory().getItemInMainHand().getAmount();
 						int increment = Config.AUCTION.START_DEFAULTS_INCREMENT.asInt();
@@ -306,7 +319,6 @@ public class CommandPlayer implements CommandExecutor{
 							
 							Storm.getInstance().getMessenger().sendMessage(send, sender);
 						}
-						
 						
 						try {
 							if (args.length >= 3) {

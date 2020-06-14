@@ -37,6 +37,7 @@ permissions:
          as.silence: false
          as.end: true
          as.cancel: true
+         as.cooldown.bypass: true
       default: op
    as.base:
       description: Base AuctionStorm permission.
@@ -64,4 +65,7 @@ permissions:
       default: op
    as.cancel:
       description: Permission to cancel any and all auctions.
+      default: op
+   as.cooldown.bypass:
+      description: Permission to bypass auction start cooldown
       default: op

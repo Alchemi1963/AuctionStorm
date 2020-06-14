@@ -17,10 +17,11 @@ AuctionStorm:
   Tag: '&7[&6&lAuctionStorm&r&7]'
 
   Auction:
+    StartCooldown: '&cYou cannot start an auction for &f$amount$ &9seconds.'
     Start: >
      $player$ &6has started an auction
      &6It is $amount$ $item$ for $price$ $valuta$.
-    StartNamed: >-
+    StartNamed: >
      $player$ &6has started an auction!
      &6It is $amount$ $item$ named
      $name$&6 for $price$ $valuta$."

@@ -4,6 +4,7 @@ import me.alchemi.al.configurations.IMessage;
 
 public enum Messages implements IMessage{
 	
+	AUCTION_STARTCOOLDOWN("AuctionStorm.Auction.StartCooldown"),
 	AUCTION_START("AuctionStorm.Auction.Start"),
 	AUCTION_STARTNAMED("AuctionStorm.Auction.StartNamed"),
 	AUCTION_QUEUED("AuctionStorm.Auction.Queued"),

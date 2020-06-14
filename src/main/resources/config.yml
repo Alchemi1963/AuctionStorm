@@ -74,6 +74,11 @@ Auction:
     Amount: 0
     Increment: 0
     Duration: 30
+  
+  #Cooldown for starting an auction.
+  #Set to -1 to disable.
+  #Default: -1
+  Cooldown: -1
   #List of items banned from auctioning
   #Default: []
   Banned-Items: []

@@ -83,6 +83,7 @@ public class Config extends ConfigBase {
 		MINIMUM_VALUES_AMOUNT("Auction.Minimum-Values.Amount"),
 		MINIMUM_VALUES_INCREMENT("Auction.Minimum-Values.Increment"),
 		MINIMUM_VALUES_DURATION("Auction.Minimum-Values.Duration"),
+		COOLDOWN("Auction.Cooldown"),
 		BANNED_ITEMS("Auction.Banned-Items");
 		
 		private Object value;
