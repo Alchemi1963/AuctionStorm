@@ -25,7 +25,7 @@ public class Config extends ConfigBase {
 	
 	public static enum ConfigEnum implements IConfigEnum {
 		
-		CONFIG(new File(Storm.getInstance().getDataFolder(), "config.yml"), 23);
+		CONFIG(new File(Storm.getInstance().getDataFolder(), "config.yml"), 24);
 		
 		final File file;
 		final int version;
