@@ -3,7 +3,7 @@ main: me.alchemi.as.Storm
 authors:
 - Alchemi
 - martijnpu
-version: 2.0.3
+version: 2.0.4
 api-version: 1.15
 description: Really nice auction plugin!
 depend:
