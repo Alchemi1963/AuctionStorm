@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import me.alchemi.al.Library;
 import me.alchemi.al.configurations.Messenger;
 import me.alchemi.al.objects.meta.PersistentMeta;
+import me.alchemi.al.util.ItemUtil;
 import me.alchemi.as.Storm;
 import me.alchemi.as.objects.meta.SilentMeta;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -77,7 +78,7 @@ public class AuctionMessenger extends Messenger{
 			return;
 		}
 		
-		BaseComponent[] comps = new BaseComponent[] {new TextComponent(Library.itemStackToJson(item))};
+		BaseComponent[] comps = new BaseComponent[] {new TextComponent(ItemUtil.itemStackToJson(item))};
 		HoverEvent ev = new HoverEvent( HoverEvent.Action.SHOW_ITEM, comps);
 		
 		TextComponent mainComponent;

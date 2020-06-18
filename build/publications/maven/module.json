@@ -3,7 +3,7 @@
   "component": {
     "group": "me.alchemi",
     "module": "AuctionStorm",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -11,7 +11,7 @@
   "createdBy": {
     "gradle": {
       "version": "6.4.1",
-      "buildId": "fhuplzhw3ffalfimmwntkhanou"
+      "buildId": "ryne6wijcjcnrntmfss5a5bxfq"
     }
   },
   "variants": [
@@ -26,13 +26,13 @@
       },
       "files": [
         {
-          "name": "AuctionStorm-2.0.2.jar",
-          "url": "AuctionStorm-2.0.2.jar",
-          "size": 61208,
-          "sha512": "a312d617508d5faebe3c4935b828b23f41394341213f44b48f15132f40d0dbee8ec6b1ae60a820e87a65e3a06aacb7311bb024baa092a41eb6141632b219a05d",
-          "sha256": "f543eb7a9cf892228596724f38924cd712d743e9d46a6a68c3438f443bb07028",
-          "sha1": "35d1e68dacfdbe10724ae68c5a33edd6b52c218f",
-          "md5": "27829b7aff2899dbef10d196abd6ca1a"
+          "name": "AuctionStorm-2.0.3.jar",
+          "url": "AuctionStorm-2.0.3.jar",
+          "size": 65766,
+          "sha512": "49181ca3a151d77ef98a395164ece7f25b44c4f0f5e254ca00f7cfd3b74933e63682811f1eb31a2eea818fd4930cd58a8c6220e271cd5261d59f9abb15e32f6e",
+          "sha256": "09ad9d1ea30546fa87d7c31668d51cc38e1d807411351bdd5443723b17e164fd",
+          "sha1": "e6b431702480de89908a1e64fb7c8bb8a8417a7f",
+          "md5": "20c0af221353489050f2ffb6944204b8"
         }
       ]
     },
@@ -70,13 +70,13 @@
       ],
       "files": [
         {
-          "name": "AuctionStorm-2.0.2.jar",
-          "url": "AuctionStorm-2.0.2.jar",
-          "size": 61208,
-          "sha512": "a312d617508d5faebe3c4935b828b23f41394341213f44b48f15132f40d0dbee8ec6b1ae60a820e87a65e3a06aacb7311bb024baa092a41eb6141632b219a05d",
-          "sha256": "f543eb7a9cf892228596724f38924cd712d743e9d46a6a68c3438f443bb07028",
-          "sha1": "35d1e68dacfdbe10724ae68c5a33edd6b52c218f",
-          "md5": "27829b7aff2899dbef10d196abd6ca1a"
+          "name": "AuctionStorm-2.0.3.jar",
+          "url": "AuctionStorm-2.0.3.jar",
+          "size": 65766,
+          "sha512": "49181ca3a151d77ef98a395164ece7f25b44c4f0f5e254ca00f7cfd3b74933e63682811f1eb31a2eea818fd4930cd58a8c6220e271cd5261d59f9abb15e32f6e",
+          "sha256": "09ad9d1ea30546fa87d7c31668d51cc38e1d807411351bdd5443723b17e164fd",
+          "sha1": "e6b431702480de89908a1e64fb7c8bb8a8417a7f",
+          "md5": "20c0af221353489050f2ffb6944204b8"
         }
       ]
     }

@@ -27,7 +27,7 @@ dependencies {
 }
 
 group = 'me.alchemi'
-version = '2.0.3'
+version = '2.0.4'
 description = 'AuctionStorm'
 sourceCompatibility = '1.8'
 
@@ -57,10 +57,13 @@ processResources {
 	filter  { line -> line.replaceAll('\\$\\{project.version\\}', project.version)}
 }
 
-task export {
+task export(type: Copy) {
 	dependsOn 'jar'
 	dependsOn 'publishToMavenLocal'
 	finalizedBy 'incrementVersion'
+	
+	from jar.archivePath
+	into 'target/'
 
 	doLast{
 		project.logger.lifecycle 'Exporting to jar file.'

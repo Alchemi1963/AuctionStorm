@@ -19,10 +19,10 @@ AuctionStorm:
 
   Auction:
     StartCooldown: '&cYou cannot start an auction for &f%amount% &9seconds.'
-    Start: >
+    Start: |
      %player% &6has started an auction
      &6It is %amount% %item% for %price% %currency%.
-    StartNamed: >
+    StartNamed: |
      %player% &6has started an auction!
      &6It is %amount% %item% named
      %name%&6 for %price% %currency%."

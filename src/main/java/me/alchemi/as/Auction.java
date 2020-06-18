@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import me.alchemi.al.Library;
+import me.alchemi.al.util.ItemUtil;
 import me.alchemi.as.listeners.commands.CommandPlayer;
 import me.alchemi.as.objects.AuctionLog;
 import me.alchemi.as.objects.AuctionMessenger;
@@ -968,7 +968,7 @@ public class Auction {
 	
 	public static String getDisplayName(ItemStack item) {
 		if (item == null) throw new NullPointerException("ItemStack cannot be null!");
-		return item.hasItemMeta() ? item.getItemMeta().hasDisplayName() ? item.getItemMeta().toString() : "" : "";
+		return item.hasItemMeta() ? item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : "" : "";
 	}
 	
 	public static void giveItemStack(ItemStack item, OfflinePlayer seller) {
@@ -977,6 +977,6 @@ public class Auction {
 			return;
 		}
 		
-		Library.giveItemStack(item, seller.getPlayer());
+		ItemUtil.giveItemStack(item, seller.getPlayer());
 	}
 }
