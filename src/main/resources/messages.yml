@@ -25,7 +25,7 @@ AuctionStorm:
     StartNamed: |
      %player% &6has started an auction!
      &6It is %amount% %item% named
-     %name%&6 for %price% %currency%."
+     %name%&6 for %price% %currency%.
     Queued: '&9Your auction has been queued.'
     Wrong:
         None: '&6There is currently no auction, you can use &9/as start &6to start one.'
