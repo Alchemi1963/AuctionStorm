@@ -11,6 +11,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import me.alchemi.al.Library;
 import me.alchemi.al.configurations.Messenger;
+import me.alchemi.al.objects.meta.MetaUtil;
 import me.alchemi.al.objects.meta.PersistentMeta;
 import me.alchemi.as.Auction;
 import me.alchemi.as.Queue;
@@ -289,13 +290,11 @@ public class CommandPlayer implements CommandExecutor{
 							&& Storm.getInstance().permsEnabled()
 							&& player.hasPermission("as.togglesilence")) { //silence command
 						
-						if (PersistentMeta.hasMeta(player, SilentMeta.class) && PersistentMeta.getMeta(player, SilentMeta.class).asBoolean()) {//player.hasPermission("as.silence")) {
-							//main.perm.playerRemove(null, player, "as.silence");
-							PersistentMeta.setMeta(player, new SilentMeta(false));
+						if (MetaUtil.hasMeta(player, SilentMeta.KEY, SilentMeta.class) && MetaUtil.getMeta(player, SilentMeta.KEY, SilentMeta.class).asBoolean()) {
+							PersistentMeta.setMeta(player, SilentMeta.KEY, new SilentMeta(false));
 							Storm.getInstance().getMessenger().sendMessage(Messages.COMMAND_UNSILENCED, player);
 						} else {
-							//main.perm.playerAdd(null, player, "as.silence");
-							PersistentMeta.setMeta(player, new SilentMeta(true));
+							PersistentMeta.setMeta(player, SilentMeta.KEY, new SilentMeta(true));
 							Storm.getInstance().getMessenger().sendMessage(Messages.COMMAND_SILENCED, player);
 						}
 						

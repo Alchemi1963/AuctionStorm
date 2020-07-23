@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.alchemi.al.Library;
 import me.alchemi.al.configurations.Messenger;
-import me.alchemi.al.objects.meta.PersistentMeta;
+import me.alchemi.al.objects.meta.MetaUtil;
 import me.alchemi.al.util.ItemUtil;
 import me.alchemi.as.Storm;
 import me.alchemi.as.objects.meta.SilentMeta;
@@ -35,7 +35,7 @@ public class AuctionMessenger extends Messenger{
 		}
 		
 		for (Player r : Bukkit.getOnlinePlayers()) {
-			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
+			if (MetaUtil.hasMeta(r, SilentMeta.KEY, SilentMeta.class) && MetaUtil.getMeta(r, SilentMeta.KEY, SilentMeta.class).asBoolean()) continue;
 			
 			if (useTag) {
 				if (tag.endsWith(" ") || msg.startsWith(" ")) {
@@ -59,7 +59,7 @@ public class AuctionMessenger extends Messenger{
 		}
 		for (Player r : Library.getInstance().getServer().getOnlinePlayers()) {
 
-			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
+			if (MetaUtil.hasMeta(r, SilentMeta.KEY, SilentMeta.class) && MetaUtil.getMeta(r, SilentMeta.KEY, SilentMeta.class).asBoolean()) continue;
 			if (tag.endsWith(" ") || mainText.startsWith(" ")) {
 				sendMessageHover(r, tag + " " + mainText, hoverText);
 			} else {
@@ -92,7 +92,7 @@ public class AuctionMessenger extends Messenger{
 		
 		
 		for (Player r : Library.getInstance().getServer().getOnlinePlayers()) {
-			if (PersistentMeta.hasMeta(r, SilentMeta.class) && PersistentMeta.getMeta(r, SilentMeta.class).asBoolean()) continue;
+			if (MetaUtil.hasMeta(r, SilentMeta.KEY, SilentMeta.class) && MetaUtil.getMeta(r, SilentMeta.KEY, SilentMeta.class).asBoolean()) continue;
 			
 			r.spigot().sendMessage(mainComponent);
 		}
