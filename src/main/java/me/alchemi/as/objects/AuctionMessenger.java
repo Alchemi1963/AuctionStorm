@@ -10,9 +10,10 @@ import me.alchemi.al.objects.meta.MetaUtil;
 import me.alchemi.al.util.ItemUtil;
 import me.alchemi.as.Storm;
 import me.alchemi.as.objects.meta.SilentMeta;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Content;
+import net.md_5.bungee.api.chat.hover.content.Text;
 
 public class AuctionMessenger extends Messenger{
 
@@ -78,7 +79,7 @@ public class AuctionMessenger extends Messenger{
 			return;
 		}
 		
-		BaseComponent[] comps = new BaseComponent[] {new TextComponent(ItemUtil.itemStackToJson(item))};
+		Content[] comps = new Content[] {new Text(ItemUtil.itemStackToJson(item))};
 		HoverEvent ev = new HoverEvent( HoverEvent.Action.SHOW_ITEM, comps);
 		
 		TextComponent mainComponent;
