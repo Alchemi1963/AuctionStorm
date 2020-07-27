@@ -57,7 +57,10 @@ task copy(type: Copy) {
 }
 
 processResources {
-	filter  { line -> line.replaceAll('\\$\\{project.version\\}', project.version)}
+	from ('src/main/resources'){
+		include '**/*.yml'
+		filter  { line -> line.replaceAll('\\$\\{project.version\\}', project.version) }
+	}
 }
 
 task export(type: Copy) {
