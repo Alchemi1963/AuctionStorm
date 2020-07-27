@@ -34,3 +34,4 @@ maven-build.xml
 /.externalToolBuilders/
 /.settings/
 /.gradle/
+/build/
