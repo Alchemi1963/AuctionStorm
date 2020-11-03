@@ -64,20 +64,13 @@ public class BaseTabComplete implements TabCompleter {
 			
 			if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")) {
 				
-				list.add("all");
-				list.add("hand");
+				if (!Arrays.asList(args).contains("all") && !Arrays.asList(args).contains("hand")) {
+					list.add("all");
+					list.add("hand");
+				}
 				
 			} else if (args[0].equalsIgnoreCase("bid") && Queue.current_auction != null) {
 				list.add(String.valueOf(Queue.current_auction.getCurrent_bid() + Queue.current_auction.getIncrement() + 25));
-			}
-			
-		} else if (args.length >= 4 && args.length <= 5) {
-			
-			if (args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("s")) {
-				
-				list.add("all");
-				list.add("hand");
-				
 			}
 			
 		}
