@@ -721,7 +721,7 @@ public class Auction {
 			
 			if (atimer != null) msg = new StringParser(msg).duration(atimer.time).create();
 		
-			msg = msg + new StringParser(Messages.AUCTION_INFO_FOOTER).parse(seller);
+			msg = msg + new StringParser(Messages.AUCTION_INFO_FOOTER).parse(seller).create();
 		}
 		
 		return msg;
