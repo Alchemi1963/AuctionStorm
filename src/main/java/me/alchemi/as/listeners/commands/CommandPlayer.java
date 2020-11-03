@@ -116,6 +116,7 @@ public class CommandPlayer implements CommandExecutor{
 									.player((player).getDisplayName());
 							
 							Storm.getInstance().getMessenger().sendMessage(send, sender);
+							e.printStackTrace();
 							
 						}
 						return true;
